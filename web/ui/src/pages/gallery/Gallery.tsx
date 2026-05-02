@@ -6,7 +6,7 @@ import { WideSkeleton } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertOctagonIcon, BanIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, ExternalLinkIcon,
-  FilterIcon, GroupIcon, ShieldCheckIcon, XIcon
+  FilterIcon, GroupIcon, NetworkIcon, ShieldCheckIcon, XIcon
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -36,6 +36,7 @@ const GalleryPage = () => {
   //filters
   const technologyFilter = searchParams.get("technologies") || "";
   const statusFilter = searchParams.get("status") || "";
+  const schemeFilter = searchParams.get("schemes") || "";
   // toggles
   const perceptionGroup = searchParams.get("perception") === "true";
   const showFailed = searchParams.get("failed") !== "false"; // Default to true
@@ -47,9 +48,9 @@ const GalleryPage = () => {
   useEffect(() => {
     getData(
       setLoading, setGallery, setTotalPages,
-      page, limit, technologyFilter, statusFilter, perceptionGroup, showFailed
+      page, limit, technologyFilter, statusFilter, schemeFilter, perceptionGroup, showFailed
     );
-  }, [page, limit, perceptionGroup, statusFilter, technologyFilter, showFailed]);
+  }, [page, limit, perceptionGroup, statusFilter, technologyFilter, schemeFilter, showFailed]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -99,6 +100,24 @@ const GalleryPage = () => {
       return prev;
     });
     handlePageChange(1); // back to page 1
+  };
+
+  const PROTOCOL_OPTIONS = ["http", "https", "vnc", "rdp"] as const;
+
+  const selectedSchemes = schemeFilter.split(",").filter(Boolean);
+
+  const handleSchemeChange = (scheme: string) => {
+    setSearchParams(prev => {
+      const current = prev.get("schemes")?.split(",").filter(Boolean) || [];
+      if (current.includes(scheme)) {
+        prev.set("schemes", current.filter(s => s !== scheme).join(","));
+      } else {
+        current.push(scheme);
+        prev.set("schemes", current.join(","));
+      }
+      return prev;
+    });
+    handlePageChange(1);
   };
 
   const handleStatusFilter = (status: string) => {
@@ -185,7 +204,12 @@ const GalleryPage = () => {
                 className="w-full h-48 object-cover transition-all duration-300 filter group-hover:scale-105"
               />
             )}
-            <div className="absolute top-2 right-2">
+            <div className="absolute top-2 right-2 flex gap-1">
+              {screenshot.url_scheme ? (
+                <Badge variant="secondary" className="uppercase">
+                  {screenshot.url_scheme}
+                </Badge>
+              ) : null}
               <Badge variant="default" className={`${getStatusColor(screenshot.response_code)}`}>
                 {screenshot.response_code}
               </Badge>
@@ -297,6 +321,41 @@ const GalleryPage = () => {
                           )}
                         />
                         {tech}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[200px] justify-start">
+                <NetworkIcon className="mr-2 h-4 w-4" />
+                {selectedSchemes.length > 0 ? (
+                  <>{selectedSchemes.length} protocol{selectedSchemes.length === 1 ? "" : "s"}</>
+                ) : (
+                  "Filter by Protocol"
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandList>
+                  <CommandEmpty>No protocols.</CommandEmpty>
+                  <CommandGroup>
+                    {PROTOCOL_OPTIONS.map((scheme) => (
+                      <CommandItem
+                        key={scheme}
+                        onSelect={() => handleSchemeChange(scheme)}
+                      >
+                        <CheckIcon
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            selectedSchemes.includes(scheme) ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {scheme.toUpperCase()}
                       </CommandItem>
                     ))}
                   </CommandGroup>

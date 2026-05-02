@@ -30,6 +30,7 @@ const getData = async (
   limit: number,
   technologyFilter: string,
   statusFilter: string,
+  schemeFilter: string,
   perceptionGroup: boolean,
   showFailed: boolean,
 ) => {
@@ -40,6 +41,7 @@ const getData = async (
       limit,
       technologies: technologyFilter,
       status: statusFilter,
+      schemes: schemeFilter,
       perception: perceptionGroup ? 'true' : 'false',
       failed: showFailed ? 'true' : 'false',
     });

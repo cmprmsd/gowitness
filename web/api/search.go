@@ -19,6 +19,7 @@ type searchResult struct {
 	ID uint `json:"id" gorm:"primarykey"`
 
 	URL            string   `json:"url"`
+	URLScheme      string   `json:"url_scheme"`
 	FinalURL       string   `json:"final_url"`
 	ResponseCode   int      `json:"response_code"`
 	ResponseReason string   `json:"response_reason"`
@@ -246,6 +247,7 @@ func appendResults(searchResults []searchResult, resultIDs map[uint]bool, newRes
 			searchResults = append(searchResults, searchResult{
 				ID:             res.ID,
 				URL:            res.URL,
+				URLScheme:      res.URLScheme,
 				FinalURL:       res.FinalURL,
 				ResponseCode:   res.ResponseCode,
 				ResponseReason: res.ResponseReason,

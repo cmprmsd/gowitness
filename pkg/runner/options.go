@@ -10,6 +10,37 @@ type Options struct {
 	Writer Writer
 	// Scan is typically Scan options
 	Scan Scan
+	// VNC is VNC driver options
+	VNC VNC
+	// RDP is RDP driver options
+	RDP RDP
+}
+
+// VNC holds options for the VNC driver
+type VNC struct {
+	// Port is the default port to use when a vnc:// URL omits the port
+	Port int
+	// ForceNoAuth forces RFB security type 1 (None) even if the server did
+	// not advertise it. Implements the CVE-2006-2369 style bypass against
+	// vulnerable RealVNC 4.1.0/4.1.1 servers.
+	ForceNoAuth bool
+	// SettleTime is the number of seconds to wait for additional framebuffer
+	// updates after the initial one before encoding the screenshot.
+	SettleTime int
+}
+
+// RDP holds options for the RDP driver
+type RDP struct {
+	// Port is the default port to use when an rdp:// URL omits the port
+	Port int
+	// SettleTime is the number of seconds to wait for the login screen to
+	// finish rendering before screenshotting.
+	SettleTime int
+	// Username, Password, Domain are optional credentials for Standard RDP
+	// security (no NLA). Used when not provided in the URL userinfo.
+	Username string
+	Password string
+	Domain   string
 }
 
 // Logging is log related options
@@ -110,9 +141,18 @@ func NewDefaultOptions() *Options {
 			Driver:           "chromedp",
 			Threads:          6,
 			Timeout:          60,
-			UriFilter:        []string{"http", "https"},
+			UriFilter:        []string{"http", "https", "vnc", "rdp"},
 			ScreenshotFormat: "jpeg",
 			HttpCodeFilter:   []int{},
+		},
+		VNC: VNC{
+			Port:        5900,
+			ForceNoAuth: true,
+			SettleTime:  2,
+		},
+		RDP: RDP{
+			Port:       3389,
+			SettleTime: 5,
 		},
 		Logging: Logging{
 			Debug:         true,

@@ -81,13 +81,17 @@ func (h *ApiHandler) SubmitHandler(w http.ResponseWriter, r *http.Request) {
 
 	logger := slog.New(log.Logger)
 
-	driver, err := driver.NewChromedp(logger, *options)
+	chromeDriver, err := driver.NewChromedp(logger, *options)
 	if err != nil {
 		http.Error(w, "Error sarting driver", http.StatusInternalServerError)
 		return
 	}
+	drivers := map[string]runner.Driver{
+		"http":  chromeDriver,
+		"https": chromeDriver,
+	}
 
-	runner, err := runner.NewRunner(logger, driver, *options, []writers.Writer{writer})
+	runner, err := runner.NewRunner(logger, drivers, *options, []writers.Writer{writer})
 	if err != nil {
 		log.Error("error starting runner", "err", err)
 		http.Error(w, "Error starting runner", http.StatusInternalServerError)

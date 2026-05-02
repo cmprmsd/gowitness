@@ -29,6 +29,7 @@ type gallery = {
 type galleryResult = {
   id: number;
   url: string;
+  url_scheme: string;
   probed_at: string;
   title: string;
   response_code: number;
@@ -42,6 +43,7 @@ type galleryResult = {
 type list = {
   id: number;
   url: string;
+  url_scheme: string;
   final_url: string;
   response_code: number;
   response_reason: string;
@@ -127,6 +129,7 @@ interface cookie {
 interface detail {
   id: number;
   url: string;
+  url_scheme: string;
   probed_at: string;
   final_url: string;
   response_code: number;
@@ -152,6 +155,7 @@ interface detail {
 interface searchresult {
   id: number;
   url: string;
+  url_scheme: string;
   final_url: string;
   response_code: number;
   content_length: number;

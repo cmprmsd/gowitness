@@ -22,6 +22,7 @@ type galleryContent struct {
 	ID           uint      `json:"id"`
 	ProbedAt     time.Time `json:"probed_at"`
 	URL          string    `json:"url"`
+	URLScheme    string    `json:"url_scheme"`
 	ResponseCode int       `json:"response_code"`
 	Title        string    `json:"title"`
 	Filename     string    `json:"file_name"`
@@ -43,6 +44,7 @@ type galleryContent struct {
 //	@Param			status			query		string	false	"A comma seperated list of HTTP status codes to filter by."
 //	@Param			perception		query		boolean	false	"Order the results by perception hash."
 //	@Param			failed			query		boolean	false	"Include failed screenshots in the results."
+//	@Param			schemes			query		string	false	"A comma separated list of url schemes (http, https, vnc, rdp) to filter by."
 //	@Success		200				{object}	galleryResponse
 //	@Router			/results/gallery [get]
 func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
@@ -91,6 +93,18 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 		technologies = append(technologies, strings.Split(technologyFilterValue, ",")...)
 	}
 
+	// url scheme filtering (http, https, vnc, rdp)
+	var schemes []string
+	schemesValue := r.URL.Query().Get("schemes")
+	if schemesValue != "" {
+		for _, s := range strings.Split(schemesValue, ",") {
+			s = strings.ToLower(strings.TrimSpace(s))
+			if s != "" {
+				schemes = append(schemes, s)
+			}
+		}
+	}
+
 	// failed result filtering
 	var showFailed bool
 	showFailed, err = strconv.ParseBool(r.URL.Query().Get("failed"))
@@ -117,6 +131,10 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 			Where("value IN (?)", technologies))
 	}
 
+	if len(schemes) > 0 {
+		query.Where("url_scheme IN ?", schemes)
+	}
+
 	if !showFailed {
 		query.Where("failed = ?", showFailed)
 	}
@@ -139,6 +157,7 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 			ID:           result.ID,
 			ProbedAt:     result.ProbedAt,
 			URL:          result.URL,
+			URLScheme:    result.URLScheme,
 			ResponseCode: result.ResponseCode,
 			Title:        result.Title,
 			Filename:     result.Filename,

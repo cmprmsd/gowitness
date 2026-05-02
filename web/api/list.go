@@ -12,6 +12,7 @@ type listResponse struct {
 	ID uint `json:"id" gorm:"primarykey"`
 
 	URL            string `json:"url"`
+	URLScheme      string `json:"url_scheme"`
 	FinalURL       string `json:"final_url"`
 	ResponseCode   int    `json:"response_code"`
 	ResponseReason string `json:"response_reason"`

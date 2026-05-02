@@ -13,7 +13,7 @@ import (
 )
 
 var scanWriters = []writers.Writer{}
-var scanDriver runner.Driver
+var scanDrivers = map[string]runner.Driver{}
 var scanRunner *runner.Runner
 
 var scanCmd = &cobra.Command{
@@ -53,23 +53,64 @@ flags.`)),
 		// An slog-capable logger to use with drivers and runners
 		logger := slog.New(log.Logger)
 
-		// Configure the driver
-		switch opts.Scan.Driver {
-		case "gorod":
-			scanDriver, err = driver.NewGorod(logger, *opts)
-			if err != nil {
-				return err
-			}
-		case "chromedp":
-			scanDriver, err = driver.NewChromedp(logger, *opts)
-			if err != nil {
-				return err
-			}
-		default:
-			return errors.New("invalid scan driver chosen")
+		// Build the per-scheme driver map. The HTTP driver is registered for
+		// both http and https schemes. VNC and RDP drivers are dialed lazily
+		// only when their scheme is enabled in --uri-filter.
+		schemeFilter := map[string]bool{}
+		for _, s := range opts.Scan.UriFilter {
+			schemeFilter[s] = true
 		}
 
-		log.Debug("scanning driver started", "driver", opts.Scan.Driver)
+		// HTTP driver (chromedp or gorod) registered when http or https is
+		// enabled. Skip Chrome instantiation entirely if neither is enabled.
+		if schemeFilter["http"] || schemeFilter["https"] {
+			var httpDriver runner.Driver
+			switch opts.Scan.Driver {
+			case "gorod":
+				httpDriver, err = driver.NewGorod(logger, *opts)
+				if err != nil {
+					return err
+				}
+			case "chromedp":
+				httpDriver, err = driver.NewChromedp(logger, *opts)
+				if err != nil {
+					return err
+				}
+			default:
+				return errors.New("invalid scan driver chosen")
+			}
+			if schemeFilter["http"] {
+				scanDrivers["http"] = httpDriver
+			}
+			if schemeFilter["https"] {
+				scanDrivers["https"] = httpDriver
+			}
+			log.Debug("http driver started", "driver", opts.Scan.Driver)
+		}
+
+		// VNC driver
+		if schemeFilter["vnc"] {
+			vncDriver, err := driver.NewVNC(logger, *opts)
+			if err != nil {
+				return err
+			}
+			scanDrivers["vnc"] = vncDriver
+			log.Debug("vnc driver started")
+		}
+
+		// RDP driver
+		if schemeFilter["rdp"] {
+			rdpDriver, err := driver.NewRDP(logger, *opts)
+			if err != nil {
+				return err
+			}
+			scanDrivers["rdp"] = rdpDriver
+			log.Debug("rdp driver started")
+		}
+
+		if len(scanDrivers) == 0 {
+			return errors.New("no scan drivers enabled (check --uri-filter)")
+		}
 
 		// Configure writers that subcommand scanners will pass to
 		// a runner instance.
@@ -118,7 +159,7 @@ flags.`)),
 		}
 
 		// Get the runner up. Basically, all of the subcommands will use this.
-		scanRunner, err = runner.NewRunner(logger, scanDriver, *opts, scanWriters)
+		scanRunner, err = runner.NewRunner(logger, scanDrivers, *opts, scanWriters)
 		if err != nil {
 			return err
 		}
@@ -139,7 +180,7 @@ func init() {
 	scanCmd.PersistentFlags().IntVarP(&opts.Scan.Threads, "threads", "t", 6, "Number of concurrent threads (goroutines) to use")
 	scanCmd.PersistentFlags().IntVarP(&opts.Scan.Timeout, "timeout", "T", 60, "Number of seconds before considering a page timed out")
 	scanCmd.PersistentFlags().IntVar(&opts.Scan.Delay, "delay", 3, "Number of seconds delay between navigation and screenshotting")
-	scanCmd.PersistentFlags().StringSliceVar(&opts.Scan.UriFilter, "uri-filter", []string{"http", "https"}, "Valid URIs to pass to the scanning process")
+	scanCmd.PersistentFlags().StringSliceVar(&opts.Scan.UriFilter, "uri-filter", []string{"http", "https", "vnc", "rdp"}, "Valid URIs to pass to the scanning process. Determines which drivers are activated.")
 	scanCmd.PersistentFlags().StringVarP(&opts.Scan.ScreenshotPath, "screenshot-path", "s", "./screenshots", "Path to store screenshots")
 	scanCmd.PersistentFlags().StringVar(&opts.Scan.ScreenshotFormat, "screenshot-format", "jpeg", "Format to save screenshots as. Valid formats are: jpeg, png")
 	scanCmd.PersistentFlags().IntVar(&opts.Scan.ScreenshotJpegQuality, "screenshot-jpeg-quality", 60, "The quality of JPEG screenshots (1-100)")
@@ -161,6 +202,18 @@ func init() {
 	scanCmd.PersistentFlags().IntVar(&opts.Chrome.WindowX, "chrome-window-x", 1280, "The Chrome browser window width, in pixels")
 	scanCmd.PersistentFlags().IntVar(&opts.Chrome.WindowY, "chrome-window-y", 720, "The Chrome browser window height, in pixels")
 	scanCmd.PersistentFlags().StringArrayVar(&opts.Chrome.Headers, "chrome-header", []string{}, "Extra headers to add to requests. Supports multiple --chrome-header flags")
+
+	// VNC options
+	scanCmd.PersistentFlags().IntVar(&opts.VNC.Port, "vnc-port", 5900, "Default port for vnc:// targets that omit a port")
+	scanCmd.PersistentFlags().BoolVar(&opts.VNC.ForceNoAuth, "vnc-force-none", true, "Force RFB security type 1 (None) even if not advertised by the server (CVE-2006-2369 style auth bypass)")
+	scanCmd.PersistentFlags().IntVar(&opts.VNC.SettleTime, "vnc-settle-time", 2, "Seconds to wait for additional framebuffer rectangles after the initial update before screenshotting")
+
+	// RDP options
+	scanCmd.PersistentFlags().IntVar(&opts.RDP.Port, "rdp-port", 3389, "Default port for rdp:// targets that omit a port")
+	scanCmd.PersistentFlags().IntVar(&opts.RDP.SettleTime, "rdp-settle-time", 5, "Seconds to wait for the login screen to render before screenshotting")
+	scanCmd.PersistentFlags().StringVar(&opts.RDP.Username, "rdp-username", "", "Default RDP username (Standard RDP security only - no NLA)")
+	scanCmd.PersistentFlags().StringVar(&opts.RDP.Password, "rdp-password", "", "Default RDP password")
+	scanCmd.PersistentFlags().StringVar(&opts.RDP.Domain, "rdp-domain", "", "Default RDP domain")
 
 	// Write options for scan subcommands
 	scanCmd.PersistentFlags().BoolVar(&opts.Writer.Db, "write-db", false, "Write results to a SQLite database")

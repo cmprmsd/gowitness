@@ -181,8 +181,9 @@ func (run *Gorod) Witness(target string, runner *runner.Runner) (*models.Result,
 	var (
 		first  *proto.NetworkRequestWillBeSent
 		result = &models.Result{
-			URL:      target,
-			ProbedAt: time.Now(),
+			URL:       target,
+			URLScheme: parseScheme(target),
+			ProbedAt:  time.Now(),
 		}
 		resultMutex   = sync.Mutex{}
 		netlog        = make(map[string]models.NetworkLog)

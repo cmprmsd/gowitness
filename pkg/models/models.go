@@ -17,6 +17,7 @@ type Result struct {
 	ID uint `json:"id" gorm:"primarykey"`
 
 	URL                   string    `json:"url"`
+	URLScheme             string    `json:"url_scheme" gorm:"index"`
 	ProbedAt              time.Time `json:"probed_at"`
 	FinalURL              string    `json:"final_url"`
 	ResponseCode          int       `json:"response_code"`

@@ -202,8 +202,9 @@ func (run *Chromedp) Witness(target string, thisRunner *runner.Runner) (*models.
 	// url result for output writers.
 	var (
 		result = &models.Result{
-			URL:      target,
-			ProbedAt: time.Now(),
+			URL:       target,
+			URLScheme: parseScheme(target),
+			ProbedAt:  time.Now(),
 		}
 		resultMutex sync.Mutex
 		first       *network.EventRequestWillBeSent
