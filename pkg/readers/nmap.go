@@ -99,7 +99,7 @@ func (nr *NmapReader) Read(ch chan<- string) error {
 				// add hostname candidates
 				if nr.Options.Hostnames {
 					for _, hostaName := range host.Hostnames {
-						for _, target := range nr.urlsFor(hostaName.Name, port.PortId) {
+						for _, target := range nr.urlsFor(hostaName.Name, port.PortId, port.Service.Name) {
 							ch <- target
 						}
 					}
@@ -107,12 +107,12 @@ func (nr *NmapReader) Read(ch chan<- string) error {
 
 				// ip:port candidates
 				if address.AddrType == "ipv4" {
-					for _, target := range nr.urlsFor(address.Addr, port.PortId) {
+					for _, target := range nr.urlsFor(address.Addr, port.PortId, port.Service.Name) {
 						ch <- target
 					}
 				} else {
 					addr := fmt.Sprintf("[%s]", address.Addr)
-					for _, target := range nr.urlsFor(addr, port.PortId) {
+					for _, target := range nr.urlsFor(addr, port.PortId, port.Service.Name) {
 						ch <- target
 					}
 				}
@@ -124,9 +124,16 @@ func (nr *NmapReader) Read(ch chan<- string) error {
 }
 
 // urlsFor returns URLs for a scanning candidate.
-// For candidates with no protocol, (and none of http/https is ignored), the
-// method will return two urls
-func (nr *NmapReader) urlsFor(target string, port int) []string {
+//
+// When the (service, port) tuple unambiguously points at VNC or RDP, only
+// the corresponding scheme is emitted - probing http/https against an RDP
+// or VNC port is wasted work. Otherwise the historical http/https
+// behaviour is preserved.
+func (nr *NmapReader) urlsFor(target string, port int, service string) []string {
+	if scheme := SchemeFor(service, port); scheme == "vnc" || scheme == "rdp" {
+		return []string{fmt.Sprintf("%s://%s:%d", scheme, target, port)}
+	}
+
 	var urls []string
 
 	if !nr.Options.NoHTTP {

@@ -53,6 +53,14 @@ func NewNessusReader(opts *NessusReaderOptions) *NessusReader {
 	}
 }
 
+// nessusPort tracks a port and the service name nessus reported for it,
+// so we can later route VNC/RDP services to the correct scheme rather
+// than always emitting http/https candidates.
+type nessusPort struct {
+	Port    int
+	Service string
+}
+
 func (nr *NessusReader) Read(ch chan<- string) error {
 	defer close(ch)
 
@@ -63,7 +71,7 @@ func (nr *NessusReader) Read(ch chan<- string) error {
 	defer nessus.Close()
 
 	decoder := xml.NewDecoder(nessus)
-	var targets = make(map[string][]int)
+	var targets = make(map[string][]nessusPort)
 
 	for {
 		token, err := decoder.Token()
@@ -110,12 +118,13 @@ func (nr *NessusReader) Read(ch chan<- string) error {
 				if islazy.SliceHasStr(nr.Options.Services, item.ServiceName) ||
 					islazy.SliceHasStr(nr.Options.PluginOutputs, item.PluginOutput) {
 
+					entry := nessusPort{Port: item.Port, Service: item.ServiceName}
 					// Add the hostnames or IP to the merged targetsMap
 					if nr.Options.Hostnames && fqdn != "" {
-						targets[fqdn] = islazy.UniqueIntSlice(append(targets[fqdn], item.Port))
+						targets[fqdn] = appendUniquePort(targets[fqdn], entry)
 					}
 					if ip != "" {
-						targets[ip] = islazy.UniqueIntSlice(append(targets[ip], item.Port))
+						targets[ip] = appendUniquePort(targets[ip], entry)
 					}
 				}
 			}
@@ -131,8 +140,10 @@ func (nr *NessusReader) Read(ch chan<- string) error {
 	return nil
 }
 
-// urlsFor generates urls for a target and its port ranges
-func (nr *NessusReader) urlsFor(target string, ports []int) []string {
+// urlsFor generates urls for a target and its port ranges. Services that
+// nessus identifies as VNC or RDP are emitted with the matching scheme
+// rather than http/https.
+func (nr *NessusReader) urlsFor(target string, ports []nessusPort) []string {
 	var urls []string
 
 	ip := net.ParseIP(target)
@@ -142,14 +153,29 @@ func (nr *NessusReader) urlsFor(target string, ports []int) []string {
 		host = fmt.Sprintf("[%s]", target)
 	}
 
-	for _, port := range ports {
+	for _, p := range ports {
+		if scheme := SchemeFor(p.Service, p.Port); scheme == "vnc" || scheme == "rdp" {
+			urls = append(urls, fmt.Sprintf("%s://%s:%d", scheme, host, p.Port))
+			continue
+		}
 		if !nr.Options.NoHTTP {
-			urls = append(urls, fmt.Sprintf("http://%s:%d", host, port))
+			urls = append(urls, fmt.Sprintf("http://%s:%d", host, p.Port))
 		}
 		if !nr.Options.NoHTTPS {
-			urls = append(urls, fmt.Sprintf("https://%s:%d", host, port))
+			urls = append(urls, fmt.Sprintf("https://%s:%d", host, p.Port))
 		}
 	}
 
 	return urls
+}
+
+// appendUniquePort merges a new port entry into a slice, deduplicating by
+// port number. The first-seen service name wins.
+func appendUniquePort(existing []nessusPort, p nessusPort) []nessusPort {
+	for _, e := range existing {
+		if e.Port == p.Port {
+			return existing
+		}
+	}
+	return append(existing, p)
 }
