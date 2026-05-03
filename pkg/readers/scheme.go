@@ -2,21 +2,24 @@ package readers
 
 import "strings"
 
-// SchemeForPort returns "vnc", "rdp", or "" based on a port number alone.
-// Used by readers (cidr) that don't have service-name information.
+// SchemeForPort returns "vnc", "rdp", "rtsp", or "" based on a port
+// number alone. Used by readers (cidr) that don't have service-name
+// information.
 func SchemeForPort(port int) string {
 	switch {
 	case port == 3389:
 		return "rdp"
 	case port >= 5900 && port <= 5910:
 		return "vnc"
+	case port == 554 || port == 8554:
+		return "rtsp"
 	}
 	return ""
 }
 
-// SchemeForService returns "vnc", "rdp", or "" based on a service name as
-// reported by nmap or nessus. Match is case-insensitive and tolerates the
-// most common labels each tool emits.
+// SchemeForService returns "vnc", "rdp", "rtsp", or "" based on a
+// service name as reported by nmap or nessus. Match is case-insensitive
+// and tolerates the most common labels each tool emits.
 func SchemeForService(service string) string {
 	s := strings.ToLower(strings.TrimSpace(service))
 	switch s {
@@ -24,12 +27,17 @@ func SchemeForService(service string) string {
 		return "vnc"
 	case "ms-wbt-server", "ms-rdp", "rdp", "ms-wbt", "msrdp":
 		return "rdp"
+	case "rtsp", "rtsps", "rtsp-alt":
+		return "rtsp"
 	}
 	if strings.Contains(s, "rdp") || strings.Contains(s, "wbt-server") {
 		return "rdp"
 	}
 	if strings.HasPrefix(s, "vnc") || strings.Contains(s, "rfb") {
 		return "vnc"
+	}
+	if strings.HasPrefix(s, "rtsp") {
+		return "rtsp"
 	}
 	return ""
 }

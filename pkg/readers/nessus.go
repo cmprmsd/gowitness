@@ -154,7 +154,7 @@ func (nr *NessusReader) urlsFor(target string, ports []nessusPort) []string {
 	}
 
 	for _, p := range ports {
-		if scheme := SchemeFor(p.Service, p.Port); scheme == "vnc" || scheme == "rdp" {
+		if scheme := SchemeFor(p.Service, p.Port); scheme == "vnc" || scheme == "rdp" || scheme == "rtsp" {
 			urls = append(urls, fmt.Sprintf("%s://%s:%d", scheme, host, p.Port))
 			continue
 		}

@@ -108,6 +108,16 @@ flags.`)),
 			log.Debug("rdp driver started")
 		}
 
+		// RTSP driver
+		if schemeFilter["rtsp"] {
+			rtspDriver, err := driver.NewRTSP(logger, *opts)
+			if err != nil {
+				return err
+			}
+			scanDrivers["rtsp"] = rtspDriver
+			log.Debug("rtsp driver started")
+		}
+
 		if len(scanDrivers) == 0 {
 			return errors.New("no scan drivers enabled (check --uri-filter)")
 		}
@@ -180,7 +190,7 @@ func init() {
 	scanCmd.PersistentFlags().IntVarP(&opts.Scan.Threads, "threads", "t", 6, "Number of concurrent threads (goroutines) to use")
 	scanCmd.PersistentFlags().IntVarP(&opts.Scan.Timeout, "timeout", "T", 60, "Number of seconds before considering a page timed out")
 	scanCmd.PersistentFlags().IntVar(&opts.Scan.Delay, "delay", 3, "Number of seconds delay between navigation and screenshotting")
-	scanCmd.PersistentFlags().StringSliceVar(&opts.Scan.UriFilter, "uri-filter", []string{"http", "https", "vnc", "rdp"}, "Valid URIs to pass to the scanning process. Determines which drivers are activated.")
+	scanCmd.PersistentFlags().StringSliceVar(&opts.Scan.UriFilter, "uri-filter", []string{"http", "https", "vnc", "rdp", "rtsp"}, "Valid URIs to pass to the scanning process. Determines which drivers are activated.")
 	scanCmd.PersistentFlags().StringVarP(&opts.Scan.ScreenshotPath, "screenshot-path", "s", "./screenshots", "Path to store screenshots")
 	scanCmd.PersistentFlags().StringVar(&opts.Scan.ScreenshotFormat, "screenshot-format", "jpeg", "Format to save screenshots as. Valid formats are: jpeg, png")
 	scanCmd.PersistentFlags().IntVar(&opts.Scan.ScreenshotJpegQuality, "screenshot-jpeg-quality", 60, "The quality of JPEG screenshots (1-100)")
@@ -216,6 +226,15 @@ func init() {
 	scanCmd.PersistentFlags().StringVar(&opts.RDP.Username, "rdp-username", "", "Default RDP username (Standard RDP security only - no NLA)")
 	scanCmd.PersistentFlags().StringVar(&opts.RDP.Password, "rdp-password", "", "Default RDP password")
 	scanCmd.PersistentFlags().StringVar(&opts.RDP.Domain, "rdp-domain", "", "Default RDP domain")
+
+	// RTSP options
+	scanCmd.PersistentFlags().IntVar(&opts.RTSP.Port, "rtsp-port", 554, "Default port for rtsp:// targets that omit a port")
+	scanCmd.PersistentFlags().StringVar(&opts.RTSP.Transport, "rtsp-transport", "tcp", "RTSP transport [tcp|udp]")
+	scanCmd.PersistentFlags().StringVar(&opts.RTSP.Username, "rtsp-username", "", "Default RTSP username when not embedded in the URL")
+	scanCmd.PersistentFlags().StringVar(&opts.RTSP.Password, "rtsp-password", "", "Default RTSP password")
+	scanCmd.PersistentFlags().StringSliceVar(&opts.RTSP.DefaultCreds, "rtsp-default-creds",
+		[]string{"admin:admin", "admin:", "admin:12345", "admin:888888", "root:root", "admin:password"},
+		"Comma-separated list of user:pass pairs to try after anonymous; pass an empty value to disable")
 
 	// Write options for scan subcommands
 	scanCmd.PersistentFlags().BoolVar(&opts.Writer.Db, "write-db", false, "Write results to a SQLite database")

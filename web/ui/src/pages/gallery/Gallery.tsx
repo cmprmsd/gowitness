@@ -104,7 +104,7 @@ const GalleryPage = () => {
     handlePageChange(1); // back to page 1
   };
 
-  const PROTOCOL_OPTIONS = ["http", "https", "vnc", "rdp"] as const;
+  const PROTOCOL_OPTIONS = ["http", "https", "vnc", "rdp", "rtsp"] as const;
 
   const selectedSchemes = schemeFilter.split(",").filter(Boolean);
   const selectedTags = tagFilter.split(",").filter(Boolean);

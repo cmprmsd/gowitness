@@ -130,7 +130,7 @@ func (nr *NmapReader) Read(ch chan<- string) error {
 // or VNC port is wasted work. Otherwise the historical http/https
 // behaviour is preserved.
 func (nr *NmapReader) urlsFor(target string, port int, service string) []string {
-	if scheme := SchemeFor(service, port); scheme == "vnc" || scheme == "rdp" {
+	if scheme := SchemeFor(service, port); scheme == "vnc" || scheme == "rdp" || scheme == "rtsp" {
 		return []string{fmt.Sprintf("%s://%s:%d", scheme, target, port)}
 	}
 

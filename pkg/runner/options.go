@@ -14,6 +14,8 @@ type Options struct {
 	VNC VNC
 	// RDP is RDP driver options
 	RDP RDP
+	// RTSP is RTSP driver options
+	RTSP RTSP
 }
 
 // VNC holds options for the VNC driver
@@ -41,6 +43,27 @@ type RDP struct {
 	Username string
 	Password string
 	Domain   string
+}
+
+// RTSP holds options for the RTSP driver. The driver shells out to ffmpeg
+// for the actual stream pulling and decoding.
+type RTSP struct {
+	// Port is the default port to use when an rtsp:// URL omits the port.
+	// (Mostly informational; ffmpeg honours RTSP's default port 554.)
+	Port int
+	// Transport is the RTSP transport to negotiate. "tcp" works through
+	// firewalls and NAT; "udp" is sometimes faster on local networks.
+	Transport string
+	// Username, Password are optional credentials applied when the rtsp://
+	// URL does not include userinfo.
+	Username string
+	Password string
+	// DefaultCreds is a list of "user:pass" strings tried in order after
+	// an anonymous probe fails, when the URL has no embedded creds and
+	// neither --rtsp-username nor --rtsp-password is set. Each entry
+	// produces one ffmpeg invocation; the first successful frame capture
+	// wins. Pass an empty list to disable.
+	DefaultCreds []string
 }
 
 // Logging is log related options
@@ -146,7 +169,7 @@ func NewDefaultOptions() *Options {
 			Driver:           "chromedp",
 			Threads:          6,
 			Timeout:          60,
-			UriFilter:        []string{"http", "https", "vnc", "rdp"},
+			UriFilter:        []string{"http", "https", "vnc", "rdp", "rtsp"},
 			ScreenshotFormat: "jpeg",
 			HttpCodeFilter:   []int{},
 		},
@@ -158,6 +181,10 @@ func NewDefaultOptions() *Options {
 		RDP: RDP{
 			Port:       3389,
 			SettleTime: 5,
+		},
+		RTSP: RTSP{
+			Port:      554,
+			Transport: "tcp",
 		},
 		Logging: Logging{
 			Debug:         true,

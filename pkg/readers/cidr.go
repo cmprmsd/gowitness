@@ -63,10 +63,10 @@ func (cr *CidrReader) candidates() ([]string, error) {
 		for _, port := range ports {
 			partial := fmt.Sprintf("%s:%d", ip, port)
 
-			// Well-known VNC/RDP ports get the matching scheme so a CIDR
-			// sweep that includes 3389 or 5900 yields RDP/VNC probes
-			// instead of pointless http/https attempts.
-			if scheme := SchemeForPort(port); scheme == "vnc" || scheme == "rdp" {
+			// Well-known VNC/RDP/RTSP ports get the matching scheme so a
+			// CIDR sweep that includes 554 / 3389 / 5900 yields the right
+			// driver instead of pointless http/https attempts.
+			if scheme := SchemeForPort(port); scheme == "vnc" || scheme == "rdp" || scheme == "rtsp" {
 				candidates = append(candidates, fmt.Sprintf("%s://%s", scheme, partial))
 				continue
 			}
