@@ -127,6 +127,11 @@ type Scan struct {
 	// HttpCodeFilter are http response codes to screenshot. this is a filter.
 	// by default all codes are screenshotted
 	HttpCodeFilter []int
+	// TagsFile is an optional path to a YAML rules file overriding the
+	// embedded tagger ruleset. When empty, the embedded ruleset is used.
+	TagsFile string
+	// DisableTags turns off the favicon-hash + YAML tagger entirely.
+	DisableTags bool
 }
 
 // NewDefaultOptions returns Options with some default values

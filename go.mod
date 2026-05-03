@@ -19,7 +19,10 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.6
+	github.com/tomatome/grdp v0.1.0
+	github.com/twmb/murmur3 v1.1.8
 	github.com/ysmood/gson v0.7.3
+	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.31.1
@@ -81,11 +84,8 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/swaggo/files v1.0.1 // indirect
-	github.com/tomatome/grdp v0.1.0 // indirect
-	github.com/tomatome/win v0.3.1 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/ysmood/fetchup v0.2.3 // indirect
 	github.com/ysmood/goob v0.4.0 // indirect

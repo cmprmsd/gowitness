@@ -29,6 +29,7 @@ type galleryContent struct {
 	Screenshot   string    `json:"screenshot"`
 	Failed       bool      `json:"failed"`
 	Technologies []string  `json:"technologies"`
+	Tags         []string  `json:"tags"`
 }
 
 // GalleryHandler gets a paginated gallery
@@ -45,6 +46,7 @@ type galleryContent struct {
 //	@Param			perception		query		boolean	false	"Order the results by perception hash."
 //	@Param			failed			query		boolean	false	"Include failed screenshots in the results."
 //	@Param			schemes			query		string	false	"A comma separated list of url schemes (http, https, vnc, rdp) to filter by."
+//	@Param			tags			query		string	false	"A comma separated list of tags to filter by (matches any)."
 //	@Success		200				{object}	galleryResponse
 //	@Router			/results/gallery [get]
 func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
@@ -105,6 +107,18 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// tag filtering (matches results that have ANY of the requested tags)
+	var tags []string
+	tagsValue := r.URL.Query().Get("tags")
+	if tagsValue != "" {
+		for _, s := range strings.Split(tagsValue, ",") {
+			s = strings.TrimSpace(s)
+			if s != "" {
+				tags = append(tags, s)
+			}
+		}
+	}
+
 	// failed result filtering
 	var showFailed bool
 	showFailed, err = strconv.ParseBool(r.URL.Query().Get("failed"))
@@ -115,7 +129,7 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 	// query the db
 	var queryResults []*models.Result
 	query := h.DB.Model(&models.Result{}).Limit(results.Limit).
-		Offset(offset).Preload("Technologies")
+		Offset(offset).Preload("Technologies").Preload("Tags")
 
 	if perceptionSort {
 		query.Order("perception_hash_group_id DESC")
@@ -135,6 +149,12 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 		query.Where("url_scheme IN ?", schemes)
 	}
 
+	if len(tags) > 0 {
+		query.Where("id in (?)", h.DB.Model(&models.Tag{}).
+			Select("result_id").Distinct("result_id").
+			Where("value IN (?)", tags))
+	}
+
 	if !showFailed {
 		query.Where("failed = ?", showFailed)
 	}
@@ -145,11 +165,15 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// extract Technologies for each result
+	// extract Technologies and Tags for each result
 	for _, result := range queryResults {
 		var technologies []string
 		for _, tech := range result.Technologies {
 			technologies = append(technologies, tech.Value)
+		}
+		var resultTags []string
+		for _, tag := range result.Tags {
+			resultTags = append(resultTags, tag.Value)
 		}
 
 		// Append the processed data to the response
@@ -164,6 +188,7 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 			Screenshot:   result.Screenshot,
 			Failed:       result.Failed,
 			Technologies: technologies,
+			Tags:         resultTags,
 		})
 	}
 

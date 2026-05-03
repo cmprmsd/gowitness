@@ -435,6 +435,20 @@ func (run *Gorod) Witness(target string, runner *runner.Runner) (*models.Result,
 		}
 	}
 
+	// apply tagger rules. Same code path as the chromedp driver via the
+	// shared applyTags helper; the only driver-specific bit is fetching
+	// the favicon from the page context.
+	{
+		var faviconB64 string
+		// ByPromise() is required - the IIFE returns a Promise.
+		if eval, err := page.Evaluate(rod.Eval(faviconFetchScript).ByPromise()); err != nil {
+			log.Debug("favicon fetch failed", "err", err)
+		} else if eval != nil {
+			faviconB64 = eval.Value.Str()
+		}
+		applyTags(result, faviconB64, runner)
+	}
+
 	// take the screenshot. getting here often means the page responded and we have
 	// some information. sometimes though, and im not sure why, page.Screenshot()
 	// fails by timing out. in that case, record what we have at least but martk

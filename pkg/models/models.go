@@ -40,6 +40,7 @@ type Result struct {
 
 	TLS          TLS          `json:"tls" gorm:"constraint:OnDelete:CASCADE"`
 	Technologies []Technology `json:"technologies" gorm:"constraint:OnDelete:CASCADE"`
+	Tags         []Tag        `json:"tags" gorm:"constraint:OnDelete:CASCADE"`
 
 	Headers []Header     `json:"headers" gorm:"constraint:OnDelete:CASCADE"`
 	Network []NetworkLog `json:"network" gorm:"constraint:OnDelete:CASCADE"`
@@ -81,6 +82,17 @@ type TLSSanList struct {
 }
 
 type Technology struct {
+	ID       uint `json:"id" gorm:"primarykey"`
+	ResultID uint `json:"result_id"`
+
+	Value string `json:"value" gorm:"index"`
+}
+
+// Tag is an operator-friendly classification (e.g. "printer", "fortinet",
+// "FortiGate") attached to a Result by the tagger. Multiple Tag rows per
+// Result are normal: a single matched rule may emit a product name, its
+// category, and its vendor as three separate Tag rows.
+type Tag struct {
 	ID       uint `json:"id" gorm:"primarykey"`
 	ResultID uint `json:"result_id"`
 

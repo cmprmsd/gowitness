@@ -10,6 +10,7 @@ import (
 
 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
 	"github.com/sensepost/gowitness/internal/islazy"
+	"github.com/sensepost/gowitness/internal/tagger"
 	"github.com/sensepost/gowitness/pkg/models"
 	"github.com/sensepost/gowitness/pkg/writers"
 )
@@ -22,6 +23,11 @@ type Runner struct {
 	// across schemes (chromedp handles both http and https).
 	Drivers    map[string]Driver
 	Wappalyzer *wappalyzer.Wappalyze
+	// Tagger classifies HTTP results into operator tags (printer,
+	// firewall, hypervisor, ...). Nil when disabled or when loading the
+	// ruleset failed (a warning is logged in that case so scanning can
+	// continue without tagging).
+	Tagger *tagger.Tagger
 
 	// options for the Runner to consider
 	options Options
@@ -75,11 +81,23 @@ func NewRunner(logger *slog.Logger, drivers map[string]Driver, opts Options, wri
 		return nil, err
 	}
 
+	// Load the favicon-hash + YAML tag ruleset. A bad rules file is a
+	// warning, not a fatal error - scanning continues without tagging.
+	var tg *tagger.Tagger
+	if !opts.Scan.DisableTags {
+		tg, err = tagger.LoadFromFile(opts.Scan.TagsFile)
+		if err != nil {
+			logger.Warn("tagger disabled: failed to load rules", "err", err)
+			tg = nil
+		}
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 
 	return &Runner{
 		Drivers:    drivers,
 		Wappalyzer: wap,
+		Tagger:     tg,
 		options:    opts,
 		writers:    writers,
 		Targets:    make(chan string),

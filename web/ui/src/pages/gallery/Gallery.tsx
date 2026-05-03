@@ -6,7 +6,7 @@ import { WideSkeleton } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertOctagonIcon, BanIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, ExternalLinkIcon,
-  FilterIcon, GroupIcon, NetworkIcon, ShieldCheckIcon, XIcon
+  FilterIcon, GroupIcon, NetworkIcon, ShieldCheckIcon, TagIcon, XIcon
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -26,6 +26,7 @@ const GalleryPage = () => {
   const [gallery, setGallery] = useState<apitypes.galleryResult[]>();
   const [wappalyzer, setWappalyzer] = useState<apitypes.wappalyzer>();
   const [technology, setTechnology] = useState<apitypes.technologylist>();
+  const [tagList, setTagList] = useState<apitypes.taglist>();
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -37,20 +38,21 @@ const GalleryPage = () => {
   const technologyFilter = searchParams.get("technologies") || "";
   const statusFilter = searchParams.get("status") || "";
   const schemeFilter = searchParams.get("schemes") || "";
+  const tagFilter = searchParams.get("tags") || "";
   // toggles
   const perceptionGroup = searchParams.get("perception") === "true";
   const showFailed = searchParams.get("failed") !== "false"; // Default to true
 
   useEffect(() => {
-    getWappalyzerData(setWappalyzer, setTechnology);
+    getWappalyzerData(setWappalyzer, setTechnology, setTagList);
   }, []);
 
   useEffect(() => {
     getData(
       setLoading, setGallery, setTotalPages,
-      page, limit, technologyFilter, statusFilter, schemeFilter, perceptionGroup, showFailed
+      page, limit, technologyFilter, statusFilter, schemeFilter, tagFilter, perceptionGroup, showFailed
     );
-  }, [page, limit, perceptionGroup, statusFilter, technologyFilter, schemeFilter, showFailed]);
+  }, [page, limit, perceptionGroup, statusFilter, technologyFilter, schemeFilter, tagFilter, showFailed]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -105,6 +107,7 @@ const GalleryPage = () => {
   const PROTOCOL_OPTIONS = ["http", "https", "vnc", "rdp"] as const;
 
   const selectedSchemes = schemeFilter.split(",").filter(Boolean);
+  const selectedTags = tagFilter.split(",").filter(Boolean);
 
   const handleSchemeChange = (scheme: string) => {
     setSearchParams(prev => {
@@ -119,6 +122,29 @@ const GalleryPage = () => {
     });
     handlePageChange(1);
   };
+
+  const handleTagChange = (tag: string) => {
+    setSearchParams(prev => {
+      const current = prev.get("tags")?.split(",").filter(Boolean) || [];
+      if (current.includes(tag)) {
+        prev.set("tags", current.filter(s => s !== tag).join(","));
+      } else {
+        current.push(tag);
+        prev.set("tags", current.join(","));
+      }
+      return prev;
+    });
+    handlePageChange(1);
+  };
+
+  const sortedTags = useMemo(() => {
+    if (!tagList) return [];
+    const selected = tagFilter.split(",").filter(Boolean);
+    return [
+      ...selected,
+      ...tagList.tags.filter(t => !selected.includes(t)),
+    ];
+  }, [tagList, tagFilter]);
 
   const handleStatusFilter = (status: string) => {
     setSearchParams(prev => {
@@ -256,6 +282,30 @@ const GalleryPage = () => {
               <div className="w-full truncate text-xs text-muted-foreground mt-1">
                 {screenshot.url}
               </div>
+              {screenshot.tags && screenshot.tags.length > 0 ? (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {screenshot.tags.slice(0, 6).map(tag => (
+                    <Badge
+                      key={tag}
+                      variant="outline"
+                      className="text-[10px] px-1.5 py-0 cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleTagChange(tag);
+                      }}
+                      title={`Filter by ${tag}`}
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                  {screenshot.tags.length > 6 ? (
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                      +{screenshot.tags.length - 6}
+                    </Badge>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
             <div className="w-full flex items-center justify-between mt-2">
               <TooltipProvider delayDuration={0}>
@@ -376,6 +426,42 @@ const GalleryPage = () => {
                           )}
                         />
                         {scheme.toUpperCase()}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[200px] justify-start">
+                <TagIcon className="mr-2 h-4 w-4" />
+                {selectedTags.length > 0 ? (
+                  <>{selectedTags.length} tag{selectedTags.length === 1 ? "" : "s"}</>
+                ) : (
+                  "Filter by Tag"
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[260px] p-0">
+              <Command>
+                <CommandInput placeholder="Search tags..." />
+                <CommandList>
+                  <CommandEmpty>No tags yet. Run a scan to populate.</CommandEmpty>
+                  <CommandGroup>
+                    {sortedTags.map((tag) => (
+                      <CommandItem
+                        key={tag}
+                        onSelect={() => handleTagChange(tag)}
+                      >
+                        <CheckIcon
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            selectedTags.includes(tag) ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {tag}
                       </CommandItem>
                     ))}
                   </CommandGroup>

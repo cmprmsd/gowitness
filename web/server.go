@@ -81,6 +81,7 @@ func (s *Server) Run() {
 		r.Get("/results/detail/{id}", apih.DetailHandler)
 		r.Post("/results/delete", apih.DeleteResultHandler)
 		r.Get("/results/technology", apih.TechnologyListHandler)
+		r.Get("/results/tag", apih.TagListHandler)
 	})
 
 	// screenshot files

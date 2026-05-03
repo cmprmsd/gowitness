@@ -37,6 +37,7 @@ type galleryResult = {
   screenshot: string;
   failed: boolean;
   technologies: string[];
+  tags: string[];
 };
 
 // list
@@ -169,6 +170,16 @@ interface technologylist {
   technologies: string[];
 }
 
+interface taglist {
+  tags: string[];
+}
+
+interface tag {
+  id: number;
+  result_id: number;
+  value: string;
+}
+
 export type {
   statistics,
   wappalyzer,
@@ -185,4 +196,6 @@ export type {
   detail,
   searchresult,
   technologylist,
+  taglist,
+  tag,
 };

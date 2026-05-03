@@ -193,6 +193,8 @@ func init() {
 	scanCmd.PersistentFlags().BoolVar(&opts.Scan.SkipNetworkLogs, "skip-network-logs", false, "Don't include per-request network logs when writing results (also disables save-content)")
 	scanCmd.PersistentFlags().BoolVar(&opts.Scan.ScreenshotToWriter, "write-screenshots", false, "Store screenshots with writers in addition to filesystem storage")
 	scanCmd.PersistentFlags().IntSliceVar(&opts.Scan.HttpCodeFilter, "http-code-filter", []int{}, "Http response codes to screenshot. This is a filter (by default all codes are screenshotted)")
+	scanCmd.PersistentFlags().StringVar(&opts.Scan.TagsFile, "tags-file", "", "Path to a YAML rules file overriding the embedded tagger ruleset")
+	scanCmd.PersistentFlags().BoolVar(&opts.Scan.DisableTags, "no-tags", false, "Disable favicon-hash + YAML tagging")
 
 	// Chrome options
 	scanCmd.PersistentFlags().StringVar(&opts.Chrome.Path, "chrome-path", "", "The path to a Google Chrome binary to use (downloads a platform-appropriate binary by default)")

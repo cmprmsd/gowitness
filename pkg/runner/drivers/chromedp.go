@@ -504,6 +504,18 @@ func (run *Chromedp) Witness(target string, thisRunner *runner.Runner) (*models.
 		}
 	}
 
+	// apply tagger rules. Favicon hash takes precedence over title/header
+	// matching; an empty/missing favicon falls back gracefully.
+	{
+		var faviconB64 string
+		if err := chromedp.Run(navigationCtx, chromedp.Evaluate(faviconFetchScript, &faviconB64,
+			func(p *runtime.EvaluateParams) *runtime.EvaluateParams { return p.WithAwaitPromise(true) },
+		)); err != nil {
+			logger.Debug("favicon fetch failed", "err", err)
+		}
+		applyTags(result, faviconB64, thisRunner)
+	}
+
 	if img == nil && screenshotErr == nil {
 		screenshotErr = errors.New("screenshot not captured")
 	}

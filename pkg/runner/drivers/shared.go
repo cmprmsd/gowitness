@@ -2,6 +2,7 @@ package driver
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -12,10 +13,76 @@ import (
 	"strings"
 
 	"github.com/sensepost/gowitness/internal/islazy"
+	"github.com/sensepost/gowitness/internal/tagger"
 	"github.com/sensepost/gowitness/pkg/imagehash"
 	"github.com/sensepost/gowitness/pkg/models"
 	"github.com/sensepost/gowitness/pkg/runner"
 )
+
+// faviconFetchScript is the JavaScript snippet evaluated in the page
+// context to fetch /favicon.ico (or the document's <link rel="icon">) and
+// return its body as a base64-encoded string. Empty string means "no
+// favicon retrievable" - the caller should fall back to title/header
+// matchers.
+//
+// Running inside the page reuses Chrome's existing cookies, headers and
+// proxy state, so auth-gated favicons work without a parallel HTTP
+// fetcher.
+const faviconFetchScript = `
+(async () => {
+  try {
+    const linkEl = document.querySelector('link[rel~="icon"], link[rel~="shortcut"]');
+    const candidates = [];
+    if (linkEl && linkEl.href) candidates.push(linkEl.href);
+    candidates.push('/favicon.ico');
+    for (const u of candidates) {
+      try {
+        const r = await fetch(u, { credentials: 'include' });
+        if (!r.ok) continue;
+        const buf = await r.arrayBuffer();
+        if (!buf || buf.byteLength === 0) continue;
+        const bytes = new Uint8Array(buf);
+        let bin = '';
+        for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+        return btoa(bin);
+      } catch (_) {}
+    }
+  } catch (_) {}
+  return '';
+})();
+`
+
+// applyTags decodes a base64 favicon body (possibly empty), computes its
+// Shodan hash, runs the tagger, and appends matched tags to the result.
+// Safe to call with an empty/invalid favicon body or when the tagger is
+// nil - it just falls back to title/header matching, or no-ops.
+func applyTags(result *models.Result, faviconB64 string, run *runner.Runner) {
+	if run == nil || run.Tagger == nil {
+		return
+	}
+
+	in := tagger.MatchInput{
+		Title:   result.Title,
+		Headers: result.HeaderMap(),
+		Body:    result.HTML,
+	}
+	for _, t := range result.Technologies {
+		in.Technologies = append(in.Technologies, t.Value)
+	}
+
+	if faviconB64 != "" {
+		if raw, err := base64.StdEncoding.DecodeString(faviconB64); err == nil && len(raw) > 0 {
+			if h, err := tagger.ShodanHash(raw); err == nil {
+				in.FaviconHash = h
+				in.HasFavicon = true
+			}
+		}
+	}
+
+	for _, tag := range run.Tagger.Match(in) {
+		result.Tags = append(result.Tags, models.Tag{Value: tag})
+	}
+}
 
 // parseScheme returns the lowercased scheme (http, https, vnc, rdp, ...) of a
 // target URL. Returns an empty string when parsing fails.
