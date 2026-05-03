@@ -6,7 +6,7 @@ import { WideSkeleton } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertOctagonIcon, BanIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, ExternalLinkIcon,
-  FilterIcon, GroupIcon, NetworkIcon, ShieldCheckIcon, TagIcon, XIcon
+  FilterIcon, GroupIcon, KeyIcon, NetworkIcon, ShieldCheckIcon, TagIcon, XIcon
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -240,6 +240,29 @@ const GalleryPage = () => {
                 {screenshot.response_code}
               </Badge>
             </div>
+            {screenshot.discovered_creds ? (
+              <div className="absolute top-2 left-2">
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge
+                        variant="outline"
+                        className="bg-yellow-500/95 text-black border-yellow-700 font-mono text-[11px] shadow-lg"
+                      >
+                        <KeyIcon className="mr-1 h-3 w-3" />
+                        {screenshot.discovered_creds}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="text-xs max-w-xs">
+                      <p>Discovered credentials: <span className="font-mono">{screenshot.discovered_creds}</span></p>
+                      <p className="text-muted-foreground mt-1">
+                        Authenticated to this service using a default-credential probe.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            ) : null}
             <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <TooltipProvider delayDuration={0}>
                 <Tooltip>

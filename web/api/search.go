@@ -26,11 +26,12 @@ type searchResult struct {
 	Protocol       string   `json:"protocol"`
 	ContentLength  int64    `json:"content_length"`
 	Title          string   `json:"title"`
-	Failed         bool     `json:"failed"`
-	FailedReason   string   `json:"failed_reason"`
-	Filename       string   `json:"file_name"`
-	Screenshot     string   `json:"screenshot"`
-	MatchedFields  []string `json:"matched_fields"`
+	Failed          bool     `json:"failed"`
+	FailedReason    string   `json:"failed_reason"`
+	DiscoveredCreds string   `json:"discovered_creds"`
+	Filename        string   `json:"file_name"`
+	Screenshot      string   `json:"screenshot"`
+	MatchedFields   []string `json:"matched_fields"`
 }
 
 // searchOperators are the operators we support. everything else is
@@ -245,20 +246,21 @@ func appendResults(searchResults []searchResult, resultIDs map[uint]bool, newRes
 			}
 		} else {
 			searchResults = append(searchResults, searchResult{
-				ID:             res.ID,
-				URL:            res.URL,
-				URLScheme:      res.URLScheme,
-				FinalURL:       res.FinalURL,
-				ResponseCode:   res.ResponseCode,
-				ResponseReason: res.ResponseReason,
-				Protocol:       res.Protocol,
-				ContentLength:  res.ContentLength,
-				Title:          res.Title,
-				Failed:         res.Failed,
-				FailedReason:   res.FailedReason,
-				Filename:       res.Filename,
-				Screenshot:     res.Screenshot,
-				MatchedFields:  []string{matchedField},
+				ID:              res.ID,
+				URL:             res.URL,
+				URLScheme:       res.URLScheme,
+				FinalURL:        res.FinalURL,
+				ResponseCode:    res.ResponseCode,
+				ResponseReason:  res.ResponseReason,
+				Protocol:        res.Protocol,
+				ContentLength:   res.ContentLength,
+				Title:           res.Title,
+				Failed:          res.Failed,
+				FailedReason:    res.FailedReason,
+				DiscoveredCreds: res.DiscoveredCreds,
+				Filename:        res.Filename,
+				Screenshot:      res.Screenshot,
+				MatchedFields:   []string{matchedField},
 			})
 
 			// Mark the result ID as added

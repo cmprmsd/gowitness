@@ -19,17 +19,18 @@ type galleryResponse struct {
 }
 
 type galleryContent struct {
-	ID           uint      `json:"id"`
-	ProbedAt     time.Time `json:"probed_at"`
-	URL          string    `json:"url"`
-	URLScheme    string    `json:"url_scheme"`
-	ResponseCode int       `json:"response_code"`
-	Title        string    `json:"title"`
-	Filename     string    `json:"file_name"`
-	Screenshot   string    `json:"screenshot"`
-	Failed       bool      `json:"failed"`
-	Technologies []string  `json:"technologies"`
-	Tags         []string  `json:"tags"`
+	ID              uint      `json:"id"`
+	ProbedAt        time.Time `json:"probed_at"`
+	URL             string    `json:"url"`
+	URLScheme       string    `json:"url_scheme"`
+	ResponseCode    int       `json:"response_code"`
+	Title           string    `json:"title"`
+	Filename        string    `json:"file_name"`
+	Screenshot      string    `json:"screenshot"`
+	Failed          bool      `json:"failed"`
+	DiscoveredCreds string    `json:"discovered_creds"`
+	Technologies    []string  `json:"technologies"`
+	Tags            []string  `json:"tags"`
 }
 
 // GalleryHandler gets a paginated gallery
@@ -178,17 +179,18 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Append the processed data to the response
 		results.Results = append(results.Results, &galleryContent{
-			ID:           result.ID,
-			ProbedAt:     result.ProbedAt,
-			URL:          result.URL,
-			URLScheme:    result.URLScheme,
-			ResponseCode: result.ResponseCode,
-			Title:        result.Title,
-			Filename:     result.Filename,
-			Screenshot:   result.Screenshot,
-			Failed:       result.Failed,
-			Technologies: technologies,
-			Tags:         resultTags,
+			ID:              result.ID,
+			ProbedAt:        result.ProbedAt,
+			URL:             result.URL,
+			URLScheme:       result.URLScheme,
+			ResponseCode:    result.ResponseCode,
+			Title:           result.Title,
+			Filename:        result.Filename,
+			Screenshot:      result.Screenshot,
+			Failed:          result.Failed,
+			DiscoveredCreds: result.DiscoveredCreds,
+			Technologies:    technologies,
+			Tags:            resultTags,
 		})
 	}
 

@@ -79,8 +79,10 @@ func (r *RTSP) Witness(target string, run *runner.Runner) (*models.Result, error
 		timeout = 30 * time.Second
 	}
 
-	// Build the ladder of dial URLs to try.
-	dialURLs := r.candidateDialURLs(parsed)
+	// Build the ladder of dial URLs to try. Each entry carries a label
+	// describing the credentials used so we can persist the winning one
+	// as a finding.
+	attempts := r.candidateAttempts(parsed)
 
 	tmpFile, err := os.CreateTemp("", "gowitness-rtsp-*.jpg")
 	if err != nil {
@@ -92,15 +94,21 @@ func (r *RTSP) Witness(target string, run *runner.Runner) (*models.Result, error
 
 	var lastReason string
 	var imgBytes []byte
-	for i, dialURL := range dialURLs {
+	var winningLabel string
+	for i, c := range attempts {
 		// pre-truncate output between attempts so a previous attempt's
 		// stale frame can't be picked up if a later attempt fails.
 		_ = os.WriteFile(tmpPath, nil, 0o600)
 
-		body, reason := r.attempt(dialURL, tmpPath, timeout)
+		body, reason := r.attempt(c.dialURL, tmpPath, timeout)
 		if len(body) > 0 {
 			imgBytes = body
-			r.log.Debug("rtsp frame captured", "target", saveURL, "attempt", i+1, "of", len(dialURLs))
+			winningLabel = c.label
+			r.log.Debug("rtsp frame captured",
+				"target", saveURL,
+				"attempt", i+1, "of", len(attempts),
+				"creds", c.label,
+			)
 			break
 		}
 		lastReason = reason
@@ -141,31 +149,49 @@ func (r *RTSP) Witness(target string, run *runner.Runner) (*models.Result, error
 	result.ResponseCode = 200
 	result.ResponseReason = "OK"
 	result.Protocol = fmt.Sprintf("rtsp/%dx%d", bounds.Dx(), bounds.Dy())
+	// Only record the winning ladder credential as a finding. The empty
+	// label (for URL-supplied or CLI-supplied creds) means "operator
+	// already knew" and should not be surfaced as a discovery.
+	result.DiscoveredCreds = winningLabel
 
 	return result, nil
 }
 
-// candidateDialURLs returns the ordered list of RTSP URLs ffmpeg will be
-// invoked with. Order:
+// credAttempt is one rung of the RTSP credential ladder.
+type credAttempt struct {
+	// dialURL is what we hand to ffmpeg.
+	dialURL string
+	// label is the human-readable credentials description, persisted on
+	// success only when the ladder discovered them. Empty string means
+	// the operator already knew (URL- or CLI-supplied) and the success
+	// is not a finding.
+	label string
+}
+
+// candidateAttempts returns the ordered list of attempts ffmpeg will try.
+// Order:
 //
-//  1. URL-embedded creds, if present (only attempt — operator chose them)
-//  2. CLI --rtsp-username/--rtsp-password, if set (only attempt)
-//  3. Anonymous, then each --rtsp-default-creds pair in turn
+//  1. URL-embedded creds, if present (one attempt; not a finding)
+//  2. CLI --rtsp-username/--rtsp-password, if set (one attempt; not a
+//     finding)
+//  3. Anonymous + each --rtsp-default-creds entry in turn. Successful
+//     attempts here ARE persisted as DiscoveredCreds findings.
 //
-// Empty / malformed entries in DefaultCreds are silently skipped so a
-// flag like `--rtsp-default-creds=` can be used to disable the ladder.
-func (r *RTSP) candidateDialURLs(parsed *url.URL) []string {
+// Empty entries in DefaultCreds are silently skipped.
+func (r *RTSP) candidateAttempts(parsed *url.URL) []credAttempt {
 	if parsed.User != nil {
-		return []string{parsed.String()}
+		return []credAttempt{{dialURL: parsed.String()}}
 	}
 	if r.options.RTSP.Username != "" {
 		clone := *parsed
 		clone.User = url.UserPassword(r.options.RTSP.Username, r.options.RTSP.Password)
-		return []string{clone.String()}
+		return []credAttempt{{dialURL: clone.String()}}
 	}
 
-	out := []string{parsed.String()} // anonymous first
-	seen := map[string]struct{}{out[0]: {}}
+	out := []credAttempt{
+		{dialURL: parsed.String(), label: "anonymous"},
+	}
+	seen := map[string]struct{}{out[0].dialURL: {}}
 	for _, pair := range r.options.RTSP.DefaultCreds {
 		if pair == "" {
 			continue
@@ -182,7 +208,7 @@ func (r *RTSP) candidateDialURLs(parsed *url.URL) []string {
 			continue
 		}
 		seen[u] = struct{}{}
-		out = append(out, u)
+		out = append(out, credAttempt{dialURL: u, label: pair})
 	}
 	return out
 }

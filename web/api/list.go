@@ -21,8 +21,9 @@ type listResponse struct {
 	Title          string `json:"title"`
 
 	// Failed flag set if the result should be considered failed
-	Failed       bool   `json:"failed"`
-	FailedReason string `json:"failed_reason"`
+	Failed          bool   `json:"failed"`
+	FailedReason    string `json:"failed_reason"`
+	DiscoveredCreds string `json:"discovered_creds"`
 }
 
 // ListHandler returns a simple list of results

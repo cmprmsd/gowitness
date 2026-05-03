@@ -38,6 +38,13 @@ type Result struct {
 	Failed       bool   `json:"failed"`
 	FailedReason string `json:"failed_reason"`
 
+	// DiscoveredCreds records the credentials (or "anonymous") that
+	// successfully authenticated when the driver walked an automatic
+	// credential ladder. Empty when the operator supplied creds
+	// explicitly via URL or CLI flags, or when the protocol has no auth
+	// concept. Currently populated by the RTSP driver.
+	DiscoveredCreds string `json:"discovered_creds" gorm:"index"`
+
 	TLS          TLS          `json:"tls" gorm:"constraint:OnDelete:CASCADE"`
 	Technologies []Technology `json:"technologies" gorm:"constraint:OnDelete:CASCADE"`
 	Tags         []Tag        `json:"tags" gorm:"constraint:OnDelete:CASCADE"`

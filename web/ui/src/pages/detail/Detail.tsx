@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ExternalLink, ChevronLeft, ChevronRight, Code, ClockIcon, Trash2Icon, DownloadIcon, ImagesIcon, ZoomInIcon, CopyIcon } from 'lucide-react';
+import { ExternalLink, ChevronLeft, ChevronRight, Code, ClockIcon, Trash2Icon, DownloadIcon, ImagesIcon, ZoomInIcon, CopyIcon, KeyIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
 import { WideSkeleton } from '@/components/loading';
 import { Form, Link, useNavigate, useParams } from 'react-router-dom';
@@ -390,6 +390,22 @@ const ScreenshotDetailPage = () => {
             <span className="font-mono">{(detail.content_length / 1024).toFixed(2)}</span> KB of content. Probing (first
             to last request) took roughly {duration}.
           </p>
+          {detail.discovered_creds ? (
+            <div className="mb-6 rounded-lg border border-yellow-300 bg-yellow-100/95 p-4 text-yellow-900 shadow">
+              <div className="flex items-start gap-3">
+                <KeyIcon className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                <div>
+                  <p className="font-semibold">
+                    Discovered credentials: <span className="font-mono">{detail.discovered_creds}</span>
+                  </p>
+                  <p className="mt-1 text-sm">
+                    The scanner authenticated to this service using a default-credential probe. Treat as a finding —
+                    these credentials should be rotated.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="bg-white bg-opacity-20 rounded-lg p-4 text-center">
               <p className="text-3xl font-bold">{detail.network.length}</p>

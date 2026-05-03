@@ -36,6 +36,7 @@ type galleryResult = {
   file_name: string;
   screenshot: string;
   failed: boolean;
+  discovered_creds: string;
   technologies: string[];
   tags: string[];
 };
@@ -53,6 +54,7 @@ type list = {
   title: string;
   failed: boolean;
   failed_reason: string;
+  discovered_creds: string;
 };
 
 // details
@@ -136,6 +138,7 @@ interface detail {
   response_code: number;
   response_reason: string;
   protocol: string;
+  discovered_creds: string;
   content_length: number;
   html: string;
   title: string;
@@ -164,6 +167,7 @@ interface searchresult {
   matched_fields: string[];
   file_name: string;
   screenshot: string;
+  discovered_creds: string;
 }
 
 interface technologylist {
