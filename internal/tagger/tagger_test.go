@@ -15,6 +15,16 @@ func mustLoad(t *testing.T, yaml string) *Tagger {
 	return tg
 }
 
+// values extracts the .Value field from a Match result for tests that
+// only care about which strings were emitted.
+func values(tvs []TaggedValue) []string {
+	out := make([]string, 0, len(tvs))
+	for _, tv := range tvs {
+		out = append(out, tv.Value)
+	}
+	return out
+}
+
 func TestEmbeddedDefaultRulesLoad(t *testing.T) {
 	tg, err := New()
 	if err != nil {
@@ -36,15 +46,35 @@ rules:
     category: "anything"
     title_contains: ["acme"]
 `)
-	got := tg.Match(MatchInput{
+	got := values(tg.Match(MatchInput{
 		FaviconHash: 12345,
 		HasFavicon:  true,
 		Title:       "Welcome to Acme",
-	})
+	}))
 	want := []string{"Acme Printer", "acme", "printer"}
 	sort.Strings(want)
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("favicon precedence: got %v want %v", got, want)
+	}
+}
+
+func TestFaviconHashEmitsType(t *testing.T) {
+	tg := mustLoad(t, `
+rules:
+  - name: "Acme"
+    category: "printer"
+    vendor: "acme"
+    favicon_hash: 12345
+`)
+	got := tg.Match(MatchInput{FaviconHash: 12345, HasFavicon: true})
+	want := []TaggedValue{
+		{Value: "Acme", Type: TypeName},
+		{Value: "acme", Type: TypeVendor},
+		{Value: "printer", Type: TypeCategory},
+	}
+	sort.Slice(want, func(i, j int) bool { return want[i].Value < want[j].Value })
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("typed match: got %v want %v", got, want)
 	}
 }
 
@@ -59,11 +89,11 @@ rules:
     category: "router"
     title_contains: ["UniFi"]
 `)
-	got := tg.Match(MatchInput{
+	got := values(tg.Match(MatchInput{
 		FaviconHash: 12345, // no rule matches this
 		HasFavicon:  true,
 		Title:       "UniFi Controller",
-	})
+	}))
 	want := []string{"Title Match", "router"}
 	sort.Strings(want)
 	if !reflect.DeepEqual(got, want) {
@@ -80,7 +110,7 @@ rules:
     title_regex: "(?i)vsphere|vcenter"
 `)
 	in := MatchInput{Title: "VSPHERE Web Client"}
-	got := tg.Match(in)
+	got := values(tg.Match(in))
 	want := []string{"VMware vSphere", "hypervisor", "vmware"}
 	sort.Strings(want)
 	if !reflect.DeepEqual(got, want) {
@@ -97,9 +127,9 @@ rules:
     header_contains:
       Server: "xxxxxxxx"
 `)
-	got := tg.Match(MatchInput{
+	got := values(tg.Match(MatchInput{
 		Headers: map[string][]string{"server": {"xXxxxxxX-1.0"}},
-	})
+	}))
 	want := []string{"FortiGate", "firewall", "fortinet"}
 	sort.Strings(want)
 	if !reflect.DeepEqual(got, want) {
@@ -115,7 +145,7 @@ rules:
     vendor: "jenkins"
     tech_contains: ["Jenkins"]
 `)
-	got := tg.Match(MatchInput{Technologies: []string{"jenkins"}})
+	got := values(tg.Match(MatchInput{Technologies: []string{"jenkins"}}))
 	want := []string{"Jenkins", "devops", "jenkins"}
 	sort.Strings(want)
 	if !reflect.DeepEqual(got, want) {
@@ -133,7 +163,7 @@ rules:
       - 3
 `)
 	for _, h := range []int32{1, 2, 3} {
-		got := tg.Match(MatchInput{FaviconHash: h, HasFavicon: true})
+		got := values(tg.Match(MatchInput{FaviconHash: h, HasFavicon: true}))
 		if !reflect.DeepEqual(got, []string{"Multi"}) {
 			t.Fatalf("hash %d: got %v", h, got)
 		}
@@ -164,7 +194,7 @@ rules:
     vendor: "y"
     favicon_hash: 1
 `)
-	got := tg.Match(MatchInput{FaviconHash: 1, HasFavicon: true})
+	got := values(tg.Match(MatchInput{FaviconHash: 1, HasFavicon: true}))
 	want := []string{"Same", "x", "y"}
 	sort.Strings(want)
 	if !reflect.DeepEqual(got, want) {

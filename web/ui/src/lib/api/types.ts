@@ -174,8 +174,13 @@ interface technologylist {
   technologies: string[];
 }
 
+interface tagentry {
+  value: string;
+  type: string; // "name" | "category" | "vendor" | "" (legacy)
+}
+
 interface taglist {
-  tags: string[];
+  tags: tagentry[];
 }
 
 interface tag {
@@ -201,5 +206,6 @@ export type {
   searchresult,
   technologylist,
   taglist,
+  tagentry,
   tag,
 };

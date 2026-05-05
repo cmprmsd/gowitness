@@ -137,14 +137,39 @@ const GalleryPage = () => {
     handlePageChange(1);
   };
 
-  const sortedTags = useMemo(() => {
-    if (!tagList) return [];
+  // Map every known tag value to its type ("name" | "category" | "vendor"
+  // | "" for legacy rows). Used both by the dropdown for grouping and to
+  // colour-style on-card pills if we later want to.
+  const tagTypeMap = useMemo(() => {
+    const m = new Map<string, string>();
+    if (tagList) {
+      for (const t of tagList.tags) m.set(t.value, t.type);
+    }
+    return m;
+  }, [tagList]);
+
+  // Tags grouped for the dropdown. Order: Category -> Vendor -> Product
+  // (broad -> specific reading order). Anything without a known type
+  // (legacy DB rows) falls into an "Other" group.
+  const groupedTags = useMemo(() => {
+    if (!tagList) return [] as { key: string; label: string; values: string[] }[];
     const selected = tagFilter.split(",").filter(Boolean);
+    const groups: Record<string, string[]> = { category: [], vendor: [], name: [], "": [] };
+    const seen = new Set<string>();
+    const allValues = tagList.tags.map(t => t.value);
+    for (const v of [...selected, ...allValues]) {
+      if (seen.has(v)) continue;
+      seen.add(v);
+      const type = tagTypeMap.get(v) ?? "";
+      (groups[type] ?? groups[""]).push(v);
+    }
     return [
-      ...selected,
-      ...tagList.tags.filter(t => !selected.includes(t)),
-    ];
-  }, [tagList, tagFilter]);
+      { key: "category", label: "Category", values: groups.category },
+      { key: "vendor",   label: "Vendor",   values: groups.vendor },
+      { key: "name",     label: "Product",  values: groups.name },
+      { key: "",         label: "Other",    values: groups[""] },
+    ].filter(g => g.values.length > 0);
+  }, [tagList, tagFilter, tagTypeMap]);
 
   const handleStatusFilter = (status: string) => {
     setSearchParams(prev => {
@@ -396,7 +421,10 @@ const GalleryPage = () => {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent
+              className="w-[200px] p-0"
+              onCloseAutoFocus={(e) => e.preventDefault()}
+            >
               <Command>
                 <CommandInput placeholder="Search technologies..." />
                 <CommandList>
@@ -405,6 +433,7 @@ const GalleryPage = () => {
                     {sortedTechnologies.map((tech) => (
                       <CommandItem
                         key={tech}
+                        onMouseDown={(e) => e.preventDefault()}
                         onSelect={() => handleTechnologyChange(tech)}
                       >
                         <CheckIcon
@@ -432,7 +461,10 @@ const GalleryPage = () => {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent
+              className="w-[200px] p-0"
+              onCloseAutoFocus={(e) => e.preventDefault()}
+            >
               <Command>
                 <CommandList>
                   <CommandEmpty>No protocols.</CommandEmpty>
@@ -440,6 +472,7 @@ const GalleryPage = () => {
                     {PROTOCOL_OPTIONS.map((scheme) => (
                       <CommandItem
                         key={scheme}
+                        onMouseDown={(e) => e.preventDefault()}
                         onSelect={() => handleSchemeChange(scheme)}
                       >
                         <CheckIcon
@@ -467,27 +500,40 @@ const GalleryPage = () => {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[260px] p-0">
+            <PopoverContent
+              className="w-[280px] p-0"
+              onCloseAutoFocus={(e) => e.preventDefault()}
+            >
               <Command>
                 <CommandInput placeholder="Search tags..." />
                 <CommandList>
                   <CommandEmpty>No tags yet. Run a scan to populate.</CommandEmpty>
-                  <CommandGroup>
-                    {sortedTags.map((tag) => (
-                      <CommandItem
-                        key={tag}
-                        onSelect={() => handleTagChange(tag)}
-                      >
-                        <CheckIcon
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedTags.includes(tag) ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        {tag}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                  {groupedTags.map(group => (
+                    <CommandGroup key={group.key} heading={group.label}>
+                      {group.values.map((tag) => (
+                        <CommandItem
+                          key={tag}
+                          // Prevent the click from shifting focus out of the
+                          // Popover, which would otherwise close it after
+                          // each selection. Lets the operator tick several
+                          // tags in a row without re-opening the menu.
+                          onMouseDown={(e) => e.preventDefault()}
+                          onSelect={() => handleTagChange(tag)}
+                        >
+                          <CheckIcon
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedTags.includes(tag) ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          <span>{tag}</span>
+                          <span className="ml-auto text-xs text-muted-foreground">
+                            {group.key || "—"}
+                          </span>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  ))}
                 </CommandList>
               </Command>
             </PopoverContent>

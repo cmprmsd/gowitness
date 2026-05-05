@@ -79,8 +79,8 @@ func applyTags(result *models.Result, faviconB64 string, run *runner.Runner) {
 		}
 	}
 
-	for _, tag := range run.Tagger.Match(in) {
-		result.Tags = append(result.Tags, models.Tag{Value: tag})
+	for _, tv := range run.Tagger.Match(in) {
+		result.Tags = append(result.Tags, models.Tag{Value: tv.Value, Type: tv.Type})
 	}
 }
 

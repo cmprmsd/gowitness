@@ -63,6 +63,20 @@ type MatchInput struct {
 	Technologies []string
 }
 
+// Tag classification axes. Stored on each emitted tag so the UI can
+// group the filter dropdown (Product / Category / Vendor).
+const (
+	TypeName     = "name"
+	TypeCategory = "category"
+	TypeVendor   = "vendor"
+)
+
+// TaggedValue is one emitted tag plus the rule axis it came from.
+type TaggedValue struct {
+	Value string
+	Type  string
+}
+
 // Tagger holds a compiled ruleset and answers Match queries.
 type Tagger struct {
 	rules []*Rule
@@ -110,8 +124,8 @@ func load(raw []byte, source string) (*Tagger, error) {
 			return nil, fmt.Errorf("%s rule %q: no matcher", source, r.Name)
 		}
 
-		for _, t := range r.emittedTags() {
-			tagSet[t] = struct{}{}
+		for _, tv := range r.emittedTags() {
+			tagSet[tv.Value] = struct{}{}
 		}
 	}
 
@@ -129,11 +143,13 @@ func load(raw []byte, source string) (*Tagger, error) {
 // filters when no scan results exist yet.
 func (t *Tagger) Tags() []string { return append([]string(nil), t.allTags...) }
 
-// Match evaluates rules against the input and returns deduped tag names.
-// Favicon-hash matchers run first; if any rule matches by favicon, only
-// those tags are returned. Otherwise the matcher falls back to the
-// title/header/body/tech matchers.
-func (t *Tagger) Match(in MatchInput) []string {
+// Match evaluates rules against the input and returns deduped
+// (value, type) pairs. Favicon-hash matchers run first; if any rule
+// matches by favicon, only those tags are returned. Otherwise the
+// matcher falls back to the title/header/body/tech matchers. When the
+// same value would be emitted under multiple axes the first-seen axis
+// wins (rules are processed in YAML order).
+func (t *Tagger) Match(in MatchInput) []TaggedValue {
 	if t == nil || len(t.rules) == 0 {
 		return nil
 	}
@@ -165,18 +181,18 @@ func (t *Tagger) Match(in MatchInput) []string {
 		return nil
 	}
 
-	out := make([]string, 0, len(hits)*3)
+	out := make([]TaggedValue, 0, len(hits)*3)
 	seen := make(map[string]struct{}, len(hits)*3)
 	for _, r := range hits {
-		for _, t := range r.emittedTags() {
-			if _, ok := seen[t]; ok {
+		for _, tv := range r.emittedTags() {
+			if _, ok := seen[tv.Value]; ok {
 				continue
 			}
-			seen[t] = struct{}{}
-			out = append(out, t)
+			seen[tv.Value] = struct{}{}
+			out = append(out, tv)
 		}
 	}
-	sort.Strings(out)
+	sort.Slice(out, func(i, j int) bool { return out[i].Value < out[j].Value })
 	return out
 }
 
@@ -220,16 +236,16 @@ func (r *Rule) hasMatcher() bool {
 		len(r.TechContains) > 0
 }
 
-func (r *Rule) emittedTags() []string {
-	var out []string
+func (r *Rule) emittedTags() []TaggedValue {
+	var out []TaggedValue
 	if r.Name != "" {
-		out = append(out, r.Name)
+		out = append(out, TaggedValue{Value: r.Name, Type: TypeName})
 	}
 	if r.Category != "" {
-		out = append(out, r.Category)
+		out = append(out, TaggedValue{Value: r.Category, Type: TypeCategory})
 	}
 	if r.Vendor != "" {
-		out = append(out, r.Vendor)
+		out = append(out, TaggedValue{Value: r.Vendor, Type: TypeVendor})
 	}
 	return out
 }

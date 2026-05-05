@@ -99,11 +99,16 @@ type Technology struct {
 // "FortiGate") attached to a Result by the tagger. Multiple Tag rows per
 // Result are normal: a single matched rule may emit a product name, its
 // category, and its vendor as three separate Tag rows.
+//
+// Type identifies which axis of the rule the value came from - one of
+// "name" (the specific product), "category" (e.g. "printer"), or
+// "vendor" (e.g. "canon"). Used by the UI to group the filter dropdown.
 type Tag struct {
 	ID       uint `json:"id" gorm:"primarykey"`
 	ResultID uint `json:"result_id"`
 
 	Value string `json:"value" gorm:"index"`
+	Type  string `json:"type" gorm:"index"`
 }
 
 type Header struct {
