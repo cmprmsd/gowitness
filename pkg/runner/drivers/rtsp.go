@@ -71,10 +71,10 @@ func (r *RTSP) Witness(target string, run *runner.Runner) (*models.Result, error
 	if r.ffmpeg == "" {
 		result.Failed = true
 		result.FailedReason = "ffmpeg not installed; rtsp scans require it"
-		// Sentinel: any non-zero ResponseCode keeps the row from being
-		// dropped by runner.go's "status code was 0" filter, so the
-		// failure shows up in the gallery / writers as a finding.
-		result.ResponseCode = 1
+		// ResponseCode left at 0 so the runner drops the row. A failed
+		// RTSP probe with no captured frame and no working credentials
+		// has nothing to show in the gallery; the WARN log keeps it
+		// visible to the operator.
 		r.log.Warn("rtsp scan failed", "target", saveURL, "reason", result.FailedReason)
 		return result, nil
 	}
@@ -125,9 +125,9 @@ func (r *RTSP) Witness(target string, run *runner.Runner) (*models.Result, error
 			lastReason = "no frame captured"
 		}
 		result.FailedReason = lastReason
-		// Sentinel: keep the row in writers so the operator sees the
-		// failure (and reason) without having to scroll through stderr.
-		result.ResponseCode = 1
+		// ResponseCode left at 0 so the runner drops the row from
+		// writers - completely-failed probes have nothing to display.
+		// The WARN log below preserves operator visibility.
 		r.log.Warn("rtsp scan failed",
 			"target", saveURL,
 			"reason", lastReason,
