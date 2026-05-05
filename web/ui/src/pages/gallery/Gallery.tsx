@@ -30,6 +30,14 @@ const GalleryPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // Open-state for each multi-select popover. Controlled so that the
+  // re-render triggered by setSearchParams in handleXxxChange below
+  // can't reset the popover's internal uncontrolled state to closed.
+  // Radix's outside-click and ESC handling still close them normally.
+  const [techOpen, setTechOpen] = useState(false);
+  const [protocolOpen, setProtocolOpen] = useState(false);
+  const [tagOpen, setTagOpen] = useState(false);
+
   const [searchParams, setSearchParams] = useSearchParams();
   // pagination
   const page = parseInt(searchParams.get("page") || "1");
@@ -408,7 +416,7 @@ const GalleryPage = () => {
     <div className="space-y-6">
       <div className="flex flex-wrap gap-4 items-center justify-between rounded-lg">
         <div className="flex flex-wrap gap-2">
-          <Popover>
+          <Popover open={techOpen} onOpenChange={setTechOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-[200px] justify-start">
                 <FilterIcon className="mr-2 h-4 w-4" />
@@ -450,7 +458,7 @@ const GalleryPage = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          <Popover>
+          <Popover open={protocolOpen} onOpenChange={setProtocolOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-[200px] justify-start">
                 <NetworkIcon className="mr-2 h-4 w-4" />
@@ -489,7 +497,7 @@ const GalleryPage = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          <Popover>
+          <Popover open={tagOpen} onOpenChange={setTagOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-[200px] justify-start">
                 <TagIcon className="mr-2 h-4 w-4" />
