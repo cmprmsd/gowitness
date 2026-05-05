@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/glebarez/sqlite"
-	"github.com/sensepost/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

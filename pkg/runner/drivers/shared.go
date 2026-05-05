@@ -12,11 +12,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/sensepost/gowitness/internal/islazy"
-	"github.com/sensepost/gowitness/internal/tagger"
-	"github.com/sensepost/gowitness/pkg/imagehash"
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/runner"
+	"github.com/cmprmsd/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/internal/tagger"
+	"github.com/cmprmsd/gowitness/pkg/imagehash"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/runner"
 )
 
 // faviconFetchScript is the JavaScript snippet evaluated in the page

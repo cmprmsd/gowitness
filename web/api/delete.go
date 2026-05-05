@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/models"
 )
 
 type deleteResultRequest struct {

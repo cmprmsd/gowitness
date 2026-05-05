@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/sensepost/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/models"
 )
 
 // MemoryWriter is a memory-based results queue with a maximum slot count

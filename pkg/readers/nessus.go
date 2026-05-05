@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/sensepost/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/internal/islazy"
 )
 
 // NessusReader is a Nessus file reader

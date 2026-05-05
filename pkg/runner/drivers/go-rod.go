@@ -15,11 +15,11 @@ import (
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
 	"github.com/go-rod/rod/lib/proto"
-	"github.com/sensepost/gowitness/internal/islazy"
-	"github.com/sensepost/gowitness/pkg/imagehash"
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/runner"
+	"github.com/cmprmsd/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/pkg/imagehash"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/runner"
 	"github.com/ysmood/gson"
 )
 

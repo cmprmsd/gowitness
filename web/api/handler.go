@@ -2,7 +2,7 @@ package api
 
 import (
 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
-	"github.com/sensepost/gowitness/pkg/database"
+	"github.com/cmprmsd/gowitness/pkg/database"
 	"gorm.io/gorm"
 )
 

@@ -3,10 +3,10 @@ package writers
 import (
 	"sync"
 
-	"github.com/sensepost/gowitness/internal/islazy"
-	"github.com/sensepost/gowitness/pkg/database"
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/pkg/database"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/models"
 	"gorm.io/gorm"
 )
 

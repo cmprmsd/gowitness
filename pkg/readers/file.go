@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sensepost/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/internal/islazy"
 )
 
 // FileReader is a reader that expects a file with targets that

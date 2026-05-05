@@ -5,10 +5,10 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/runner"
-	driver "github.com/sensepost/gowitness/pkg/runner/drivers"
-	"github.com/sensepost/gowitness/pkg/writers"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/runner"
+	driver "github.com/cmprmsd/gowitness/pkg/runner/drivers"
+	"github.com/cmprmsd/gowitness/pkg/writers"
 )
 
 type submitRequest struct {

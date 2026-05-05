@@ -10,12 +10,11 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
-	"strconv"
 	"strings"
 	"time"
 
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/runner"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/runner"
 )
 
 // RTSP is a driver that grabs a single video frame from an RTSP server
@@ -230,23 +229,30 @@ func (r *RTSP) candidateAttempts(parsed *url.URL) []credAttempt {
 // attempt invokes ffmpeg once for one dial URL. Returns the captured
 // frame bytes (or nil) and a short failure reason (or "" on success).
 //
-// We use -rw_timeout (microseconds) for I/O timeouts because the older
-// RTSP-specific -stimeout was deprecated in ffmpeg 5 and removed in
-// ffmpeg 6+. The Go context timeout is the hard upper bound and kills
-// the process via SIGKILL if ffmpeg ignores its own timeouts.
+// Timeout enforcement is done entirely on the Go side via
+// context.WithTimeout - the CommandContext sends SIGKILL `timeout+5s`
+// after the call begins. We deliberately do NOT pass an ffmpeg-side
+// timeout flag because the right flag name and unit differ wildly
+// between releases:
+//
+//   - ffmpeg 4.x: -stimeout (RTSP-specific, microseconds)
+//   - ffmpeg 5.x: -stimeout (deprecated) or -timeout (microseconds)
+//   - ffmpeg 6.x+: -stimeout removed, -timeout (seconds)
+//   - -rw_timeout is a TCP/UDP protocol option in some builds and
+//     unrecognised in others.
+//
+// Probing the right one at startup adds complexity for marginal
+// benefit; the Go SIGKILL is sufficient.
 func (r *RTSP) attempt(dialURL, tmpPath string, timeout time.Duration) ([]byte, string) {
 	transport := r.options.RTSP.Transport
 	if transport == "" {
 		transport = "tcp"
 	}
 
-	rwTimeout := strconv.FormatInt(timeout.Microseconds(), 10)
-
 	args := []string{
 		"-hide_banner",
 		"-nostdin",
 		"-loglevel", "error",
-		"-rw_timeout", rwTimeout,
 		"-rtsp_transport", transport,
 		"-i", dialURL,
 		"-frames:v", "1",

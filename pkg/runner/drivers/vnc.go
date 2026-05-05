@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"time"
 
-	internalvnc "github.com/sensepost/gowitness/internal/vnc"
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/runner"
+	internalvnc "github.com/cmprmsd/gowitness/internal/vnc"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/runner"
 )
 
 // VNC is a driver that screenshots VNC servers using the RFB protocol.

@@ -23,8 +23,8 @@ import (
 	"github.com/tomatome/grdp/protocol/tpkt"
 	"github.com/tomatome/grdp/protocol/x224"
 
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/runner"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/runner"
 )
 
 const (
