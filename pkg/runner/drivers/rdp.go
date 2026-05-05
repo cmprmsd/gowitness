@@ -6,10 +6,12 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	stdlog "log"
 	"log/slog"
 	"net"
 	"net/url"
 	"strconv"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -32,10 +34,34 @@ const (
 	rdpDefaultHeight = 800
 )
 
+// grdpLogSink captures grdp's last package-global error message so we can
+// attach it to the FailedReason of the result. grdp uses a single shared
+// logger; under any concurrency the latest error wins, which is good
+// enough as a hint - the actual structured reason still goes to slog.
+var grdpLogSink atomic.Value // string
+
+// grdpLogWriter is an io.Writer hooked up to grdp's *log.Logger. Each
+// glog.Error/.Warn call writes one line; we forward it to slog.Debug
+// (so -D users see grdp's own diagnostics) and remember the last
+// message so the witness can include it in FailedReason.
+type grdpLogWriter struct{}
+
+func (grdpLogWriter) Write(p []byte) (int, error) {
+	msg := strings.TrimSpace(string(p))
+	if msg != "" {
+		grdpLogSink.Store(msg)
+		slog.Default().Debug("grdp", "msg", msg)
+	}
+	return len(p), nil
+}
+
 func init() {
-	// grdp's logger is package-global and noisy by default. Silence it; the
-	// driver surfaces its own structured errors via slog.
-	glog.SetLevel(glog.NONE)
+	// Route grdp's package-global logger through slog at debug level so
+	// the user can see structured diagnostics on -D. Keep level at ERROR
+	// to avoid the trace/debug spam that grdp emits during a normal
+	// connection.
+	glog.SetLogger(stdlog.New(grdpLogWriter{}, "", 0))
+	glog.SetLevel(glog.ERROR)
 }
 
 // RDP is a driver that screenshots the login screen of an RDP server using
@@ -101,10 +127,19 @@ func (r *RDP) Witness(target string, run *runner.Runner) (*models.Result, error)
 		settle = 5 * time.Second
 	}
 
+	// Reset the package-global grdp log sink for this attempt so any
+	// prior error message doesn't get attributed to this scan.
+	grdpLogSink.Store("")
+
 	conn, err := net.DialTimeout("tcp", addr, timeout)
 	if err != nil {
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("dial: %s", err)
+		// Sentinel response code keeps the row from being dropped by
+		// runner.go's "status code was 0" filter so the operator sees
+		// the failure (and reason) in the gallery / writers.
+		result.ResponseCode = 1
+		r.log.Warn("rdp scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 	// best-effort hard deadline so a stalled server can't block the worker
@@ -139,6 +174,7 @@ func (r *RDP) Witness(target string, run *runner.Runner) (*models.Result, error)
 		paintMu     sync.Mutex
 		lastUpdate  atomic.Int64 // unix-nano timestamp of the most recent bitmap update
 		gotUpdate   atomic.Bool
+		gotReady    atomic.Bool // true once the PDU layer reports "ready" (i.e. X.224 + MCS + capabilities done)
 		closeOnce   sync.Once
 		closeReason atomic.Value // string
 		done        = make(chan struct{})
@@ -155,6 +191,8 @@ func (r *RDP) Witness(target string, run *runner.Runner) (*models.Result, error)
 		signalDone(fmt.Sprintf("protocol: %s", e))
 	}).On("close", func() {
 		signalDone("connection closed")
+	}).On("ready", func() {
+		gotReady.Store(true)
 	}).On("update", func(rectangles []pdu.BitmapData) {
 		paintMu.Lock()
 		defer paintMu.Unlock()
@@ -169,6 +207,8 @@ func (r *RDP) Witness(target string, run *runner.Runner) (*models.Result, error)
 		_ = conn.Close()
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("x224 connect: %s", err)
+		result.ResponseCode = 1
+		r.log.Warn("rdp scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 
@@ -206,8 +246,25 @@ waitLoop:
 				reason = s
 			}
 		}
+
+		// If the failure happened before the PDU layer ever became
+		// "ready" AND the symptom is a closed-connection read, the
+		// most likely cause is a server that requires NLA/SSL
+		// (Standard RDP rejected). Add an actionable hint. grdp's
+		// own ERROR log (e.g. "X224_NEG_FAILURE with code: 2") was
+		// captured into grdpLogSink by our log writer; surface it
+		// when present.
+		if !gotReady.Load() && strings.Contains(reason, "use of closed network connection") {
+			reason = "x224 negotiation rejected (server likely requires NLA/SSL; this driver only attempts Standard RDP security)"
+		}
+		if hint, _ := grdpLogSink.Load().(string); hint != "" {
+			reason = fmt.Sprintf("%s [grdp: %s]", reason, hint)
+		}
+
 		result.Failed = true
 		result.FailedReason = reason
+		result.ResponseCode = 1
+		r.log.Warn("rdp scan failed", "target", target, "reason", reason)
 		return result, nil
 	}
 

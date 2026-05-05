@@ -65,6 +65,10 @@ func (v *VNC) Witness(target string, run *runner.Runner) (*models.Result, error)
 	if err != nil {
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("dial: %s", err)
+		// Sentinel response code so the runner doesn't drop the row;
+		// the operator should see failed scans in the gallery / writers.
+		result.ResponseCode = 1
+		v.log.Warn("vnc scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 	defer tcp.Close()
@@ -86,6 +90,8 @@ func (v *VNC) Witness(target string, run *runner.Runner) (*models.Result, error)
 	if err != nil {
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("rfb handshake: %s", err)
+		result.ResponseCode = 1
+		v.log.Warn("vnc scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 	defer conn.Close()
@@ -99,6 +105,8 @@ func (v *VNC) Witness(target string, run *runner.Runner) (*models.Result, error)
 	if conn.FrameBufferWidth == 0 || conn.FrameBufferHeight == 0 {
 		result.Failed = true
 		result.FailedReason = "framebuffer has zero dimensions"
+		result.ResponseCode = 1
+		v.log.Warn("vnc scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 
@@ -108,12 +116,16 @@ func (v *VNC) Witness(target string, run *runner.Runner) (*models.Result, error)
 	if err := conn.SetEncodings([]internalvnc.Encoding{new(internalvnc.RawEncoding)}); err != nil {
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("set encodings: %s", err)
+		result.ResponseCode = 1
+		v.log.Warn("vnc scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 
 	if err := conn.FramebufferUpdateRequest(false, 0, 0, conn.FrameBufferWidth, conn.FrameBufferHeight); err != nil {
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("framebuffer request: %s", err)
+		result.ResponseCode = 1
+		v.log.Warn("vnc scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 
@@ -169,6 +181,8 @@ collect:
 	if !gotInitial {
 		result.Failed = true
 		result.FailedReason = "no framebuffer update received"
+		result.ResponseCode = 1
+		v.log.Warn("vnc scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
 
