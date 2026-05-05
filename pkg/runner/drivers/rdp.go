@@ -140,10 +140,6 @@ func (r *RDP) Witness(target string, run *runner.Runner) (*models.Result, error)
 	if err != nil {
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("dial: %s", err)
-		// Sentinel response code keeps the row from being dropped by
-		// runner.go's "status code was 0" filter so the operator sees
-		// the failure (and reason) in the gallery / writers.
-		result.ResponseCode = 1
 		r.log.Warn("rdp scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
@@ -215,7 +211,6 @@ func (r *RDP) Witness(target string, run *runner.Runner) (*models.Result, error)
 		_ = conn.Close()
 		result.Failed = true
 		result.FailedReason = fmt.Sprintf("x224 connect: %s", err)
-		result.ResponseCode = 1
 		r.log.Warn("rdp scan failed", "target", target, "reason", result.FailedReason)
 		return result, nil
 	}
@@ -287,7 +282,6 @@ waitLoop:
 
 		result.Failed = true
 		result.FailedReason = reason
-		result.ResponseCode = 1
 		r.log.Warn("rdp scan failed", "target", target, "reason", reason)
 		return result, nil
 	}
