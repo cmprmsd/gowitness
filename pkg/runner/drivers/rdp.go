@@ -10,6 +10,7 @@ import (
 	"log/slog"
 	"net"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -64,9 +65,13 @@ func init() {
 	glog.SetLevel(glog.ERROR)
 }
 
-// RDP is a driver that screenshots the login screen of an RDP server using
-// Standard RDP security (no NLA/SSL). NLA-protected hosts will fail the
-// X.224 handshake and the result is marked as failed.
+// RDP is a driver that screenshots the login screen of an RDP server.
+//
+// X.224 negotiation advertises Standard RDP and SSL/TLS so the server
+// can pick whichever it allows; grdp transparently upgrades the
+// connection to TLS when SSL is selected. NLA (HYBRID / HYBRID_EX) is
+// out of scope - those servers reject negotiation and the result is
+// marked failed with an actionable hint.
 type RDP struct {
 	options runner.Options
 	log     *slog.Logger
@@ -164,10 +169,13 @@ func (r *RDP) Witness(target string, run *runner.Runner) (*models.Result, error)
 	secLayer.SetFastPathListener(pduLayer)
 	secLayer.SetChannelSender(mcs)
 
-	// Standard RDP security only: skip TLS/NLA, capture the unencrypted login
-	// screen. Modern Windows servers with NLA enforced will fail here, which
-	// is reflected as a failed result.
-	x224Layer.SetRequestedProtocol(x224.PROTOCOL_RDP)
+	// Advertise plain RDP and SSL/TLS. grdp's x224 layer transparently
+	// upgrades to TLS (with InsecureSkipVerify) when the server selects
+	// PROTOCOL_SSL, which Windows hosts default to. We deliberately do
+	// NOT advertise PROTOCOL_HYBRID (NLA) - the auth dance is out of
+	// scope for unauth recon, and HYBRID_REQUIRED servers will surface
+	// as code 5/6 with an actionable hint below.
+	x224Layer.SetRequestedProtocol(x224.PROTOCOL_RDP | x224.PROTOCOL_SSL)
 
 	screen := image.NewRGBA(image.Rect(0, 0, width, height))
 	var (
@@ -247,17 +255,33 @@ waitLoop:
 			}
 		}
 
-		// If the failure happened before the PDU layer ever became
-		// "ready" AND the symptom is a closed-connection read, the
-		// most likely cause is a server that requires NLA/SSL
-		// (Standard RDP rejected). Add an actionable hint. grdp's
-		// own ERROR log (e.g. "X224_NEG_FAILURE with code: 2") was
-		// captured into grdpLogSink by our log writer; surface it
-		// when present.
-		if !gotReady.Load() && strings.Contains(reason, "use of closed network connection") {
-			reason = "x224 negotiation rejected (server likely requires NLA/SSL; this driver only attempts Standard RDP security)"
+		// Translate the grdp-captured X.224 negotiation failure code
+		// into something the operator can act on. See MS-RDPBCGR
+		// 2.2.1.2.2 for the full enum.
+		hint, _ := grdpLogSink.Load().(string)
+		if !gotReady.Load() {
+			if code, ok := extractX224NegCode(hint); ok {
+				switch code {
+				case 1: // SSL_REQUIRED_BY_SERVER - shouldn't trigger now (we advertise SSL)
+					reason = "server requires SSL/TLS only; client advertised it but the negotiation still failed"
+				case 2: // SSL_NOT_ALLOWED_BY_SERVER
+					reason = "server requires plain RDP and rejected SSL/TLS"
+				case 3: // SSL_CERT_NOT_ON_SERVER
+					reason = "server cannot present an SSL certificate"
+				case 4: // INCONSISTENT_FLAGS
+					reason = "x224 negotiation: inconsistent flags"
+				case 5: // HYBRID_REQUIRED_BY_SERVER
+					reason = "server requires NLA (HYBRID); this driver cannot complete the CredSSP handshake"
+				case 6: // SSL_WITH_USER_AUTH_REQUIRED_BY_SERVER
+					reason = "server requires NLA over SSL (HYBRID_EX); this driver cannot complete the CredSSP handshake"
+				default:
+					reason = fmt.Sprintf("x224 negotiation rejected (code %d)", code)
+				}
+			} else if strings.Contains(reason, "use of closed network connection") {
+				reason = "x224 negotiation rejected before handshake completed (server likely requires NLA)"
+			}
 		}
-		if hint, _ := grdpLogSink.Load().(string); hint != "" {
+		if hint != "" {
 			reason = fmt.Sprintf("%s [grdp: %s]", reason, hint)
 		}
 
@@ -300,6 +324,23 @@ func sanitizeRDPURL(u *url.URL) string {
 	clone := *u
 	clone.User = nil
 	return clone.String()
+}
+
+// x224NegCodeRe matches the numeric error code grdp logs on a
+// TYPE_RDP_NEG_FAILURE message - e.g.
+// "NODE_RDP_PROTOCOL_X224_NEG_FAILURE with code: 5,see ...".
+var x224NegCodeRe = regexp.MustCompile(`code:\s*(\d+)`)
+
+func extractX224NegCode(s string) (int, bool) {
+	m := x224NegCodeRe.FindStringSubmatch(s)
+	if len(m) != 2 {
+		return 0, false
+	}
+	n, err := strconv.Atoi(m[1])
+	if err != nil {
+		return 0, false
+	}
+	return n, true
 }
 
 // paintBitmap copies a single RDP BitmapData rectangle into an RGBA image.
