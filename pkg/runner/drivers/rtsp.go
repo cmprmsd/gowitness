@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/sensepost/gowitness/pkg/models"
@@ -71,6 +72,11 @@ func (r *RTSP) Witness(target string, run *runner.Runner) (*models.Result, error
 	if r.ffmpeg == "" {
 		result.Failed = true
 		result.FailedReason = "ffmpeg not installed; rtsp scans require it"
+		// Sentinel: any non-zero ResponseCode keeps the row from being
+		// dropped by runner.go's "status code was 0" filter, so the
+		// failure shows up in the gallery / writers as a finding.
+		result.ResponseCode = 1
+		r.log.Warn("rtsp scan failed", "target", saveURL, "reason", result.FailedReason)
 		return result, nil
 	}
 
@@ -120,6 +126,14 @@ func (r *RTSP) Witness(target string, run *runner.Runner) (*models.Result, error
 			lastReason = "no frame captured"
 		}
 		result.FailedReason = lastReason
+		// Sentinel: keep the row in writers so the operator sees the
+		// failure (and reason) without having to scroll through stderr.
+		result.ResponseCode = 1
+		r.log.Warn("rtsp scan failed",
+			"target", saveURL,
+			"reason", lastReason,
+			"attempts", len(attempts),
+		)
 		return result, nil
 	}
 
@@ -215,21 +229,25 @@ func (r *RTSP) candidateAttempts(parsed *url.URL) []credAttempt {
 
 // attempt invokes ffmpeg once for one dial URL. Returns the captured
 // frame bytes (or nil) and a short failure reason (or "" on success).
+//
+// We use -rw_timeout (microseconds) for I/O timeouts because the older
+// RTSP-specific -stimeout was deprecated in ffmpeg 5 and removed in
+// ffmpeg 6+. The Go context timeout is the hard upper bound and kills
+// the process via SIGKILL if ffmpeg ignores its own timeouts.
 func (r *RTSP) attempt(dialURL, tmpPath string, timeout time.Duration) ([]byte, string) {
 	transport := r.options.RTSP.Transport
 	if transport == "" {
 		transport = "tcp"
 	}
 
-	// -stimeout is RTSP-specific (microseconds), used both for the TCP
-	// connect and for socket reads.
-	stimeout := strconv.FormatInt(timeout.Microseconds(), 10)
+	rwTimeout := strconv.FormatInt(timeout.Microseconds(), 10)
 
 	args := []string{
 		"-hide_banner",
+		"-nostdin",
 		"-loglevel", "error",
+		"-rw_timeout", rwTimeout,
 		"-rtsp_transport", transport,
-		"-stimeout", stimeout,
 		"-i", dialURL,
 		"-frames:v", "1",
 		"-update", "1",
@@ -244,19 +262,42 @@ func (r *RTSP) attempt(dialURL, tmpPath string, timeout time.Duration) ([]byte, 
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 
-	if err := cmd.Run(); err != nil {
-		reason := truncateLine(stderr.String())
+	err := cmd.Run()
+	stderrText := strings.TrimSpace(stderr.String())
+	if err != nil {
+		// Surface the FULL ffmpeg stderr at debug level so an operator
+		// running with -D can see what really happened. The caller
+		// records the truncated first line as result.FailedReason.
+		if stderrText != "" {
+			r.log.Debug("ffmpeg stderr", "url", redactURL(dialURL), "stderr", stderrText)
+		}
+		reason := truncateLine(stderrText)
 		if reason == "" {
 			reason = err.Error()
 		}
 		return nil, fmt.Sprintf("ffmpeg: %s", reason)
 	}
 
-	body, err := os.ReadFile(tmpPath)
-	if err != nil || len(body) == 0 {
+	body, ferr := os.ReadFile(tmpPath)
+	if ferr != nil || len(body) == 0 {
+		if stderrText != "" {
+			r.log.Debug("ffmpeg produced no frame",
+				"url", redactURL(dialURL), "stderr", stderrText)
+		}
 		return nil, "no frame captured"
 	}
 	return body, ""
+}
+
+// redactURL strips userinfo from a URL string so logs don't leak the
+// password being tried.
+func redactURL(s string) string {
+	u, err := url.Parse(s)
+	if err != nil {
+		return s
+	}
+	u.User = nil
+	return u.String()
 }
 
 // splitUserPass parses a "user:pass" pair, supporting an empty password
