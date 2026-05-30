@@ -1,8 +1,8 @@
 package api
 
 import (
-	wappalyzer "github.com/projectdiscovery/wappalyzergo"
 	"github.com/cmprmsd/gowitness/pkg/database"
+	wappalyzer "github.com/projectdiscovery/wappalyzergo"
 	"gorm.io/gorm"
 )
 

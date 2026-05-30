@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/cmprmsd/gowitness/pkg/log"
 	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm/clause"
 )
 

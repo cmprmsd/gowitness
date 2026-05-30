@@ -153,6 +153,18 @@ const docTemplate = `{
                         "description": "Include failed screenshots in the results.",
                         "name": "failed",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "A comma separated list of url schemes (http, https, vnc, rdp) to filter by.",
+                        "name": "schemes",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "A comma separated list of tags to filter by (matches any).",
+                        "name": "tags",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -183,6 +195,29 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.listResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/results/tag": {
+            "get": {
+                "description": "Get all the unique tags detected by the favicon-hash + YAML tagger, with their classification axis.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Results"
+                ],
+                "summary": "Get tag results",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.tagListResponse"
                         }
                     }
                 }
@@ -375,6 +410,9 @@ const docTemplate = `{
         "api.galleryContent": {
             "type": "object",
             "properties": {
+                "discovered_creds": {
+                    "type": "string"
+                },
                 "failed": {
                     "type": "boolean"
                 },
@@ -393,6 +431,12 @@ const docTemplate = `{
                 "screenshot": {
                     "type": "string"
                 },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "technologies": {
                     "type": "array",
                     "items": {
@@ -403,6 +447,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                },
+                "url_scheme": {
                     "type": "string"
                 }
             }
@@ -433,6 +480,9 @@ const docTemplate = `{
                 "content_length": {
                     "type": "integer"
                 },
+                "discovered_creds": {
+                    "type": "string"
+                },
                 "failed": {
                     "description": "Failed flag set if the result should be considered failed",
                     "type": "boolean"
@@ -460,6 +510,9 @@ const docTemplate = `{
                 },
                 "url": {
                     "type": "string"
+                },
+                "url_scheme": {
+                    "type": "string"
                 }
             }
         },
@@ -476,6 +529,9 @@ const docTemplate = `{
             "properties": {
                 "content_length": {
                     "type": "integer"
+                },
+                "discovered_creds": {
+                    "type": "string"
                 },
                 "failed": {
                     "type": "boolean"
@@ -514,6 +570,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                },
+                "url_scheme": {
                     "type": "string"
                 }
             }
@@ -600,6 +659,28 @@ const docTemplate = `{
                 },
                 "url": {
                     "type": "string"
+                }
+            }
+        },
+        "api.tagListEntry": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.tagListResponse": {
+            "type": "object",
+            "properties": {
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.tagListEntry"
+                    }
                 }
             }
         },
@@ -762,6 +843,10 @@ const docTemplate = `{
                         "$ref": "#/definitions/models.Cookie"
                     }
                 },
+                "discovered_creds": {
+                    "description": "DiscoveredCreds records the credentials (or \"anonymous\") that\nsuccessfully authenticated when the driver walked an automatic\ncredential ladder. Empty when the operator supplied creds\nexplicitly via URL or CLI flags, or when the protocol has no auth\nconcept. Currently populated by the RTSP driver.",
+                    "type": "string"
+                },
                 "failed": {
                     "description": "Failed flag set if the result should be considered failed",
                     "type": "boolean"
@@ -818,6 +903,12 @@ const docTemplate = `{
                 "screenshot": {
                     "type": "string"
                 },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tag"
+                    }
+                },
                 "technologies": {
                     "type": "array",
                     "items": {
@@ -831,6 +922,9 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.TLS"
                 },
                 "url": {
+                    "type": "string"
+                },
+                "url_scheme": {
                     "type": "string"
                 }
             }
@@ -887,6 +981,23 @@ const docTemplate = `{
                 },
                 "tls_id": {
                     "type": "integer"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Tag": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "result_id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 },
                 "value": {
                     "type": "string"

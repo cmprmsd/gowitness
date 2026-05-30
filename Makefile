@@ -10,7 +10,7 @@ LD_FLAGS := -trimpath \
 	-X=github.com/cmprmsd/gowitness/internal/version.GoBuildEnv=$(G) \
 	-X=github.com/cmprmsd/gowitness/internal/version.GoBuildTime=$(BUILD_TIME)"
 BIN_DIR := build
-PLATFORMS := darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 linux/arm windows/amd64 windows/arm64
+PLATFORMS := linux/amd64 #darwin/amd64 darwin/arm64 #linux/arm64 linux/arm windows/amd64 windows/arm64
 CGO := CGO_ENABLED=0
 
 # Default target

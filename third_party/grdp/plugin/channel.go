@@ -167,7 +167,7 @@ typedef UINT VCAPITYPE VIRTUALCHANNELWRITEEX(LPVOID pInitHandle, DWORD openHandl
 typedef VIRTUALCHANNELWRITEEX* PVIRTUALCHANNELWRITEEX;
 */
 
-//static channel name
+// static channel name
 const (
 	CLIPRDR_SVC_CHANNEL_NAME = "cliprdr" //剪切板
 	RDPDR_SVC_CHANNEL_NAME   = "rdpdr"   //设备重定向(打印机，磁盘，端口，智能卡等)

@@ -11,7 +11,8 @@
 //     RealVNC servers.
 //
 // References:
-//   [PROTOCOL]: http://tools.ietf.org/html/rfc6143
+//
+//	[PROTOCOL]: http://tools.ietf.org/html/rfc6143
 package vnc
 
 import (

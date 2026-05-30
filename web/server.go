@@ -7,11 +7,11 @@ import (
 	"github.com/cmprmsd/gowitness/web/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
 
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/web/api"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/cmprmsd/gowitness/pkg/log"
-	"github.com/cmprmsd/gowitness/web/api"
 )
 
 // Server is a web server

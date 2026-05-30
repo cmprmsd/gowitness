@@ -18,14 +18,14 @@ type searchRequest struct {
 type searchResult struct {
 	ID uint `json:"id" gorm:"primarykey"`
 
-	URL            string   `json:"url"`
-	URLScheme      string   `json:"url_scheme"`
-	FinalURL       string   `json:"final_url"`
-	ResponseCode   int      `json:"response_code"`
-	ResponseReason string   `json:"response_reason"`
-	Protocol       string   `json:"protocol"`
-	ContentLength  int64    `json:"content_length"`
-	Title          string   `json:"title"`
+	URL             string   `json:"url"`
+	URLScheme       string   `json:"url_scheme"`
+	FinalURL        string   `json:"final_url"`
+	ResponseCode    int      `json:"response_code"`
+	ResponseReason  string   `json:"response_reason"`
+	Protocol        string   `json:"protocol"`
+	ContentLength   int64    `json:"content_length"`
+	Title           string   `json:"title"`
 	Failed          bool     `json:"failed"`
 	FailedReason    string   `json:"failed_reason"`
 	DiscoveredCreds string   `json:"discovered_creds"`

@@ -8,11 +8,11 @@ import (
 	"os"
 	"sync"
 
-	wappalyzer "github.com/projectdiscovery/wappalyzergo"
 	"github.com/cmprmsd/gowitness/internal/islazy"
 	"github.com/cmprmsd/gowitness/internal/tagger"
 	"github.com/cmprmsd/gowitness/pkg/models"
 	"github.com/cmprmsd/gowitness/pkg/writers"
+	wappalyzer "github.com/projectdiscovery/wappalyzergo"
 )
 
 // Runner is a runner that probes web targets using one or more drivers,

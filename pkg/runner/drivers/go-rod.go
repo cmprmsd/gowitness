@@ -12,14 +12,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/launcher"
-	"github.com/go-rod/rod/lib/proto"
 	"github.com/cmprmsd/gowitness/internal/islazy"
 	"github.com/cmprmsd/gowitness/pkg/imagehash"
 	"github.com/cmprmsd/gowitness/pkg/log"
 	"github.com/cmprmsd/gowitness/pkg/models"
 	"github.com/cmprmsd/gowitness/pkg/runner"
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
+	"github.com/go-rod/rod/lib/proto"
 	"github.com/ysmood/gson"
 )
 
