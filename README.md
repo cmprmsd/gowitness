@@ -13,6 +13,21 @@
 </p>
 <br>
 
+## fork additions
+
+This is a fork of [`sensepost/gowitness`](https://github.com/sensepost/gowitness) that extends the screenshot pipeline beyond HTTP:
+
+- **VNC driver** (`vnc://host[:5900]`) — captures the framebuffer via RFB. Implements the **CVE-2006-2369** authentication bypass against vulnerable old RealVNC servers by forcing security type 1 (None).
+- **RDP driver** (`rdp://host[:3389]`) — negotiates Standard RDP or SSL/TLS (no NLA) and captures the login-screen bitmap. Windows hosts with NLA disabled work out of the box; NLA-required servers surface a clear "server requires NLA (HYBRID)" reason.
+- **RTSP driver** (`rtsp://host[:554]`) — grabs a single video frame via ffmpeg. Walks a **default-credential ladder** (`admin:admin`, `admin:`, `admin:12345`, `admin:888888`, `root:root`, `admin:password`) and records the winning creds as a **discovered-credentials finding** — visible in the gallery as a yellow key badge on the card and as an advisory banner on the detail page.
+- **Favicon-hash tagger** — every HTTP result is classified into operator-friendly tags (`printer` / `firewall` / `hypervisor` / `Canon Remote UI` / `pfSense` / etc.) using a Shodan-compatible MMH3 favicon hash seeded from [`edoardottt/favirecon`](https://github.com/edoardottt/favirecon) (~1400 rules) plus hand-curated title-based rules. Override the ruleset with `--tags-file rules.yaml`.
+- **Reader routing** — the nmap / nessus / cidr readers detect VNC / RDP / RTSP services by service name and well-known port and emit the matching URL scheme instead of always trying `http(s)://`. A single `gowitness scan nmap -f scan.xml --open-only --write-db` now produces web *and* VNC *and* RDP *and* camera screenshots in one pass.
+- **Gallery filters** — multi-select filters for **Protocol** and **Tag** (grouped by Category / Vendor / Product) with popovers that stay open across multiple selections. Click the hover-only external-link button on a card to open the target URL in a new tab without navigating to the detail page.
+
+Runtime deps for the extra drivers: `ffmpeg` is required for RTSP (not for VNC/RDP). Missing ffmpeg logs a startup warning; only `rtsp://` targets fail.
+
+<br>
+
 ## introduction
 
 `gowitness` is a website screenshot utility written in Golang, that uses Chrome Headless to generate screenshots of web interfaces using the command line, with a handy report viewer to process results. Both Linux and macOS is supported, with Windows support mostly working.
