@@ -12,14 +12,14 @@ import (
 	"sync"
 	"time"
 
+	"github.com/cmprmsd/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/pkg/imagehash"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/runner"
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
 	"github.com/go-rod/rod/lib/proto"
-	"github.com/sensepost/gowitness/internal/islazy"
-	"github.com/sensepost/gowitness/pkg/imagehash"
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/runner"
 	"github.com/ysmood/gson"
 )
 
@@ -181,8 +181,9 @@ func (run *Gorod) Witness(target string, runner *runner.Runner) (*models.Result,
 	var (
 		first  *proto.NetworkRequestWillBeSent
 		result = &models.Result{
-			URL:      target,
-			ProbedAt: time.Now(),
+			URL:       target,
+			URLScheme: parseScheme(target),
+			ProbedAt:  time.Now(),
 		}
 		resultMutex   = sync.Mutex{}
 		netlog        = make(map[string]models.NetworkLog)
@@ -432,6 +433,20 @@ func (run *Gorod) Witness(target string, runner *runner.Runner) (*models.Result,
 				Value: tech,
 			})
 		}
+	}
+
+	// apply tagger rules. Same code path as the chromedp driver via the
+	// shared applyTags helper; the only driver-specific bit is fetching
+	// the favicon from the page context.
+	{
+		var faviconB64 string
+		// ByPromise() is required - the IIFE returns a Promise.
+		if eval, err := page.Evaluate(rod.Eval(faviconFetchScript).ByPromise()); err != nil {
+			log.Debug("favicon fetch failed", "err", err)
+		} else if eval != nil {
+			faviconB64 = eval.Value.Str()
+		}
+		applyTags(result, faviconB64, runner)
 	}
 
 	// take the screenshot. getting here often means the page responded and we have

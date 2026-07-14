@@ -10,6 +10,60 @@ type Options struct {
 	Writer Writer
 	// Scan is typically Scan options
 	Scan Scan
+	// VNC is VNC driver options
+	VNC VNC
+	// RDP is RDP driver options
+	RDP RDP
+	// RTSP is RTSP driver options
+	RTSP RTSP
+}
+
+// VNC holds options for the VNC driver
+type VNC struct {
+	// Port is the default port to use when a vnc:// URL omits the port
+	Port int
+	// ForceNoAuth forces RFB security type 1 (None) even if the server did
+	// not advertise it. Implements the CVE-2006-2369 style bypass against
+	// vulnerable RealVNC 4.1.0/4.1.1 servers.
+	ForceNoAuth bool
+	// SettleTime is the number of seconds to wait for additional framebuffer
+	// updates after the initial one before encoding the screenshot.
+	SettleTime int
+}
+
+// RDP holds options for the RDP driver
+type RDP struct {
+	// Port is the default port to use when an rdp:// URL omits the port
+	Port int
+	// SettleTime is the number of seconds to wait for the login screen to
+	// finish rendering before screenshotting.
+	SettleTime int
+	// Username, Password, Domain are optional credentials for Standard RDP
+	// security (no NLA). Used when not provided in the URL userinfo.
+	Username string
+	Password string
+	Domain   string
+}
+
+// RTSP holds options for the RTSP driver. The driver shells out to ffmpeg
+// for the actual stream pulling and decoding.
+type RTSP struct {
+	// Port is the default port to use when an rtsp:// URL omits the port.
+	// (Mostly informational; ffmpeg honours RTSP's default port 554.)
+	Port int
+	// Transport is the RTSP transport to negotiate. "tcp" works through
+	// firewalls and NAT; "udp" is sometimes faster on local networks.
+	Transport string
+	// Username, Password are optional credentials applied when the rtsp://
+	// URL does not include userinfo.
+	Username string
+	Password string
+	// DefaultCreds is a list of "user:pass" strings tried in order after
+	// an anonymous probe fails, when the URL has no embedded creds and
+	// neither --rtsp-username nor --rtsp-password is set. Each entry
+	// produces one ffmpeg invocation; the first successful frame capture
+	// wins. Pass an empty list to disable.
+	DefaultCreds []string
 }
 
 // Logging is log related options
@@ -96,6 +150,11 @@ type Scan struct {
 	// HttpCodeFilter are http response codes to screenshot. this is a filter.
 	// by default all codes are screenshotted
 	HttpCodeFilter []int
+	// TagsFile is an optional path to a YAML rules file overriding the
+	// embedded tagger ruleset. When empty, the embedded ruleset is used.
+	TagsFile string
+	// DisableTags turns off the favicon-hash + YAML tagger entirely.
+	DisableTags bool
 }
 
 // NewDefaultOptions returns Options with some default values
@@ -110,9 +169,22 @@ func NewDefaultOptions() *Options {
 			Driver:           "chromedp",
 			Threads:          6,
 			Timeout:          60,
-			UriFilter:        []string{"http", "https"},
+			UriFilter:        []string{"http", "https", "vnc", "rdp", "rtsp"},
 			ScreenshotFormat: "jpeg",
 			HttpCodeFilter:   []int{},
+		},
+		VNC: VNC{
+			Port:        5900,
+			ForceNoAuth: true,
+			SettleTime:  2,
+		},
+		RDP: RDP{
+			Port:       3389,
+			SettleTime: 5,
+		},
+		RTSP: RTSP{
+			Port:      554,
+			Transport: "tcp",
 		},
 		Logging: Logging{
 			Debug:         true,

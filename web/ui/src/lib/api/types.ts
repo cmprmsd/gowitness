@@ -29,19 +29,23 @@ type gallery = {
 type galleryResult = {
   id: number;
   url: string;
+  url_scheme: string;
   probed_at: string;
   title: string;
   response_code: number;
   file_name: string;
   screenshot: string;
   failed: boolean;
+  discovered_creds: string;
   technologies: string[];
+  tags: string[];
 };
 
 // list
 type list = {
   id: number;
   url: string;
+  url_scheme: string;
   final_url: string;
   response_code: number;
   response_reason: string;
@@ -50,6 +54,7 @@ type list = {
   title: string;
   failed: boolean;
   failed_reason: string;
+  discovered_creds: string;
 };
 
 // details
@@ -127,11 +132,13 @@ interface cookie {
 interface detail {
   id: number;
   url: string;
+  url_scheme: string;
   probed_at: string;
   final_url: string;
   response_code: number;
   response_reason: string;
   protocol: string;
+  discovered_creds: string;
   content_length: number;
   html: string;
   title: string;
@@ -152,6 +159,7 @@ interface detail {
 interface searchresult {
   id: number;
   url: string;
+  url_scheme: string;
   final_url: string;
   response_code: number;
   content_length: number;
@@ -159,10 +167,26 @@ interface searchresult {
   matched_fields: string[];
   file_name: string;
   screenshot: string;
+  discovered_creds: string;
 }
 
 interface technologylist {
   technologies: string[];
+}
+
+interface tagentry {
+  value: string;
+  type: string; // "name" | "category" | "vendor" | "" (legacy)
+}
+
+interface taglist {
+  tags: tagentry[];
+}
+
+interface tag {
+  id: number;
+  result_id: number;
+  value: string;
 }
 
 export type {
@@ -181,4 +205,7 @@ export type {
   detail,
   searchresult,
   technologylist,
+  taglist,
+  tagentry,
+  tag,
 };

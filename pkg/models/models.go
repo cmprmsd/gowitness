@@ -17,6 +17,7 @@ type Result struct {
 	ID uint `json:"id" gorm:"primarykey"`
 
 	URL                   string    `json:"url"`
+	URLScheme             string    `json:"url_scheme" gorm:"index"`
 	ProbedAt              time.Time `json:"probed_at"`
 	FinalURL              string    `json:"final_url"`
 	ResponseCode          int       `json:"response_code"`
@@ -37,8 +38,16 @@ type Result struct {
 	Failed       bool   `json:"failed"`
 	FailedReason string `json:"failed_reason"`
 
+	// DiscoveredCreds records the credentials (or "anonymous") that
+	// successfully authenticated when the driver walked an automatic
+	// credential ladder. Empty when the operator supplied creds
+	// explicitly via URL or CLI flags, or when the protocol has no auth
+	// concept. Currently populated by the RTSP driver.
+	DiscoveredCreds string `json:"discovered_creds" gorm:"index"`
+
 	TLS          TLS          `json:"tls" gorm:"constraint:OnDelete:CASCADE"`
 	Technologies []Technology `json:"technologies" gorm:"constraint:OnDelete:CASCADE"`
+	Tags         []Tag        `json:"tags" gorm:"constraint:OnDelete:CASCADE"`
 
 	Headers []Header     `json:"headers" gorm:"constraint:OnDelete:CASCADE"`
 	Network []NetworkLog `json:"network" gorm:"constraint:OnDelete:CASCADE"`
@@ -84,6 +93,22 @@ type Technology struct {
 	ResultID uint `json:"result_id"`
 
 	Value string `json:"value" gorm:"index"`
+}
+
+// Tag is an operator-friendly classification (e.g. "printer", "fortinet",
+// "FortiGate") attached to a Result by the tagger. Multiple Tag rows per
+// Result are normal: a single matched rule may emit a product name, its
+// category, and its vendor as three separate Tag rows.
+//
+// Type identifies which axis of the rule the value came from - one of
+// "name" (the specific product), "category" (e.g. "printer"), or
+// "vendor" (e.g. "canon"). Used by the UI to group the filter dropdown.
+type Tag struct {
+	ID       uint `json:"id" gorm:"primarykey"`
+	ResultID uint `json:"result_id"`
+
+	Value string `json:"value" gorm:"index"`
+	Type  string `json:"type" gorm:"index"`
 }
 
 type Header struct {

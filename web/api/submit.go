@@ -5,10 +5,10 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/runner"
-	driver "github.com/sensepost/gowitness/pkg/runner/drivers"
-	"github.com/sensepost/gowitness/pkg/writers"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/runner"
+	driver "github.com/cmprmsd/gowitness/pkg/runner/drivers"
+	"github.com/cmprmsd/gowitness/pkg/writers"
 )
 
 type submitRequest struct {
@@ -81,13 +81,17 @@ func (h *ApiHandler) SubmitHandler(w http.ResponseWriter, r *http.Request) {
 
 	logger := slog.New(log.Logger)
 
-	driver, err := driver.NewChromedp(logger, *options)
+	chromeDriver, err := driver.NewChromedp(logger, *options)
 	if err != nil {
 		http.Error(w, "Error sarting driver", http.StatusInternalServerError)
 		return
 	}
+	drivers := map[string]runner.Driver{
+		"http":  chromeDriver,
+		"https": chromeDriver,
+	}
 
-	runner, err := runner.NewRunner(logger, driver, *options, []writers.Writer{writer})
+	runner, err := runner.NewRunner(logger, drivers, *options, []writers.Writer{writer})
 	if err != nil {
 		log.Error("error starting runner", "err", err)
 		http.Error(w, "Error starting runner", http.StatusInternalServerError)

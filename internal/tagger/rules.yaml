@@ -1,0 +1,3194 @@
+# Auto-generated tag rules for gowitness.
+#
+# Favicon hashes are seeded from github.com/edoardottt/favirecon
+# (db.json, MIT license, copyright 2022 vrenzolaverace).
+# https://github.com/edoardottt/favirecon
+#
+# Hand-curated entries with title-based fallbacks come at the top.
+# Schema: see internal/tagger/tagger.go.
+rules:
+  - name: "Kyocera Command Center"
+    category: "printer"
+    vendor: "kyocera"
+    title_regex: "(?i)(command center|kyocera)"
+  - name: "Brother Printer"
+    category: "printer"
+    vendor: "brother"
+    title_contains:
+      - "Brother"
+  - name: "HP LaserJet"
+    category: "printer"
+    vendor: "hp"
+    title_regex: "(?i)hp.*(laserjet|officejet|deskjet|color printer)"
+  - name: "HP Web Jetadmin"
+    category: "printer"
+    vendor: "hp"
+    title_contains:
+      - "HP Web Jetadmin"
+  - name: "Epson Web Config"
+    category: "printer"
+    vendor: "epson"
+    title_regex: "(?i)epson.*(web config|webconfig)"
+  - name: "Lexmark Printer"
+    category: "printer"
+    vendor: "lexmark"
+    title_contains:
+      - "Lexmark"
+  - name: "Xerox Printer"
+    category: "printer"
+    vendor: "xerox"
+    title_contains:
+      - "Xerox"
+  - name: "Sharp MFP"
+    category: "printer"
+    vendor: "sharp"
+    title_regex: "(?i)sharp.*(mfp|printer|copier)"
+  - name: "Konica Minolta"
+    category: "printer"
+    vendor: "konica-minolta"
+    title_contains:
+      - "KONICA MINOLTA"
+      - "Konica"
+  - name: "FortiGate"
+    category: "firewall"
+    vendor: "fortinet"
+    title_contains:
+      - "FortiGate"
+  - name: "pfSense"
+    category: "firewall"
+    vendor: "pfsense"
+    title_contains:
+      - "pfSense"
+  - name: "OPNsense"
+    category: "firewall"
+    vendor: "opnsense"
+    title_contains:
+      - "OPNsense"
+  - name: "Sophos UTM"
+    category: "firewall"
+    vendor: "sophos"
+    title_contains:
+      - "Sophos UTM"
+      - "Sophos User Portal"
+      - "WebAdmin"
+  - name: "SonicWall"
+    category: "firewall"
+    vendor: "sonicwall"
+    title_contains:
+      - "SonicWall"
+      - "SonicOS"
+  - name: "Palo Alto GlobalProtect"
+    category: "firewall"
+    vendor: "paloalto"
+    title_contains:
+      - "GlobalProtect Portal"
+  - name: "Check Point Gaia"
+    category: "firewall"
+    vendor: "checkpoint"
+    title_contains:
+      - "Check Point Gaia"
+      - "Gaia Portal"
+  - name: "WatchGuard"
+    category: "firewall"
+    vendor: "watchguard"
+    title_contains:
+      - "WatchGuard"
+  - name: "VMware vSphere"
+    category: "hypervisor"
+    vendor: "vmware"
+    title_regex: "(?i)vsphere|vcenter"
+  - name: "VMware ESXi"
+    category: "hypervisor"
+    vendor: "vmware"
+    title_contains:
+      - "ESXi"
+      - "VMware ESX"
+  - name: "Proxmox VE"
+    category: "hypervisor"
+    vendor: "proxmox"
+    title_contains:
+      - "Proxmox Virtual Environment"
+      - "Proxmox VE"
+  - name: "XenServer"
+    category: "hypervisor"
+    vendor: "citrix"
+    title_regex: "(?i)xenserver|citrix hypervisor"
+  - name: "Dell iDRAC"
+    category: "ipmi"
+    vendor: "dell"
+    title_contains:
+      - "iDRAC"
+  - name: "HPE iLO"
+    category: "ipmi"
+    vendor: "hpe"
+    title_contains:
+      - "Integrated Lights-Out"
+      - "iLO"
+  - name: "Supermicro IPMI"
+    category: "ipmi"
+    vendor: "supermicro"
+    title_regex: "(?i)supermicro|ipmi"
+  - name: "Lenovo XClarity"
+    category: "ipmi"
+    vendor: "lenovo"
+    title_contains:
+      - "XClarity"
+  - name: "MikroTik RouterOS"
+    category: "router"
+    vendor: "mikrotik"
+    title_contains:
+      - "RouterOS"
+      - "MikroTik"
+  - name: "Ubiquiti UniFi"
+    category: "router"
+    vendor: "ubiquiti"
+    title_contains:
+      - "UniFi"
+  - name: "Synology DSM"
+    category: "nas"
+    vendor: "synology"
+    title_contains:
+      - "Synology"
+      - "DSM"
+  - name: "QNAP"
+    category: "nas"
+    vendor: "qnap"
+    title_contains:
+      - "QNAP"
+      - "QTS"
+  - name: "TrueNAS"
+    category: "nas"
+    vendor: "truenas"
+    title_contains:
+      - "TrueNAS"
+      - "FreeNAS"
+  - name: "Hikvision Camera"
+    category: "camera"
+    vendor: "hikvision"
+    title_contains:
+      - "Hikvision"
+  - name: "Dahua Camera"
+    category: "camera"
+    vendor: "dahua"
+    title_contains:
+      - "Dahua"
+      - "WEB SERVICE"
+  - name: "Axis Camera"
+    category: "camera"
+    vendor: "axis"
+    title_contains:
+      - "AXIS"
+  - name: "(Blank) iSpy"
+    favicon_hash: 1821549811
+  - name: "000webhost"
+    favicon_hash: 1722224755
+  - name: "1A First Alternative"
+    favicon_hash: -1702798999
+  - name: "3CX Phone System"
+    favicon_hash: 970132176
+  - name: "3CX Web"
+    favicon_hash: -10469226
+  - name: "A10 Networks"
+    favicon_hash: 1553502622
+  - name: "ABB Optimax"
+    favicon_hash: -305613147
+  - name: "ABUS"
+    favicon_hash: 1956710267
+  - name: "ADB Broadband (Network)"
+    favicon_hash: -587741716
+  - name: "AEM Screens"
+    favicon_hash: -277464596
+  - name: "AKHQ"
+    favicon_hash: 855432563
+  - name: "ALIBI NVR"
+    category: "camera"
+    favicon_hash: 1876585825
+  - name: "ALLNET"
+    favicon_hash: 1162358134
+  - name: "AMH"
+    favicon_hash: 1822002133
+  - name: "AMP - Application Management Panel"
+    favicon_hash: -1577363222
+  - name: "ARC"
+    favicon_hash: 163538942
+  - name: "ARRIS (Network)"
+    favicon_hash: -360566773
+  - name: "ASP.net"
+    favicon_hash: 1772087922
+  - name: "ASPECT Control Panel"
+    favicon_hash: 1011076161
+  - name: "ASUS AiCloud"
+    favicon_hash: 552592949
+  - name: "AT&T"
+    favicon_hash: -1593402357
+  - name: "AVIWEST - StreamHub"
+    favicon_hash: 2033037722
+  - name: "AVS electronics"
+    favicon_hash: 1177920756
+  - name: "AVer"
+    favicon_hash: 1335824931
+  - name: "AXIS (network cameras)"
+    category: "camera"
+    favicon_hash: -1616143106
+  - name: "Abilis (Network/Automation)"
+    favicon_hash: -166151761
+  - name: "Absorb"
+    favicon_hash: 162418931
+  - name: "Accellion File Transfer"
+    favicon_hash: -1171707951
+  - name: "AccessNetworks"
+    favicon_hash: -1785167104
+  - name: "Accrisoft"
+    favicon_hash: -1275148624
+  - name: "Ace"
+    favicon_hash: -183163807
+  - name: "Ackee"
+    favicon_hash: -1495233116
+  - name: "Acronis"
+    favicon_hash: 1568516651
+  - name: "Adform"
+    favicon_hash: 1668832054
+  - name: "Adobe Campaign Classic"
+    favicon_hash: -333791179
+  - name: "Adobe Connect"
+    favicon_hash: -1962284560
+  - name: "Adobe Connect Central"
+    favicon_hash: -1476384993
+  - name: "Adserver"
+    favicon_hash: 674449329
+  - name: "AeroHive Networks"
+    favicon_hash: 1604363273
+  - name: "AfterLogic Webmail"
+    category: "webmail"
+    favicon_hash: -194791768
+  - name: "Aipo"
+    favicon_hash: 1591050260
+  - name: "Airwatch"
+    favicon_hash:
+      - -1863663974
+      - -1153873472
+      - 321909464
+      - 788771792
+      - 1095915848
+  - name: "Alexandria"
+    favicon_hash: -1314405728
+  - name: "Alfresco"
+    favicon_hash: 1333537166
+  - name: "Algorab"
+    favicon_hash: 1807116994
+  - name: "Alibaba"
+    favicon_hash: -2042679530
+  - name: "Alibaba Cloud (Block Page)"
+    favicon_hash: 1227052603
+  - name: "Alienvault"
+    favicon_hash: -1779611449
+  - name: "AlphaNet"
+    favicon_hash: -163806709
+  - name: "Amazon"
+    favicon_hash:
+      - -1544605732
+      - 1941681276
+  - name: "Amazon AWS"
+    favicon_hash:
+      - 314969666
+      - 716989053
+      - 1565485509
+  - name: "Ambari"
+    favicon_hash: -165021467
+  - name: "AmicaWEB - Combivox"
+    favicon_hash: 1233473326
+  - name: "Amped Wireless"
+    favicon_hash: 1858779064
+  - name: "Angular"
+    favicon_hash: -1851491385
+  - name: "AngularJS"
+    favicon_hash: -1255347784
+  - name: "Ansible"
+    favicon_hash: 1735248917
+  - name: "Ansible AWX"
+    favicon_hash: -1413670889
+  - name: "AnyDesk"
+    favicon_hash: 1027252292
+  - name: "Apache"
+    favicon_hash:
+      - 1039044672
+      - 1446754233
+      - 1732786188
+  - name: "Apache ActiveMQ"
+    favicon_hash: 1766699363
+  - name: "Apache Archiva"
+    favicon_hash: -1051063062
+  - name: "Apache Doris"
+    favicon_hash: 24048806
+  - name: "Apache HTTP Server"
+    favicon_hash: -1314943136
+  - name: "Apache HTTP Server Test Page"
+    favicon_hash: 1910316737
+  - name: "Apache Haus"
+    favicon_hash: -632070065
+  - name: "Apache Impala"
+    favicon_hash: 587330928
+  - name: "Apache Kylin"
+    favicon_hash: -186961397
+  - name: "Apache ShardingSphere"
+    favicon_hash: 816588900
+  - name: "Apache Tomcat"
+    favicon_hash: -297069493
+  - name: "Aplikasi"
+    favicon_hash: 494866796
+  - name: "Apollo"
+    favicon_hash: 11794165
+  - name: "AppDynamics"
+    favicon_hash: -1217002480
+  - name: "AppNext"
+    favicon_hash: -1243674871
+  - name: "Apple"
+    favicon_hash:
+      - -1498185948
+      - 1232159009
+      - 1382324298
+  - name: "AppsFlyer"
+    favicon_hash: 786476039
+  - name: "Aqua Enterprise"
+    favicon_hash: -1261322577
+  - name: "Araknis"
+    favicon_hash: 1640914316
+  - name: "Arbor Networks"
+    favicon_hash: -1745552996
+  - name: "ArcGIS"
+    favicon_hash: 229300816
+  - name: "Arcadyan o2 box (Network)"
+    favicon_hash: 1479202414
+  - name: "Archibus"
+    favicon_hash: 889652940
+  - name: "Archivematica"
+    favicon_hash: -1378182799
+  - name: "Argon Technologies"
+    favicon_hash: 1530688358
+  - name: "Arlo"
+    favicon_hash: -1637180585
+  - name: "Arris"
+    favicon_hash:
+      - -1477563858
+      - 1495420903
+  - name: "Aruba (Virtual Controller)"
+    favicon_hash: 1142227528
+  - name: "Arvixe"
+    favicon_hash: 184809389
+  - name: "Askey Cable Modem"
+    favicon_hash:
+      - -1710631084
+      - 89321398
+  - name: "Assurant"
+    favicon_hash: 1227004061
+  - name: "Asustor"
+    favicon_hash: 1678170702
+  - name: "Atlassian"
+    category: "devops"
+    vendor: "atlassian"
+    favicon_hash:
+      - 628535358
+      - 705143395
+      - 743365239
+  - name: "Atlassian - Bamboo"
+    category: "devops"
+    vendor: "atlassian"
+    favicon_hash: -1379982221
+  - name: "Atlassian - Confluence"
+    category: "devops"
+    vendor: "atlassian"
+    favicon_hash:
+      - -1642532491
+      - -305179312
+  - name: "Atlassian - JIRA"
+    category: "devops"
+    vendor: "atlassian"
+    favicon_hash:
+      - -1581907337
+      - 552727997
+      - 981867722
+  - name: "Atlassian Crowd"
+    category: "devops"
+    vendor: "atlassian"
+    favicon_hash: -1231308448
+  - name: "Atriuum"
+    favicon_hash: -1465226128
+  - name: "AudioCodes"
+    favicon_hash: -297076130
+  - name: "AutomationAnywhere"
+    favicon_hash: -1005691603
+  - name: "Avaya"
+    favicon_hash: 1884840369
+  - name: "Avigilon"
+    category: "camera"
+    favicon_hash:
+      - 1318124267
+      - 1668385882
+  - name: "Avigilon Web Access"
+    category: "camera"
+    favicon_hash: -1125259127
+  - name: "Avtech IP Surveillance (Camera)"
+    favicon_hash: -194439630
+  - name: "Avycon"
+    favicon_hash: 1709607771
+  - name: "Axcient Replibit Management Server"
+    favicon_hash: 475379699
+  - name: "Axigen"
+    favicon_hash: 2006735094
+  - name: "Azure Devops Server"
+    favicon_hash: -232968088
+  - name: "BARIX"
+    favicon_hash: -1964089279
+  - name: "BBC"
+    favicon_hash: 1380259394
+  - name: "BIG-IP"
+    category: "firewall"
+    vendor: "f5"
+    favicon_hash: 878647854
+  - name: "BOMGAR Support Portal"
+    favicon_hash: 829321644
+  - name: "Baidu"
+    favicon_hash:
+      - -1374555452
+      - 1118684072
+      - 1496849154
+      - 1684500512
+  - name: "Baidu (IP error page)"
+    favicon_hash: -1507567067
+  - name: "Bank of America"
+    favicon_hash: -1549154783
+  - name: "Barracuda"
+    category: "firewall"
+    vendor: "barracuda"
+    favicon_hash: 1436966696
+  - name: "Barracuda Firewall"
+    category: "firewall"
+    vendor: "barracuda"
+    favicon_hash: -157270335
+  - name: "Barracuda Networks"
+    category: "firewall"
+    vendor: "barracuda"
+    favicon_hash: 1224439683
+  - name: "Barracuda SSL VPN"
+    category: "firewall"
+    vendor: "barracuda"
+    favicon_hash: -1976018368
+  - name: "Belkin router"
+    favicon_hash: -1022319330
+  - name: "BigBlueButton"
+    favicon_hash: 250762888
+  - name: "Bing"
+    favicon_hash: -740211187
+  - name: "Binom"
+    favicon_hash: -1723806538
+  - name: "BioTime"
+    favicon_hash: -890810109
+  - name: "Biotime"
+    favicon_hash: 1319780356
+  - name: "Bipiemme Technology"
+    favicon_hash: 164535647
+  - name: "Bitnami"
+    favicon_hash: -1607644090
+  - name: "Bitwarden"
+    favicon_hash: -167663731
+  - name: "Blackboard"
+    favicon_hash: -1593651747
+  - name: "Blue Iris (Webcam)"
+    category: "camera"
+    favicon_hash: -520888198
+  - name: "BlueBean"
+    favicon_hash: 1349199107
+  - name: "Bluehost"
+    favicon_hash:
+      - -1119613926
+      - 577446824
+  - name: "Bluemax"
+    favicon_hash: -1101206929
+  - name: "Blynk Administration"
+    favicon_hash: 984358620
+  - name: "BoaServer"
+    favicon_hash: 1169183049
+  - name: "BookMyAccountant"
+    favicon_hash: 1099370896
+  - name: "BookStack"
+    favicon_hash: -778412836
+  - name: "Bosch Security Systems (Camera)"
+    favicon_hash: -1702769256
+  - name: "Bossgoo"
+    favicon_hash: 1757638479
+  - name: "Braze"
+    favicon_hash: 1280461262
+  - name: "BrbOS"
+    favicon_hash: -1049382096
+  - name: "Britecore"
+    favicon_hash: -1469020453
+  - name: "BroadWave"
+    favicon_hash: 1334507537
+  - name: "Buddy"
+    favicon_hash: -850502287
+  - name: "BugZilla"
+    favicon_hash: 1714492006
+  - name: "Bump50:50"
+    favicon_hash: 145291791
+  - name: "Business Process Management Services"
+    favicon_hash: -1197926023
+  - name: "C-Lodop"
+    favicon_hash: -329747115
+  - name: "CAE"
+    favicon_hash: -268676052
+  - name: "CC Online"
+    favicon_hash: 1843534472
+  - name: "CONTEC"
+    favicon_hash: -244067125
+  - name: "CP Plus"
+    favicon_hash: -1250820636
+  - name: "CP Plus Orange"
+    favicon_hash: 2041528389
+  - name: "CPT"
+    favicon_hash: -1057103077
+  - name: "CTFd"
+    favicon_hash: 1947845994
+  - name: "CUPS"
+    category: "printer"
+    vendor: "cups"
+    favicon_hash:
+      - -2062525755
+      - -120854511
+  - name: "CX"
+    favicon_hash: -532394952
+  - name: "Cachet"
+    favicon_hash: -1606065523
+  - name: "Cacti"
+    favicon_hash: -1797138069
+  - name: "Cafe24 (Korea)"
+    favicon_hash: 1251810433
+  - name: "Cake PHP"
+    favicon_hash: 980692677
+  - name: "Cambium Networks"
+    favicon_hash: -435817905
+  - name: "Canon Remote UI"
+    category: "printer"
+    vendor: "canon"
+    favicon_hash: -1692862215
+  - name: "Canvas LMS (Learning Management)"
+    favicon_hash: 575613323
+  - name: "CapRover"
+    favicon_hash: 988422585
+  - name: "Cardinal Health"
+    favicon_hash: -1872029577
+  - name: "Cargo Site Builder"
+    favicon_hash: -1672096080
+  - name: "CentOS"
+    favicon_hash:
+      - -1517793453
+      - 1522616207
+  - name: "Centaur"
+    favicon_hash: 1954075067
+  - name: "CentreStack"
+    favicon_hash: 1163764264
+  - name: "CerberusFTP"
+    favicon_hash: -276311150
+  - name: "Chainpoint"
+    favicon_hash: 2128230701
+  - name: "Chamilo"
+    favicon_hash: -1667378049
+  - name: "CheckPoint"
+    category: "firewall"
+    vendor: "checkpoint"
+    favicon_hash: 794809961
+  - name: "Checkpoint (Gaia)"
+    category: "firewall"
+    vendor: "checkpoint"
+    favicon_hash: -1822098181
+  - name: "Chef Automate"
+    favicon_hash: -276759139
+  - name: "Cisco"
+    favicon_hash: 899457975
+  - name: "Cisco Meraki"
+    category: "firewall"
+    vendor: "cisco"
+    favicon_hash: 163842882
+  - name: "Cisco Meraki Dashboard"
+    category: "firewall"
+    vendor: "cisco"
+    favicon_hash: 804949239
+  - name: "Cisco Router"
+    favicon_hash: -299287097
+  - name: "Citigold"
+    favicon_hash: 1232683746
+  - name: "Citrix Login"
+    favicon_hash: -1272756243
+  - name: "ClaimTime (Ramsell Public Health & Safety)"
+    favicon_hash: -687783882
+  - name: "ClarkConnect Enterprise Edition"
+    favicon_hash: 1940967059
+  - name: "ClearSwift"
+    favicon_hash: 1917437143
+  - name: "Clirik"
+    favicon_hash: 998588252
+  - name: "Cloud9"
+    favicon_hash: -1740432731
+  - name: "CloudFlare"
+    favicon_hash: 1914658187
+  - name: "CloudFlow"
+    favicon_hash: 1729596692
+  - name: "Cloudinary"
+    favicon_hash: -624805968
+  - name: "Cnservers LLC"
+    favicon_hash: -235701012
+  - name: "Cockpit Project"
+    favicon_hash: 688609340
+  - name: "CodeChecker"
+    favicon_hash: -1496590341
+  - name: "Codiad"
+    favicon_hash: 1122883478
+  - name: "Cofence Vision"
+    favicon_hash: 739801466
+  - name: "ComAp"
+    favicon_hash: -1973343228
+  - name: "Combivox"
+    favicon_hash: -342262483
+  - name: "Comcast Business"
+    favicon_hash: 1603223646
+  - name: "ComfortClick"
+    favicon_hash: 1068026086
+  - name: "CommuniGate"
+    favicon_hash: -1588746893
+  - name: "Communigate"
+    favicon_hash: -1118274094
+  - name: "Comtime Router"
+    favicon_hash: 1761743076
+  - name: "Concentrator"
+    favicon_hash: 248673607
+  - name: "Confluence"
+    category: "devops"
+    vendor: "atlassian"
+    favicon_hash: -1312806261
+  - name: "Console WPServeur"
+    favicon_hash: -697407367
+  - name: "Contaware"
+    favicon_hash: 1004209915
+  - name: "ControlID"
+    favicon_hash: 1215779410
+  - name: "Controllr"
+    favicon_hash: 1675395218
+  - name: "CoreLogic"
+    favicon_hash: -1435467015
+  - name: "CradlePoint"
+    favicon_hash: -1457536113
+  - name: "CradlePoint Technology (Router)"
+    favicon_hash: 1466912879
+  - name: "Craft CMS"
+    favicon_hash: -47932290
+  - name: "Criteo Corp"
+    favicon_hash: 1635147929
+  - name: "CrownPeak"
+    favicon_hash: 1224108256
+  - name: "CrushFTP"
+    category: "file-transfer"
+    favicon_hash: -1022206565
+  - name: "CyberHound Appliance"
+    favicon_hash: 1473157813
+  - name: "Cyberoam"
+    favicon_hash: 1462981117
+  - name: "Cypress Configuration and Management"
+    favicon_hash: 1126652438
+  - name: "D-Link (Network)"
+    category: "router"
+    vendor: "d-link"
+    favicon_hash:
+      - -2031183903
+      - 1081719753
+  - name: "D-Link (camera)"
+    category: "router"
+    vendor: "d-link"
+    favicon_hash:
+      - -1897829998
+      - -355305208
+  - name: "D-Link (router/network)"
+    category: "router"
+    vendor: "d-link"
+    favicon_hash:
+      - 517158172
+      - 1038500535
+      - 1703788174
+  - name: "D-View 8"
+    favicon_hash: -1317621215
+  - name: "DD WRT (DD-WRT milli_httpd)"
+    favicon_hash: 252728887
+  - name: "DEVA Broadcast"
+    favicon_hash: -1184167764
+  - name: "DHIS2"
+    favicon_hash: 1976912833
+  - name: "DNN (CMS)"
+    favicon_hash: -1465479343
+  - name: "DOX - Document Exchange Service"
+    category: "webmail"
+    vendor: "microsoft"
+    favicon_hash: -85666451
+  - name: "DPTech"
+    favicon_hash: -1826044321
+  - name: "DVR (Korean)"
+    favicon_hash: -560297467
+  - name: "DVWA - Damn Vulnerable Web Application"
+    favicon_hash: -231109625
+  - name: "DW Cloud"
+    favicon_hash: 868509217
+  - name: "Dahua"
+    category: "camera"
+    favicon_hash: -1466785234
+  - name: "Dahua Storm (DVR)"
+    category: "camera"
+    favicon_hash: 1281253102
+  - name: "Dahua Storm (IP Camera)"
+    category: "camera"
+    favicon_hash:
+      - 833190513
+      - 2019488876
+  - name: "Dashy"
+    favicon_hash: -1013024216
+  - name: "Datto, Inc."
+    favicon_hash: 2004732863
+  - name: "DbGate"
+    favicon_hash: 1198579728
+  - name: "Dead End"
+    favicon_hash: 1351214488
+  - name: "Debian"
+    favicon_hash:
+      - -2013156129
+      - 1763297019
+  - name: "Debian/Ubuntu Portal"
+    favicon_hash: 2058391758
+  - name: "Dedicated Micros"
+    favicon_hash: -1661331374
+  - name: "Dell"
+    favicon_hash:
+      - -1608064257
+      - -1153950306
+      - -175283071
+      - 1147858285
+  - name: "Dell SonicWALL"
+    category: "firewall"
+    vendor: "sonicwall"
+    favicon_hash: 363324987
+  - name: "Deluge"
+    favicon_hash: 944969688
+  - name: "Deluge Web UI"
+    favicon_hash:
+      - -1589842876
+      - -1071169404
+      - 108411803
+  - name: "Device42"
+    favicon_hash: -198481018
+  - name: "Devline"
+    favicon_hash: -1238307632
+  - name: "Dgraph Ratel"
+    favicon_hash: -1961046099
+  - name: "Digital Keystone (DK)"
+    favicon_hash: -373674173
+  - name: "Digium (Switchvox)"
+    favicon_hash: 2068154487
+  - name: "Discuz!"
+    favicon_hash: -505448917
+  - name: "Dlink Router"
+    category: "router"
+    vendor: "d-link"
+    favicon_hash: 1037387972
+  - name: "Dlink Webcam"
+    category: "router"
+    vendor: "d-link"
+    favicon_hash:
+      - -1354933624
+      - 31972968
+      - 1144925962
+      - 1221759509
+  - name: "Docker"
+    category: "devops"
+    vendor: "docker"
+    favicon_hash:
+      - -1814887000
+      - 1937209448
+  - name: "DokuWiki"
+    favicon_hash: -630493013
+  - name: "Dolibarr"
+    favicon_hash:
+      - -1131046522
+      - 440258421
+      - 1407809463
+  - name: "DolphinPHP"
+    favicon_hash: 1367373012
+  - name: "Domino"
+    favicon_hash: -1711491868
+  - name: "Domoticz"
+    favicon_hash: 90680708
+  - name: "Domotz"
+    favicon_hash: 1938350499
+  - name: "Dovado Router"
+    favicon_hash: -1911513273
+  - name: "Dreamfactory"
+    favicon_hash: -1476120239
+  - name: "Dremio"
+    favicon_hash: 1143877728
+  - name: "Drone CI"
+    favicon_hash: 1354079303
+  - name: "DropBox"
+    favicon_hash: 1537743656
+  - name: "Drupal"
+    category: "cms"
+    vendor: "drupal"
+    favicon_hash:
+      - -1610980956
+      - -167656799
+      - 648382619
+      - 1174841451
+  - name: "DuckDuckGo"
+    favicon_hash: -1451366515
+  - name: "Duo Security"
+    favicon_hash: -986201618
+  - name: "Dynatrace"
+    favicon_hash: 1828614783
+  - name: "E2open"
+    favicon_hash: 1192261743
+  - name: "ECO World UI"
+    favicon_hash: -1096293925
+  - name: "EFAK"
+    favicon_hash: 1693580324
+  - name: "EMail Marketing Service"
+    favicon_hash: -1183519486
+  - name: "ESET PROTECT"
+    favicon_hash: 751911084
+  - name: "EVSE Web Interface"
+    favicon_hash: 1381079566
+  - name: "Ebay"
+    favicon_hash:
+      - -1059717365
+      - -429287806
+  - name: "Ecessa WAN Optimizer"
+    favicon_hash: 1059461494
+  - name: "Ecolane"
+    favicon_hash: 296518274
+  - name: "Ecole"
+    favicon_hash: 1376888327
+  - name: "Elastic (Database)"
+    category: "monitoring"
+    vendor: "elastic"
+    favicon_hash:
+      - 1552860581
+      - 1611729805
+  - name: "Elastix"
+    favicon_hash:
+      - -1432009195
+      - 1032553729
+  - name: "Elsys Cloud"
+    favicon_hash: -996264874
+  - name: "Eltex (Router)"
+    favicon_hash: 1877797890
+  - name: "Endgame"
+    favicon_hash: 1896727737
+  - name: "Endian Firewall"
+    category: "firewall"
+    favicon_hash:
+      - -1225484776
+      - 1422770566
+  - name: "EnergyTeam"
+    favicon_hash: 130960039
+  - name: "Enlighted Manage"
+    favicon_hash: 1241305867
+  - name: "Entrolink"
+    favicon_hash: 1973665246
+  - name: "Entronix Energy Management Platform"
+    favicon_hash: -368490461
+  - name: "ErpNext"
+    favicon_hash:
+      - -1373888521
+      - 1303364595
+  - name: "Etherpad"
+    favicon_hash: -1068237086
+  - name: "Eventum"
+    favicon_hash: 305412257
+  - name: "Everything"
+    favicon_hash: -977323269
+  - name: "Exacq"
+    favicon_hash: 476213314
+  - name: "Exostar - Managed Access Gateway"
+    favicon_hash: 420473080
+  - name: "ExtremeXOS ScreenPlay"
+    favicon_hash: 1451166122
+  - name: "F-Secure Policy Manager Server"
+    favicon_hash: -998320869
+  - name: "F5 Big-IP"
+    category: "firewall"
+    vendor: "f5"
+    favicon_hash: -335242539
+  - name: "FG Forrest"
+    favicon_hash: 135741046
+  - name: "FRITZ!Box"
+    favicon_hash: -219752612
+  - name: "Facebook"
+    favicon_hash:
+      - -560962771
+      - 142313513
+  - name: "FactoryTalk ViewPoint"
+    favicon_hash: -1808902844
+  - name: "Farming Simulator Dedicated Server"
+    favicon_hash: 509789953
+  - name: "FastAPI"
+    favicon_hash: 439373620
+  - name: "FastPanel Hosting"
+    favicon_hash: 774252049
+  - name: "Fastvue"
+    favicon_hash: -1117549627
+  - name: "FatPipe"
+    favicon_hash:
+      - -2084578694
+      - -1489194754
+  - name: "Fedora Server"
+    favicon_hash: -547019147
+  - name: "Fedora Server Edition"
+    favicon_hash: 1098596251
+  - name: "Ferozo Panel"
+    favicon_hash: 2072198544
+  - name: "Fexa"
+    favicon_hash: -1661672841
+  - name: "File Browser"
+    favicon_hash: 1052926265
+  - name: "FileCloud"
+    favicon_hash:
+      - -1929384416
+      - 1772648560
+  - name: "FileMaker"
+    favicon_hash: -1637198354
+  - name: "FireBrick"
+    favicon_hash: -181463215
+  - name: "FireEye"
+    favicon_hash:
+      - -842192932
+      - 95271369
+      - 105083909
+      - 240606739
+      - 1476335317
+      - 2121539357
+  - name: "Fireware Watchguard"
+    category: "firewall"
+    vendor: "watchguard"
+    favicon_hash: -569941107
+  - name: "Flat UI"
+    favicon_hash: -1768736691
+  - name: "FlatPress"
+    favicon_hash: -1189292869
+  - name: "FlexNet"
+    favicon_hash: 1552601947
+  - name: "Flood Web UI"
+    favicon_hash: 1023869165
+  - name: "Flower"
+    favicon_hash: -374133142
+  - name: "Flowise"
+    favicon_hash: -2051052918
+  - name: "Flussonic (Video Streaming)"
+    favicon_hash: -393788031
+  - name: "Foldr"
+    favicon_hash: 1178471380
+  - name: "Forcepoint Access forbidden"
+    favicon_hash: -1259700605
+  - name: "Foreman"
+    favicon_hash: 1526179599
+  - name: "Form.io"
+    favicon_hash: 1319699698
+  - name: "Fortinet - Forticlient"
+    category: "firewall"
+    vendor: "fortinet"
+    favicon_hash: 945408572
+  - name: "FreeNAS"
+    category: "nas"
+    vendor: "truenas"
+    favicon_hash: -784265586
+  - name: "FreeRDP WebConnect"
+    favicon_hash: -2052468252
+  - name: "Freebox OS"
+    favicon_hash: 1838417872
+  - name: "Freenom"
+    favicon_hash: -995224160
+  - name: "Frontier Communications"
+    favicon_hash: 40617830
+  - name: "FuelPHP"
+    favicon_hash: 1503188865
+  - name: "Fujitsu NAS"
+    favicon_hash: -1188918488
+  - name: "Futura Exchange"
+    category: "webmail"
+    vendor: "microsoft"
+    favicon_hash: 2021342287
+  - name: "GIAE Online"
+    favicon_hash: -101718582
+  - name: "GLPI"
+    favicon_hash: -1474875778
+  - name: "GMail"
+    favicon_hash: 2119159060
+  - name: "GPON Home Gateway"
+    favicon_hash: 251106693
+  - name: "GROWI - Team collaboration software"
+    favicon_hash: -1001050714
+  - name: "Gargoyle Router Management Utility"
+    favicon_hash:
+      - -1850681776
+      - 1862132268
+  - name: "GassAutomat"
+    favicon_hash: 1859950336
+  - name: "Gemalto"
+    favicon_hash: -1197966750
+  - name: "Geneko"
+    favicon_hash: 29056450
+  - name: "GenieACS"
+    favicon_hash: -2098066288
+  - name: "Ghost"
+    favicon_hash: -1743260071
+  - name: "Ghost (CMS)"
+    category: "cms"
+    vendor: "ghost"
+    favicon_hash:
+      - -1231681737
+      - -1015932800
+  - name: "Ghost CMS"
+    category: "cms"
+    vendor: "ghost"
+    favicon_hash: 2096818813
+  - name: "Giam sat"
+    favicon_hash: -2010570651
+  - name: "Gibbon"
+    favicon_hash: -165631681
+  - name: "GigaHost"
+    favicon_hash: -727481036
+  - name: "Gigapod"
+    favicon_hash:
+      - -1416401235
+      - 807156787
+  - name: "Gigaset"
+    favicon_hash: 1523210179
+  - name: "Git"
+    favicon_hash: -1262113920
+  - name: "GitHub"
+    favicon_hash: 1848946384
+  - name: "GitLab"
+    category: "devops"
+    vendor: "gitlab"
+    favicon_hash: -816821232
+  - name: "Gitea"
+    category: "devops"
+    vendor: "gitea"
+    favicon_hash:
+      - -1160966609
+      - 1969970750
+  - name: "Gitlab"
+    category: "devops"
+    vendor: "gitlab"
+    favicon_hash:
+      - 516963061
+      - 1278323681
+  - name: "Global Management System"
+    favicon_hash: -1381126564
+  - name: "Go Anywhere Web Client"
+    favicon_hash: 1828756398
+  - name: "GoAnywhere MFT"
+    favicon_hash: 1484947000
+  - name: "GoCD"
+    favicon_hash: -1576282848
+  - name: "GoFlex Home Home Server"
+    favicon_hash: -1930062189
+  - name: "Gofrugal"
+    favicon_hash: 2007650109
+  - name: "Gogs"
+    category: "devops"
+    vendor: "gogs"
+    favicon_hash:
+      - -449283196
+      - 917966895
+  - name: "Google"
+    favicon_hash: 708578229
+  - name: "Grafana"
+    category: "monitoring"
+    vendor: "grafana"
+    favicon_hash: 547025948
+  - name: "GrandStream Device"
+    favicon_hash: -1684189219
+  - name: "GraphQL"
+    favicon_hash: -1067420240
+  - name: "Graylog"
+    favicon_hash: -305424081
+  - name: "Greatek"
+    favicon_hash: -1376750468
+  - name: "Green-Computing"
+    favicon_hash: 2059893391
+  - name: "Greenshift"
+    favicon_hash: 1366863347
+  - name: "Guardicore"
+    favicon_hash: 1866559839
+  - name: "HFS (HTTP File Server)"
+    favicon_hash:
+      - 731374291
+      - 2124459909
+  - name: "HOT Box"
+    favicon_hash: -1193783166
+  - name: "HOTSPLOTS Router"
+    favicon_hash: 1435180442
+  - name: "HP Device Status"
+    favicon_hash: -22659015
+  - name: "HP Printer / Server"
+    category: "printer"
+    vendor: "hp"
+    favicon_hash:
+      - -2144363468
+      - 905744673
+  - name: "HP iLO"
+    category: "ipmi"
+    vendor: "hpe"
+    favicon_hash: 2059618623
+  - name: "HTML Sitemap"
+    favicon_hash: -1865603240
+  - name: "HUMAX"
+    favicon_hash: -1253943670
+  - name: "HWg-STE"
+    favicon_hash: -1176564322
+  - name: "Haivision Makito"
+    favicon_hash: 1166865883
+  - name: "Halon Security"
+    favicon_hash: -103091179
+  - name: "Handle Proxy"
+    favicon_hash: 926501571
+  - name: "Harbor"
+    favicon_hash: 657337228
+  - name: "Helm Dashboard"
+    favicon_hash: -594722214
+  - name: "HeroSpeed Digital Technology Co. (NVR/IPC/XVR)"
+    category: "camera"
+    favicon_hash: -873627015
+  - name: "Hestia"
+    favicon_hash: -476299640
+  - name: "Hewlett Packard"
+    favicon_hash:
+      - -1912577989
+      - -1829534120
+  - name: "Hexnode"
+    favicon_hash: -1815453503
+  - name: "Hikvision Web Client"
+    category: "camera"
+    favicon_hash: 2047138954
+  - name: "Hikvision camera"
+    category: "camera"
+    favicon_hash: 999357577
+  - name: "HillStone Networks"
+    favicon_hash: -839455805
+  - name: "Hitron Technologies"
+    favicon_hash: 607846949
+  - name: "Hitron Technologies Inc."
+    favicon_hash: 711742418
+  - name: "Home motion by Somfy"
+    favicon_hash: 1427774978
+  - name: "Homebridge"
+    favicon_hash: -1155883524
+  - name: "Homegrown Website Hosting"
+    favicon_hash: -421986013
+  - name: "Homer"
+    favicon_hash: -417785140
+  - name: "Honeywell"
+    favicon_hash:
+      - -1727542795
+      - 903086190
+  - name: "Horde"
+    category: "webmail"
+    favicon_hash:
+      - -741491222
+      - 2104916232
+  - name: "HostMonster - Web hosting"
+    favicon_hash: -972810761
+  - name: "HotelDruid"
+    favicon_hash: -1521640213
+  - name: "Hoverfly Dashboard"
+    favicon_hash: 1357234275
+  - name: "Huawei"
+    favicon_hash: 281559989
+  - name: "Huawei (Network)"
+    favicon_hash:
+      - -884776764
+      - 987967490
+  - name: "Huawei - ADSL/Router"
+    category: "router"
+    vendor: "huawei"
+    favicon_hash: -1395400951
+  - name: "Huawei - Claro"
+    favicon_hash: 2109473187
+  - name: "Huginn web agents console"
+    favicon_hash: 2016727121
+  - name: "Huweishen"
+    favicon_hash: 1188645141
+  - name: "Hyperledger Explorer"
+    favicon_hash: -1814564704
+  - name: "IBM Hardware Management Console"
+    favicon_hash: 262502857
+  - name: "IBM Lotus Domino Web Access"
+    favicon_hash: 1075305934
+  - name: "IBM Maximo"
+    favicon_hash: -399298961
+  - name: "IBM Notes"
+    favicon_hash: 728788645
+  - name: "IBM Security Access manager for Web"
+    favicon_hash: -2069014068
+  - name: "IBM Server"
+    favicon_hash: 1726027799
+  - name: "IBM TRIRIGA"
+    favicon_hash: -1868605258
+  - name: "IBM iNotes"
+    favicon_hash: -1093314638
+  - name: "ICON Time system"
+    favicon_hash: -1489682310
+  - name: "IIS Windows Server"
+    favicon_hash: -1629133697
+  - name: "IMail Web Client"
+    favicon_hash: -2088877437
+  - name: "IMuse"
+    favicon_hash: 108362015
+  - name: "INSTAR Full-HD IP-Camera"
+    favicon_hash: -1748763891
+  - name: "INSTAR IP Cameras"
+    category: "camera"
+    favicon_hash: -1169314298
+  - name: "IONOS"
+    favicon_hash: 1973799754
+  - name: "IP Camera"
+    category: "camera"
+    favicon_hash: -1532282299
+  - name: "IP Webcam"
+    category: "camera"
+    favicon_hash: -601917817
+  - name: "IP-Symcon WebFront"
+    favicon_hash: 1292731542
+  - name: "IPCAM"
+    favicon_hash: 2087256469
+  - name: "IPCop"
+    favicon_hash: 1670778556
+  - name: "IPCorder"
+    favicon_hash: 250294225
+  - name: "ISP Manager"
+    favicon_hash: -986678507
+  - name: "ISP Manager (Web Hosting Panel)"
+    favicon_hash: -1151675028
+  - name: "ISPConfig"
+    favicon_hash: 483383992
+  - name: "IW"
+    favicon_hash: 896412703
+  - name: "IceWarp"
+    favicon_hash: 2144485375
+  - name: "Icecast Streaming Media Server"
+    favicon_hash: 1424295654
+  - name: "IgniteNet"
+    favicon_hash: -1996576874
+  - name: "Improbable.io"
+    favicon_hash: 1149842582
+  - name: "InVid"
+    favicon_hash: 1684574358
+  - name: "Indeed"
+    favicon_hash: 1502482995
+  - name: "Indico"
+    favicon_hash: -1522253755
+  - name: "InfiNet Wireless | WANFleX (Network)"
+    favicon_hash: 1648531157
+  - name: "Infinite Campus"
+    favicon_hash: 1135750934
+  - name: "Infinitum"
+    favicon_hash: -173691695
+  - name: "Inmotion Hosting"
+    favicon_hash: -2051649833
+  - name: "InnoMedia"
+    favicon_hash: -1364880648
+  - name: "InstaCart"
+    favicon_hash: 1126835021
+  - name: "Instagram"
+    favicon_hash: 1991136554
+  - name: "Intelbras"
+    favicon_hash:
+      - -1451027808
+      - 1176619560
+  - name: "Intelbras SA"
+    favicon_hash:
+      - -1343070146
+      - 283740897
+      - 2006716043
+  - name: "Intelbras Wireless"
+    favicon_hash: -359621743
+  - name: "Intelligent Switch"
+    favicon_hash: -121681558
+  - name: "Intraweb"
+    favicon_hash: 1526980381
+  - name: "Issabel"
+    favicon_hash: -1057698644
+  - name: "Ivanti"
+    favicon_hash: -1439222863
+  - name: "JAWS Web Server (IP Camera)"
+    category: "camera"
+    favicon_hash:
+      - 90066852
+      - 768231242
+  - name: "JBoss"
+    favicon_hash: 1496254733
+  - name: "JBoss Application Server 7"
+    favicon_hash: 937999361
+  - name: "JBoss EAP 6"
+    favicon_hash: 1156815778
+  - name: "JIRA"
+    category: "devops"
+    vendor: "atlassian"
+    favicon_hash: 855273746
+  - name: "JUCI"
+    favicon_hash: 1853406396
+  - name: "Jaeger UI"
+    favicon_hash: -1348984223
+  - name: "Jamf Login"
+    category: "mdm"
+    vendor: "jamf"
+    favicon_hash: 1262005940
+  - name: "Jaspersoft"
+    favicon_hash: 1073075415
+  - name: "Jboss"
+    favicon_hash: -656811182
+  - name: "Jedox"
+    favicon_hash: -1505158120
+  - name: "Jeedom (home automation)"
+    favicon_hash: 462223993
+  - name: "Jellyseerr"
+    favicon_hash: -2017604252
+  - name: "Jenkins"
+    category: "devops"
+    vendor: "jenkins"
+    favicon_hash: 81586312
+  - name: "Jetty 404"
+    favicon_hash: -629047854
+  - name: "Jitsi Meet"
+    favicon_hash: -1334617766
+  - name: "Jonas Club Software"
+    favicon_hash: 1789284724
+  - name: "Joomla"
+    category: "cms"
+    vendor: "joomla"
+    favicon_hash:
+      - -1950415971
+      - 366524387
+      - 1627330242
+  - name: "Jorani"
+    favicon_hash: -2032163853
+  - name: "JoyRun"
+    favicon_hash: -222497010
+  - name: "Jumpserver"
+    favicon_hash: -1162630024
+  - name: "Juniper Device Manager"
+    favicon_hash: 2141724739
+  - name: "Jupyter"
+    favicon_hash: 1786554776
+  - name: "Jupyter Notebook"
+    favicon_hash: -895963602
+  - name: "JupyterHub"
+    favicon_hash: 1248917303
+  - name: "JustHost"
+    favicon_hash: 1734609466
+  - name: "KASM"
+    favicon_hash: -2144699833
+  - name: "KBlue"
+    favicon_hash: 1566659252
+  - name: "KEMP Login Screen"
+    favicon_hash: 1125166869
+  - name: "KPMG"
+    favicon_hash: 1102047973
+  - name: "KT&C"
+    favicon_hash: 1188424430
+  - name: "Kaco Web"
+    favicon_hash: -890342445
+  - name: "Kanboard"
+    favicon_hash: 2056442365
+  - name: "Kaseya"
+    favicon_hash: -1445519482
+  - name: "Kaspersky"
+    favicon_hash: -1244757483
+  - name: "Kaspersky Endpoint Security Cloud"
+    favicon_hash: -1012744956
+  - name: "Kayako"
+    favicon_hash: 1966075700
+  - name: "Keenetic"
+    favicon_hash: 547282364
+  - name: "KeepItSafe Management Console"
+    favicon_hash: -1738727418
+  - name: "Kelley Blue Book"
+    favicon_hash: -1614186944
+  - name: "Kerio Clientless SSL-VPN"
+    favicon_hash: 1487209721
+  - name: "Kerio Connect (Webmail)"
+    category: "webmail"
+    favicon_hash: -677167908
+  - name: "Kerio Connect WebMail"
+    category: "webmail"
+    favicon_hash: -1678298769
+  - name: "Kerio Control Firewall"
+    category: "firewall"
+    favicon_hash:
+      - -631002664
+      - -466504476
+  - name: "KeyCloak"
+    favicon_hash: -1105083093
+  - name: "KeyHelp (Keyweb AG)"
+    favicon_hash:
+      - -1267819858
+      - 726817668
+  - name: "KeyTalk WEB"
+    favicon_hash: -979181278
+  - name: "KeystoneJS"
+    favicon_hash: -1540609146
+  - name: "Kibana"
+    category: "monitoring"
+    vendor: "elastic"
+    favicon_hash:
+      - -1200737715
+      - -759754862
+      - -267431135
+      - 75230260
+      - 1668183286
+  - name: "Killing Floor Web Admin"
+    favicon_hash: 1227152965
+  - name: "Kodi Web Interface"
+    favicon_hash: -1182250791
+  - name: "Koha"
+    favicon_hash: 896082112
+  - name: "Konica Minolta"
+    favicon_hash: -1884368121
+  - name: "Kubeflow"
+    favicon_hash: -1203021870
+  - name: "Kyocera (Printer)"
+    category: "printer"
+    vendor: "kyocera"
+    favicon_hash: -50306417
+  - name: "LANCOM Systems"
+    favicon_hash: -325082670
+  - name: "LG Network Storage"
+    favicon_hash: 2049082371
+  - name: "LILIN"
+    favicon_hash: -1847069521
+  - name: "LS2 PAC"
+    favicon_hash: -262766611
+  - name: "LUM"
+    favicon_hash: -1138074337
+  - name: "LaCie"
+    favicon_hash: -1277814690
+  - name: "Lantronix (Spider)"
+    favicon_hash: 882208493
+  - name: "Leica Geosystems"
+    favicon_hash: -1054477011
+  - name: "Lenel"
+    favicon_hash: 538585915
+  - name: "Libraesva ESG"
+    favicon_hash: 133039858
+  - name: "LifeSize UVC Video Center"
+    favicon_hash: -134458680
+  - name: "Liferay"
+    favicon_hash: -2024949122
+  - name: "Liferay Portal"
+    favicon_hash: 129457226
+  - name: "Ligowave (network)"
+    favicon_hash: 1467395679
+  - name: "LimeSurvey"
+    favicon_hash:
+      - 1778371611
+      - 1781653957
+  - name: "Linear eMerge"
+    favicon_hash: -1189561879
+  - name: "LingFeng"
+    favicon_hash: -288432578
+  - name: "LinkedIn"
+    favicon_hash: -696586294
+  - name: "Linksys"
+    favicon_hash: 2047156994
+  - name: "Linksys Smart Wi-Fi"
+    favicon_hash:
+      - -2063036701
+      - -732601837
+  - name: "Linode"
+    favicon_hash: 920338972
+  - name: "Linux"
+    favicon_hash:
+      - 1555083561
+      - 1747323616
+  - name: "Liquid Pixels"
+    favicon_hash: -1238837624
+  - name: "LiquidFiles"
+    favicon_hash: 541087742
+  - name: "LiquidPixels"
+    favicon_hash: 1802374283
+  - name: "LiveConfig"
+    favicon_hash: 1632680057
+  - name: "LiveZilla"
+    favicon_hash: 1740006758
+  - name: "Livebox"
+    favicon_hash: 1288385475
+  - name: "Looker"
+    favicon_hash: -1923037106
+  - name: "LoopBack"
+    favicon_hash: -1883619133
+  - name: "Loxone (Automation)"
+    favicon_hash: 904434662
+  - name: "Loxone Web Interface"
+    favicon_hash: 679065580
+  - name: "Lucee!"
+    favicon_hash: 784872924
+  - name: "Luma Surveillance"
+    favicon_hash: -1351901211
+  - name: "Lupus Electronics XT"
+    favicon_hash: -299324825
+  - name: "Lynx System"
+    favicon_hash: 1417992821
+  - name: "Lyris ListManager"
+    favicon_hash: 270320124
+  - name: "MCMS"
+    favicon_hash: 1464851260
+  - name: "MDaemon Remote Administration"
+    favicon_hash: 99432374
+  - name: "MDaemon Webmail"
+    category: "webmail"
+    favicon_hash: -766957661
+  - name: "MI router"
+    favicon_hash: -1472951746
+  - name: "MK-AUTH"
+    favicon_hash: 1490343308
+  - name: "MLflow"
+    favicon_hash: -1507094812
+  - name: "MOBOTIX Camera"
+    favicon_hash: 661332347
+  - name: "MSNSwitch"
+    favicon_hash: -1721140132
+  - name: "MSP N-central Remote Monitoring"
+    favicon_hash: 1937353549
+  - name: "MT-Link"
+    favicon_hash: -982946776
+  - name: "Magento"
+    category: "ecommerce"
+    vendor: "magento"
+    favicon_hash:
+      - -38580010
+      - 1923124308
+  - name: "MagicMail Server"
+    favicon_hash: 1474516533
+  - name: "Magnolia"
+    favicon_hash: 1545970007
+  - name: "Mahara ePortfolio system"
+    favicon_hash: 119532476
+  - name: "MailPlug"
+    favicon_hash: 2086820847
+  - name: "MailStore Web Access"
+    favicon_hash: -1580354544
+  - name: "MailWizz"
+    favicon_hash: 2127152956
+  - name: "Mailcow"
+    favicon_hash: 2146763496
+  - name: "Mailing lists service"
+    favicon_hash: 1266034062
+  - name: "Mailu"
+    favicon_hash: 1076833462
+  - name: "Mailwatch"
+    favicon_hash: -1255454840
+  - name: "Makhost"
+    favicon_hash: -103848262
+  - name: "Manaba"
+    favicon_hash: 1529794015
+  - name: "MandeUmZap"
+    favicon_hash: 1104879639
+  - name: "Manhattan Active"
+    favicon_hash: -1936286083
+  - name: "Mantis"
+    favicon_hash: 2027028811
+  - name: "Mastodon server"
+    favicon_hash: -1507821392
+  - name: "Match Networks"
+    favicon_hash: 234963778
+  - name: "Material Dashboard"
+    favicon_hash: 1913538826
+  - name: "Matomo"
+    favicon_hash:
+      - -2023266783
+      - 1689753480
+  - name: "MatrixCare EHR (electronic healthcare record)"
+    favicon_hash: -1987532097
+  - name: "Mautic (Open Source Marketing Automation)"
+    favicon_hash: 1273982002
+  - name: "McMyAdmin"
+    favicon_hash: 2032487957
+  - name: "Medallia"
+    favicon_hash:
+      - -160425702
+      - 905796143
+  - name: "MediaSpace"
+    favicon_hash: -1680741662
+  - name: "Mediatrix"
+    favicon_hash: -1393435578
+  - name: "Medidata Rave"
+    favicon_hash: 1968236071
+  - name: "Meriva Security"
+    favicon_hash: -566516473
+  - name: "MerlinOne Digital Asset company"
+    favicon_hash: 1987639534
+  - name: "Mersive Solstice"
+    favicon_hash: 938616453
+  - name: "MetInfo"
+    favicon_hash: 1446490141
+  - name: "Metabase"
+    favicon_hash:
+      - 1487164831
+      - 1953726032
+  - name: "Metalink"
+    favicon_hash: -1495061773
+  - name: "Metasploit"
+    favicon_hash:
+      - -1235192469
+      - -127886975
+      - 579239725
+      - 1139788073
+  - name: "Micro Focus Vibe"
+    favicon_hash: 1239721344
+  - name: "MicroEngine"
+    favicon_hash: 1312262473
+  - name: "MicroFocus Filr"
+    favicon_hash: -1853769969
+  - name: "Microbit"
+    favicon_hash: -1088664572
+  - name: "Microhard Systems"
+    favicon_hash: -1723752240
+  - name: "Microsoft"
+    favicon_hash: -2057558656
+  - name: "Microsoft IIS"
+    favicon_hash: -1414475558
+  - name: "Microsoft Lync"
+    favicon_hash: 2091258163
+  - name: "Microsoft OWA"
+    category: "webmail"
+    vendor: "microsoft"
+    favicon_hash: 442749392
+  - name: "Microsoft Outlook"
+    favicon_hash:
+      - -1249852061
+      - 239966418
+  - name: "Microweber"
+    favicon_hash: 780351152
+  - name: "Milesight"
+    favicon_hash: -365065924
+  - name: "Milestone Web Client"
+    favicon_hash: 1529113957
+  - name: "Milestone XProtect Web Client"
+    favicon_hash: -25418041
+  - name: "Mirth"
+    favicon_hash: 1502215759
+  - name: "Mitel"
+    favicon_hash: 2061800448
+  - name: "Mitel Networks"
+    favicon_hash: -1940372141
+  - name: "Mitel Networks (MiCollab End User Portal)"
+    favicon_hash: -1922044295
+  - name: "Mizuho Global e-Banking"
+    favicon_hash: 1165640109
+  - name: "MobileIron"
+    favicon_hash:
+      - 362091310
+      - 545827989
+      - 967636089
+      - 2086228042
+  - name: "Mobotix webcam"
+    category: "camera"
+    favicon_hash: -1987026093
+  - name: "Monstra CMS"
+    favicon_hash: 419828698
+  - name: "Moodle"
+    favicon_hash:
+      - -438482901
+      - 1933407199
+  - name: "Moodys Analytics"
+    favicon_hash: -1955111623
+  - name: "Motorola"
+    favicon_hash: -1839807129
+  - name: "MoveIT"
+    favicon_hash: 989289239
+  - name: "Moxapass ioLogik Remote Ethernet I/O Server"
+    favicon_hash: 381100274
+  - name: "Multilaser"
+    favicon_hash: 916642917
+  - name: "MyASP"
+    favicon_hash: -736276076
+  - name: "MyChart"
+    favicon_hash: 1663064917
+  - name: "MyCloud NAS"
+    favicon_hash: -1074357885
+  - name: "MyOmBox"
+    favicon_hash: -1642012180
+  - name: "NAKIVO Backup&Replication"
+    favicon_hash: 183198303
+  - name: "NEBERO Login"
+    favicon_hash: -1475308062
+  - name: "NEC WebPro"
+    favicon_hash: 1922032523
+  - name: "NET"
+    favicon_hash: 1442699674
+  - name: "NETASQ - Secure / Stormshield"
+    favicon_hash: -1929912510
+  - name: "NETGEAR ReadyNAS"
+    category: "router"
+    vendor: "netgear"
+    favicon_hash: -137295400
+  - name: "NETIASPOT (Network)"
+    favicon_hash: -978656757
+  - name: "NEXIOS"
+    favicon_hash: 1298613326
+  - name: "NOS Router"
+    favicon_hash: -831826827
+  - name: "NSFocus"
+    favicon_hash: -1566499661
+  - name: "Nagios LS"
+    category: "monitoring"
+    favicon_hash: 1460499495
+  - name: "Nagios XI"
+    category: "monitoring"
+    favicon_hash: -1148627124
+  - name: "Nas4free"
+    favicon_hash: 175178334
+  - name: "Nasuni Filer"
+    favicon_hash: -25625631
+  - name: "Nessus"
+    favicon_hash:
+      - -1966432092
+      - -1844393179
+  - name: "NetComWireless (Network)"
+    favicon_hash: 5542029
+  - name: "NetData"
+    favicon_hash: 1302486561
+  - name: "NetGear Login"
+    category: "router"
+    vendor: "netgear"
+    favicon_hash: -1196651128
+  - name: "NetWin"
+    favicon_hash: -986328191
+  - name: "Netcom Technology"
+    favicon_hash: 5471989
+  - name: "Netflix"
+    favicon_hash: 902521196
+  - name: "Netgear"
+    category: "router"
+    vendor: "netgear"
+    favicon_hash: -1319025408
+  - name: "Netgear (Network)"
+    category: "router"
+    vendor: "netgear"
+    favicon_hash: 1047213685
+  - name: "NethServer Enterprise"
+    favicon_hash: 538323054
+  - name: "Netis (network devices)"
+    favicon_hash: -594256627
+  - name: "Netonix"
+    favicon_hash: 1016158463
+  - name: "Netport Software (DSL)"
+    favicon_hash: -1124868062
+  - name: "Network Optix"
+    favicon_hash: -1944920072
+  - name: "Network Storage Server"
+    favicon_hash: -1332828203
+  - name: "NextGen.Net"
+    favicon_hash: -1991844902
+  - name: "Nexus Repository Manager"
+    favicon_hash: 1323738809
+  - name: "NexusPHP"
+    favicon_hash: -582931176
+  - name: "Nginx"
+    favicon_hash:
+      - -1561873722
+      - -808437027
+      - 586998417
+  - name: "NiFi server"
+    favicon_hash: -1132465110
+  - name: "Niagara Web Server"
+    favicon_hash: -676077969
+  - name: "Niagara Web Server / Tridium"
+    favicon_hash: 1991562061
+  - name: "Nice CXone"
+    favicon_hash: -1566222852
+  - name: "Nieznana domena"
+    favicon_hash: -982373272
+  - name: "NocoDB"
+    favicon_hash: -2017596142
+  - name: "Node-RED"
+    favicon_hash:
+      - -288432582
+      - 321591353
+  - name: "Nodeworx"
+    favicon_hash: -1722446604
+  - name: "Nokia"
+    favicon_hash: 1891804387
+  - name: "Nomadix Access Gateway"
+    favicon_hash: 2071993228
+  - name: "Nordex Portal"
+    favicon_hash: 1708197458
+  - name: "Nuxt JS"
+    favicon_hash: -1442789563
+  - name: "Nuxt.js"
+    favicon_hash: 2045611526
+  - name: "Nuxt.js + Vue"
+    favicon_hash: -1874556000
+  - name: "Nuxt.js web Framework"
+    favicon_hash: -1987515689
+  - name: "O2 easy setup"
+    favicon_hash: 160634455
+  - name: "OATI"
+    favicon_hash: -1848649480
+  - name: "OLT Web management interface"
+    favicon_hash: 1174526129
+  - name: "ONESOURCE"
+    favicon_hash: -72996541
+  - name: "OPNsense"
+    category: "firewall"
+    vendor: "opnsense"
+    favicon_hash: -1148190371
+  - name: "OTRS (Open Ticket Request System)"
+    favicon_hash: -2006308185
+  - name: "Observium"
+    favicon_hash: 1638963529
+  - name: "Octoprint (3D printer)"
+    category: "printer"
+    vendor: "octoprint"
+    favicon_hash: 1307375944
+  - name: "Odoo"
+    favicon_hash: -617743584
+  - name: "OfficeSpace"
+    favicon_hash: 1053515370
+  - name: "OkoFEN Pellematic"
+    favicon_hash: -625364318
+  - name: "Okta"
+    favicon_hash: 56079838
+  - name: "Ombi"
+    favicon_hash: -1975779926
+  - name: "OneDoor"
+    favicon_hash: -890913700
+  - name: "Onera"
+    favicon_hash: 1234311970
+  - name: "Open Data Kit 2.0 Server"
+    favicon_hash: 2038454909
+  - name: "Open Source SRS"
+    favicon_hash: 1386054408
+  - name: "Open WebMail"
+    category: "webmail"
+    favicon_hash: 2053280074
+  - name: "Open WebUI"
+    favicon_hash: -286484075
+  - name: "OpenAI"
+    favicon_hash:
+      - -525583313
+      - 1752776796
+  - name: "OpenBullet2"
+    favicon_hash: -1264095219
+  - name: "OpenEDX"
+    favicon_hash: -1774771662
+  - name: "OpenERP (now known as Odoo)"
+    favicon_hash: 1966198264
+  - name: "OpenEdx"
+    favicon_hash: 1676997917
+  - name: "OpenGeo Suite"
+    favicon_hash: -609520537
+  - name: "OpenHAB"
+    favicon_hash: -1799495374
+  - name: "OpenMetadata"
+    favicon_hash: 733091897
+  - name: "OpenProject"
+    favicon_hash:
+      - 1836828108
+      - 2067267180
+  - name: "OpenRG"
+    favicon_hash: -986816620
+  - name: "OpenStack"
+    favicon_hash:
+      - -923088984
+      - 786533217
+      - 1232596212
+  - name: "OpenVPN"
+    favicon_hash: 396533629
+  - name: "OpenVZ"
+    favicon_hash: -1898583197
+  - name: "OpenVidu"
+    favicon_hash: 1205288142
+  - name: "Openfire Admin Console"
+    favicon_hash: 1211608009
+  - name: "Opengear Management Console"
+    favicon_hash: 1012948051
+  - name: "Optergy"
+    favicon_hash: 1390393078
+  - name: "Oracle"
+    favicon_hash: 1673203892
+  - name: "Oracle Cloud"
+    favicon_hash: -723685921
+  - name: "Oracle Database Cloud Service"
+    favicon_hash: 1792417660
+  - name: "Oracle Hospitality - Reporting and Analytics"
+    favicon_hash: 1240618871
+  - name: "Oracle Secure Global Desktop"
+    favicon_hash: -2039579287
+  - name: "Organizr V2"
+    favicon_hash: -299342343
+  - name: "OrientDB"
+    favicon_hash: 1180765435
+  - name: "Ossia (Provision SR) | Webcam/IP Camera"
+    category: "camera"
+    favicon_hash: -374235895
+  - name: "OutSystems"
+    favicon_hash: 2068657956
+  - name: "Outlook Web Application"
+    category: "webmail"
+    vendor: "microsoft"
+    favicon_hash:
+      - 1356662359
+      - 1768726119
+  - name: "Overleaf"
+    favicon_hash: 1325605650
+  - name: "PBX in a flash"
+    favicon_hash: -1212471026
+  - name: "PHPIPAM"
+    favicon_hash: -2084151106
+  - name: "PINC Solutions"
+    favicon_hash: -1387041300
+  - name: "PKP (OpenJournalSystems) Public Knowledge Project"
+    favicon_hash: 2099342476
+  - name: "PLEX Server"
+    favicon_hash: -895890586
+  - name: "PMB"
+    favicon_hash: 1469328760
+  - name: "POLYEDRO"
+    favicon_hash: 245977566
+  - name: "PRTG Network Monitor"
+    favicon_hash: -655683626
+  - name: "PUSR device"
+    favicon_hash: 1597827316
+  - name: "PV Webserver"
+    favicon_hash: 1662176488
+  - name: "Pakedge"
+    favicon_hash: 1908194265
+  - name: "Palo Alto Login Portal"
+    category: "firewall"
+    vendor: "paloalto"
+    favicon_hash: 602431586
+  - name: "Palo Alto Networks"
+    category: "firewall"
+    vendor: "paloalto"
+    favicon_hash:
+      - -318947884
+      - 873381299
+  - name: "Paradox IP Module"
+    favicon_hash: 727253975
+  - name: "Parallels Conflixx"
+    favicon_hash: 298891748
+  - name: "Parallels Plesk Panel"
+    favicon_hash:
+      - -771764544
+      - -652508439
+      - -519765377
+  - name: "ParentSchool SIS"
+    favicon_hash: -1126048407
+  - name: "Parse"
+    favicon_hash: 246145559
+  - name: "Parsoid"
+    favicon_hash: 1932966618
+  - name: "Passbolt"
+    favicon_hash: 1933971431
+  - name: "Password Management Client"
+    favicon_hash: 983734701
+  - name: "PayKeeper"
+    favicon_hash: -1387795012
+  - name: "PayPal"
+    favicon_hash: 309020573
+  - name: "Pearson"
+    favicon_hash: 1403071546
+  - name: "Pegasus"
+    favicon_hash: -1308101551
+  - name: "Pentaho"
+    favicon_hash: 2029529270
+  - name: "PerlDancer"
+    favicon_hash: 174377944
+  - name: "PhalApi"
+    favicon_hash: -1675031883
+  - name: "Phenix"
+    favicon_hash: 1395038954
+  - name: "Phicomm"
+    favicon_hash:
+      - -1344736688
+      - 1021528395
+  - name: "Pi Star"
+    favicon_hash: 432733105
+  - name: "PingFederate"
+    favicon_hash: 2066412882
+  - name: "Pinterest"
+    favicon_hash: 1528355650
+  - name: "Piwigo"
+    favicon_hash: 540706145
+  - name: "Piwik"
+    favicon_hash:
+      - 1668745903
+      - 1907525032
+  - name: "Platform For Science"
+    favicon_hash: -1111841537
+  - name: "Player Analytics"
+    favicon_hash: -2042821498
+  - name: "Plesk"
+    favicon_hash:
+      - -1050786453
+      - -981606721
+      - -614457039
+      - -134375033
+  - name: "Plex Export"
+    favicon_hash: 2057414495
+  - name: "Plone"
+    favicon_hash: 1482591128
+  - name: "Plunet BusinessManager"
+    favicon_hash: -297780858
+  - name: "PocketBase"
+    favicon_hash: 981081715
+  - name: "Polycom"
+    favicon_hash: 77044418
+  - name: "Portainer"
+    category: "devops"
+    vendor: "kubernetes"
+    favicon_hash: -1424036600
+  - name: "PostGraphile"
+    favicon_hash: -112697680
+  - name: "PostIt-Lite"
+    favicon_hash: -1679308822
+  - name: "Postfix Admin"
+    favicon_hash: 1563218345
+  - name: "PostgreSQL"
+    favicon_hash: 2068826621
+  - name: "Postian Email System"
+    favicon_hash: -907924012
+  - name: "Postmark"
+    favicon_hash: -1457628171
+  - name: "PowerController"
+    favicon_hash: 1346408936
+  - name: "PowerMTA monitoring"
+    favicon_hash: -1788112745
+  - name: "Poweradmin"
+    favicon_hash: 1443361300
+  - name: "Powered by Leapfunder"
+    favicon_hash: 1124727888
+  - name: "Powerschool"
+    favicon_hash: 1500747026
+  - name: "PragmaRX"
+    favicon_hash: 1491281975
+  - name: "Prancer"
+    favicon_hash: -273775086
+  - name: "Priority ERP"
+    favicon_hash: -1907337290
+  - name: "PrivateBin"
+    favicon_hash: 1358855492
+  - name: "ProcessMaker"
+    favicon_hash: 1858943950
+  - name: "Procore"
+    favicon_hash: 1952289652
+  - name: "Prometheus Server"
+    category: "monitoring"
+    vendor: "prometheus"
+    favicon_hash: -1399433489
+  - name: "Promtail"
+    favicon_hash: 932345713
+  - name: "Proofpoint"
+    favicon_hash: -1630354993
+  - name: "Proxmox Login Page"
+    category: "hypervisor"
+    vendor: "proxmox"
+    favicon_hash: 2017541283
+  - name: "Proxmox Virtual Environment"
+    category: "hypervisor"
+    vendor: "proxmox"
+    favicon_hash: 213144638
+  - name: "Pydio"
+    favicon_hash: -1115903764
+  - name: "QMatic"
+    favicon_hash: -108457676
+  - name: "QNAP NAS Virtualization Station"
+    category: "nas"
+    vendor: "qnap"
+    favicon_hash: -1041180225
+  - name: "QSolve Management System"
+    favicon_hash: 1029363268
+  - name: "RADIX"
+    favicon_hash: -1492966240
+  - name: "RAP"
+    favicon_hash: -2083667632
+  - name: "RF-301K"
+    favicon_hash: 1088281959
+  - name: "RSSBUS"
+    favicon_hash: -160596078
+  - name: "RStudio"
+    favicon_hash: -2048981507
+  - name: "RabbitMQ"
+    favicon_hash: 1064742722
+  - name: "RabbitMQ Management"
+    favicon_hash: -1082845244
+  - name: "RadiusManager"
+    favicon_hash: -1355675073
+  - name: "Rakuten"
+    favicon_hash: -926374507
+  - name: "Rapid7"
+    favicon_hash: -516760689
+  - name: "RaspAP"
+    favicon_hash: -1465760059
+  - name: "React"
+    favicon_hash:
+      - -2009722838
+      - -254193850
+  - name: "React App"
+    favicon_hash: 1170430551
+  - name: "Real 2D/3D"
+    favicon_hash: 1175383902
+  - name: "Realtek/D-Link"
+    category: "router"
+    vendor: "d-link"
+    favicon_hash: 2055322029
+  - name: "RedCap"
+    favicon_hash: 1335852856
+  - name: "RedHat"
+    favicon_hash: 1495853641
+  - name: "Redash"
+    favicon_hash: 698624197
+  - name: "Reddit"
+    favicon_hash: -1640178715
+  - name: "Redmine"
+    favicon_hash:
+      - 603314
+      - 1517005673
+  - name: "Redstor"
+    favicon_hash: -1763210479
+  - name: "Reg.ru"
+    favicon_hash: 1830651843
+  - name: "RemObjects SDK / Remoting SDK for .NET HTTP Server Microsoft"
+    favicon_hash: 72005642
+  - name: "Remote UI Portal"
+    favicon_hash: -1353325588
+  - name: "Reolink"
+    category: "camera"
+    favicon_hash: -38705358
+  - name: "Reposilite"
+    favicon_hash: 1212523028
+  - name: "Request Tracker - Login"
+    favicon_hash: 203612613
+  - name: "ResWare"
+    favicon_hash: -1845730184
+  - name: "Residential Gateway"
+    favicon_hash: -1933493443
+  - name: "Restreamer"
+    favicon_hash: -1638258999
+  - name: "RethinkDB"
+    favicon_hash: 969374472
+  - name: "Revive Adserver"
+    favicon_hash: 106844876
+  - name: "Ricoh"
+    category: "printer"
+    vendor: "ricoh"
+    favicon_hash: 1135165421
+  - name: "Riverbed"
+    favicon_hash: -1338133217
+  - name: "Roche Global Corporate Website"
+    favicon_hash: 1240573703
+  - name: "Rocket Chat"
+    favicon_hash: 225632504
+  - name: "RoundCube Webmail"
+    category: "webmail"
+    favicon_hash: -2140379067
+  - name: "Roundcube Webmail"
+    category: "webmail"
+    favicon_hash:
+      - -976235259
+      - 920326019
+  - name: "Ruckus Wireless"
+    favicon_hash: -2069844696
+  - name: "Ruijie Networks (Login)"
+    favicon_hash: -692947551
+  - name: "Rukovoditel"
+    favicon_hash: -1499940355
+  - name: "Rumpus"
+    favicon_hash: -1528414776
+  - name: "Rundeck"
+    favicon_hash: 919189549
+  - name: "Rusonyx"
+    favicon_hash: -1477373218
+  - name: "S2 Netbox Login"
+    favicon_hash: -1336042616
+  - name: "SABnzbd"
+    favicon_hash: -1939892142
+  - name: "SAP"
+    favicon_hash:
+      - -1516177449
+      - 168613227
+  - name: "SAP Conversational AI"
+    favicon_hash: 1347937389
+  - name: "SAP Netweaver"
+    favicon_hash: -266008933
+  - name: "SAVPizzaDoor"
+    favicon_hash: -1343761772
+  - name: "SEX5\u6027\u5c4b\u5a31\u4e50 Servers"
+    favicon_hash: 2018290563
+  - name: "SMA Solar Technology"
+    favicon_hash: 1859187867
+  - name: "SOGo"
+    favicon_hash: -1961104913
+  - name: "SOUND4PULSE"
+    favicon_hash: -1548359600
+  - name: "SOYAL"
+    favicon_hash: 1777351344
+  - name: "STARFACE VoIP Software"
+    favicon_hash: -332324409
+  - name: "SWF850 WEB"
+    favicon_hash: -2049046500
+  - name: "SaDPe Online"
+    favicon_hash: 1821570264
+  - name: "Saia Burgess Controls - PCD"
+    favicon_hash: -1547576879
+  - name: "Sails"
+    favicon_hash: 552597979
+  - name: "Salesforce"
+    favicon_hash: 1433417005
+  - name: "Samsung"
+    favicon_hash: 1167359424
+  - name: "Sangfor"
+    favicon_hash:
+      - -1926484046
+      - -1810847295
+      - 123821839
+  - name: "Sapido router"
+    favicon_hash: 110768013
+  - name: "Sauter moduWeb"
+    favicon_hash: 1176554158
+  - name: "SchoolNet"
+    favicon_hash: 1136074368
+  - name: "Seafile"
+    category: "file-sharing"
+    favicon_hash:
+      - -1109801483
+      - -12700016
+  - name: "Seagate Technology (NAS)"
+    favicon_hash: 240136437
+  - name: "Secure Data Transfer by Maytech"
+    favicon_hash: -2138018199
+  - name: "SecureLink Enterprise Access"
+    favicon_hash: -1172436532
+  - name: "Securepoint"
+    favicon_hash: 1051648103
+  - name: "Securifi"
+    favicon_hash: -1802629932
+  - name: "Self-Service Reset Password Manager (SSRPM)"
+    favicon_hash: -916902413
+  - name: "Sensu"
+    favicon_hash: -749942143
+  - name: "Sentora"
+    favicon_hash: -2054889066
+  - name: "Sentry"
+    category: "monitoring"
+    vendor: "sentry"
+    favicon_hash: 2063428236
+  - name: "Servatica"
+    favicon_hash: -1151246177
+  - name: "ServiceNow"
+    favicon_hash:
+      - 86919334
+      - 914622066
+  - name: "SharePoint"
+    category: "collaboration"
+    vendor: "microsoft"
+    favicon_hash: -146638980
+  - name: "Shenzhen coship electronics co."
+    favicon_hash: 224536051
+  - name: "Shinobi (CCTV)"
+    favicon_hash: -10974981
+  - name: "Shoutcast Server"
+    favicon_hash: -632583950
+  - name: "ShowDoc"
+    favicon_hash: 1969934080
+  - name: "Siemens OZW772"
+    favicon_hash: -336242473
+  - name: "Siemens Simatic"
+    favicon_hash: -1051205943
+  - name: "Sierra Wireless Ace Manager (Airlink)"
+    favicon_hash: -1571472432
+  - name: "Silver Peak"
+    favicon_hash: 1501109148
+  - name: "Simian"
+    favicon_hash: 1722331405
+  - name: "SimpleHelp (Remote Support)"
+    favicon_hash: 1117165781
+  - name: "Sitecore"
+    favicon_hash: 955369722
+  - name: "Skype"
+    favicon_hash: -1807411396
+  - name: "Slack"
+    favicon_hash:
+      - -43161126
+      - 99395752
+  - name: "Smart PABX"
+    favicon_hash: 1423291318
+  - name: "Smart/OS"
+    favicon_hash: 489340156
+  - name: "SmartAdServer"
+    favicon_hash: -1424697070
+  - name: "SmartFoxServer"
+    favicon_hash: -1108647419
+  - name: "SmartLAN/G"
+    favicon_hash: -644617577
+  - name: "SmartPing"
+    favicon_hash: 430582574
+  - name: "SmartServer 2.2"
+    favicon_hash: -329992939
+  - name: "SmarterMail"
+    favicon_hash: -1935525788
+  - name: "SmarterTrack"
+    favicon_hash: 1410071322
+  - name: "SnapGear Management Console"
+    favicon_hash: -1226343463
+  - name: "SocketCluster"
+    favicon_hash: 1620794131
+  - name: "SoftGuard Desktop Security Suite"
+    favicon_hash: 1669535914
+  - name: "Sohu"
+    favicon_hash: -1844173284
+  - name: "Solar-Log"
+    favicon_hash: -1334408578
+  - name: "SolarWinds"
+    favicon_hash: -1776962843
+  - name: "Solarwinds Serv-U FTP Server"
+    favicon_hash: 812385209
+  - name: "SonarQube"
+    favicon_hash: 1485257654
+  - name: "Sonarr"
+    favicon_hash: 1814833573
+  - name: "Sonatype Nexus Repository Manager"
+    favicon_hash: -1546574541
+  - name: "SonicWALL"
+    category: "firewall"
+    vendor: "sonicwall"
+    favicon_hash:
+      - -2012355198
+      - 631108382
+  - name: "SonicWall"
+    category: "firewall"
+    vendor: "sonicwall"
+    favicon_hash: 16866410
+  - name: "Sophos Cyberoam (appliance)"
+    category: "firewall"
+    vendor: "sophos"
+    favicon_hash: 1601194732
+  - name: "Sophos Mobile"
+    category: "firewall"
+    vendor: "sophos"
+    favicon_hash: -1274798165
+  - name: "Sophos User Portal/VPN Portal"
+    category: "firewall"
+    vendor: "sophos"
+    favicon_hash: 1045696447
+  - name: "Spacewalk"
+    favicon_hash: -1936961900
+  - name: "SpamExperts"
+    favicon_hash: -1688698891
+  - name: "SpamSniper"
+    favicon_hash: -1000719429
+  - name: "Speco technologies"
+    favicon_hash: -1492653156
+  - name: "Spectranet"
+    favicon_hash: 1583275852
+  - name: "Spiceworks (panel)"
+    favicon_hash: -2117390767
+  - name: "SpiderOak"
+    favicon_hash: 1931791000
+  - name: "Splynx"
+    favicon_hash: 899301681
+  - name: "Spring boot"
+    favicon_hash: 116323821
+  - name: "Squidex"
+    favicon_hash: 1099097618
+  - name: "StackOverflow"
+    favicon_hash: 593396886
+  - name: "Storybook"
+    favicon_hash: 1574384512
+  - name: "Strapi app"
+    favicon_hash: -1587809317
+  - name: "Strider"
+    favicon_hash: 115295460
+  - name: "StruxureWare (Schneider Electric)"
+    favicon_hash: 979634648
+  - name: "SuccessMaker"
+    favicon_hash: 986596052
+  - name: "SugarCRM"
+    favicon_hash: -778949486
+  - name: "Sun Java System Application Server"
+    favicon_hash: 1332183546
+  - name: "Sun Java System Web Server"
+    favicon_hash: -2044079375
+  - name: "Sunbird"
+    favicon_hash: 781922099
+  - name: "Sunny WebBox"
+    favicon_hash: 1975413433
+  - name: "SuperHub 2"
+    favicon_hash: -1564279764
+  - name: "Supermicro Intelligent Management (IPMI)"
+    category: "ipmi"
+    vendor: "supermicro"
+    favicon_hash: 1410610129
+  - name: "Superset"
+    favicon_hash: 1582430156
+  - name: "Surfilter SSL VPN Portal"
+    favicon_hash: -590892202
+  - name: "SyncThru Web Service (Printers)"
+    category: "printer"
+    vendor: "samsung"
+    favicon_hash: 1483097076
+  - name: "Synology"
+    category: "nas"
+    vendor: "synology"
+    favicon_hash: 1604149042
+  - name: "Synology DiskStation"
+    category: "nas"
+    vendor: "synology"
+    favicon_hash: 149371702
+  - name: "Synology VPN Plus"
+    category: "nas"
+    vendor: "synology"
+    favicon_hash: 1235070469
+  - name: "SysAid"
+    favicon_hash: 1540720428
+  - name: "T-Mobile"
+    favicon_hash:
+      - -1606103083
+      - 107061220
+  - name: "TC-Group"
+    favicon_hash: -1734573358
+  - name: "TCN"
+    favicon_hash: -702384832
+  - name: "TELE2"
+    favicon_hash: -1450898105
+  - name: "TOTOLINK (network)"
+    favicon_hash: 547474373
+  - name: "TP Link"
+    category: "router"
+    vendor: "tp-link"
+    favicon_hash: -1028703177
+  - name: "TP-LINK (Network Device)"
+    category: "router"
+    vendor: "tp-link"
+    favicon_hash: 1274078387
+  - name: "TP-Link"
+    category: "router"
+    vendor: "tp-link"
+    favicon_hash:
+      - -271968289
+      - 1818828262
+  - name: "TP-Link (Network Device)"
+    category: "router"
+    vendor: "tp-link"
+    favicon_hash: 1842351293
+  - name: "TPlus"
+    favicon_hash: -2067519629
+  - name: "TRENDnet"
+    favicon_hash: 1926757774
+  - name: "TYPO3"
+    favicon_hash: -2057590733
+  - name: "Tableau"
+    favicon_hash: -1441956789
+  - name: "Tainy E/HMOD"
+    favicon_hash: -1499488123
+  - name: "TalkingData"
+    favicon_hash: -1316071138
+  - name: "Tandberg"
+    favicon_hash: 97604680
+  - name: "Tasitech"
+    favicon_hash: -1932631093
+  - name: "Tautulli"
+    favicon_hash: -1615532813
+  - name: "TeamCity"
+    favicon_hash: -1944119648
+  - name: "TeamSystem"
+    favicon_hash: -1202103423
+  - name: "Technicolor"
+    favicon_hash:
+      - -2138771289
+      - 1594377337
+  - name: "Technicolor / Thomson Speedtouch (Network / ADSL)"
+    favicon_hash: 156312019
+  - name: "Technicolor Gateway"
+    favicon_hash: 1835479497
+  - name: "Tecvoz"
+    favicon_hash:
+      - -1452159623
+      - 1059329877
+  - name: "Teldat"
+    favicon_hash: 1849654430
+  - name: "TelevisGo"
+    favicon_hash: 1544596682
+  - name: "Telnet"
+    favicon_hash: -1664635936
+  - name: "Teltonika"
+    favicon_hash:
+      - -1612496354
+      - 119741608
+  - name: "Temporal.io"
+    favicon_hash: 557327884
+  - name: "Tenda Web Master"
+    favicon_hash: -2145085239
+  - name: "Tenderland"
+    favicon_hash: -1142667323
+  - name: "Teradek Admin Console"
+    favicon_hash: -1979589988
+  - name: "Terraform"
+    favicon_hash: 1745085988
+  - name: "TeslaMate"
+    favicon_hash: -1478287554
+  - name: "The Internet Archive"
+    favicon_hash: 142044466
+  - name: "The Lounge"
+    favicon_hash: -1375671634
+  - name: "TheHost"
+    favicon_hash: -1004700569
+  - name: "TheTradeDesk"
+    favicon_hash: 76658403
+  - name: "ThecusOS"
+    favicon_hash: 27529899
+  - name: "ThinVNC"
+    favicon_hash: -1414548363
+  - name: "Thinfinity"
+    favicon_hash: 168728537
+  - name: "ThingsPro Gateway"
+    favicon_hash: -1050377603
+  - name: "ThinkPHP"
+    favicon_hash: 1165838194
+  - name: "Thulium"
+    favicon_hash: 199682422
+  - name: "Tieline"
+    favicon_hash: -1316507119
+  - name: "TileServer GL"
+    favicon_hash: -1258058404
+  - name: "TilginAB (HomeGateway)"
+    favicon_hash: -1346447358
+  - name: "TimeKeeper"
+    favicon_hash: 2134367771
+  - name: "TitanHQ"
+    favicon_hash: -286018424
+  - name: "Tongda"
+    favicon_hash: -759108386
+  - name: "Totolink"
+    favicon_hash: -1335251146
+  - name: "Traccar GPS tracking"
+    favicon_hash: -335153896
+  - name: "TransIP"
+    favicon_hash: -1569190618
+  - name: "Transparency Analysis Notification Solution"
+    favicon_hash: 160541240
+  - name: "Trend Micro Deep Security Manager"
+    favicon_hash: 1370990243
+  - name: "Trendnet IP camera"
+    category: "camera"
+    favicon_hash: 512590457
+  - name: "Tuleap"
+    favicon_hash: -2065594952
+  - name: "Tumblr"
+    favicon_hash: 758890177
+  - name: "Twitch"
+    favicon_hash: 936297245
+  - name: "Twitter"
+    favicon_hash: -1831547740
+  - name: "Twonky"
+    favicon_hash: -694426121
+  - name: "Twonky Server (Media Streaming)"
+    favicon_hash: -878891718
+  - name: "TwonkyMedia"
+    favicon_hash: -915768386
+  - name: "U-Mail"
+    favicon_hash: -1734508635
+  - name: "UBNT Router UI"
+    favicon_hash: -1677255344
+  - name: "UPC Ceska Republica (Network)"
+    favicon_hash: 1911253822
+  - name: "UPS"
+    favicon_hash: 1101614703
+  - name: "Ubiquiti - AirOS"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash:
+      - -697231354
+      - 1020814938
+  - name: "Ubiquiti Aircube"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash: 1249285083
+  - name: "Ubiquiti Login Portals"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash: -1446794564
+  - name: "Ubiquiti UNMS"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash: 1157789622
+  - name: "Ubuntu"
+    favicon_hash: -1834435530
+  - name: "UniBox"
+    favicon_hash: 176427349
+  - name: "UniFi"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash: 1687568805
+  - name: "UniFi Controller"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash: 1479449210
+  - name: "UniFi NVR: Software Portal"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash: 1307188176
+  - name: "UniFi Video Controller (airVision)"
+    category: "router"
+    vendor: "ubiquiti"
+    favicon_hash: 768816037
+  - name: "Unified Management Console (Polycom)"
+    favicon_hash: -1775553655
+  - name: "Unify"
+    favicon_hash: 669847331
+  - name: "Univention Portal"
+    favicon_hash: -1697334194
+  - name: "Universal Devices (UD)"
+    favicon_hash: 16202868
+  - name: "Universal Media Server"
+    favicon_hash: -902890504
+  - name: "Universit\u00e9 Toulouse 1 Capitole"
+    favicon_hash: 1632780968
+  - name: "Unleash"
+    favicon_hash: -608690655
+  - name: "Unqork"
+    favicon_hash: -1240387895
+  - name: "Untangle"
+    favicon_hash: 1103599349
+  - name: "UpSource"
+    favicon_hash: 1922730879
+  - name: "Urchin 5"
+    favicon_hash: 2004848782
+  - name: "UserTesting Recorder"
+    favicon_hash: -2032679519
+  - name: "VASCO Data Security"
+    favicon_hash: 1776643422
+  - name: "VICIdial"
+    favicon_hash: 1375401192
+  - name: "VK Services"
+    favicon_hash: 1280124172
+  - name: "VKontakte"
+    favicon_hash: 1540037626
+  - name: "VMS Broadcast Server"
+    favicon_hash: -1608282972
+  - name: "VMWare Access Gateway"
+    category: "hypervisor"
+    vendor: "vmware"
+    favicon_hash: -1128128488
+  - name: "VMWare Horizon"
+    category: "hypervisor"
+    vendor: "vmware"
+    favicon_hash: 1182206475
+  - name: "VMware Horizon"
+    category: "hypervisor"
+    vendor: "vmware"
+    favicon_hash:
+      - -1255992602
+      - -991123252
+      - 1895360511
+  - name: "VMware Workspace"
+    category: "hypervisor"
+    vendor: "vmware"
+    favicon_hash: -1250474341
+  - name: "VMware vCenter Converter Standalone"
+    category: "hypervisor"
+    vendor: "vmware"
+    favicon_hash: -175177211
+  - name: "VOS"
+    favicon_hash: -1062191521
+  - name: "VZPP Plesk"
+    favicon_hash: -1268095485
+  - name: "Vadacom"
+    favicon_hash: -1763285821
+  - name: "ValidMail"
+    favicon_hash: 1591770950
+  - name: "Vanderbilt SPC"
+    favicon_hash: -1162730477
+  - name: "Vantara Pentaho Business Analytics Server"
+    favicon_hash: 1749354953
+  - name: "Vas Hosting"
+    favicon_hash: 1912067085
+  - name: "Vault"
+    favicon_hash: -919788577
+  - name: "Veeva"
+    favicon_hash: -1692183672
+  - name: "VeloCloud"
+    favicon_hash: -2062596654
+  - name: "Velocix Asset Portal"
+    favicon_hash: -1620734764
+  - name: "Verdaccio"
+    favicon_hash: -1314102215
+  - name: "Verizon"
+    favicon_hash: -1758263820
+  - name: "Vesta Hosting Control Panel"
+    favicon_hash: 1954835352
+  - name: "Video Conferencing server for Enterprise"
+    favicon_hash: 1197632109
+  - name: "VidyoDesktop"
+    favicon_hash: -1970367401
+  - name: "Vigor Login"
+    favicon_hash: -2076244488
+  - name: "Vigor Router"
+    favicon_hash: 104189364
+  - name: "Vinyl"
+    favicon_hash: -1660707210
+  - name: "Viprinet"
+    favicon_hash: -1352019987
+  - name: "Virtua Cobranca"
+    favicon_hash: 876876147
+  - name: "Virtualizor"
+    favicon_hash: 2065589381
+  - name: "VisualSVN Server"
+    favicon_hash: 706602230
+  - name: "Vitek"
+    favicon_hash: 264161619
+  - name: "Vivotek (Camera)"
+    favicon_hash: -1654229048
+  - name: "Vmware Secure File Transfer"
+    category: "hypervisor"
+    vendor: "vmware"
+    favicon_hash: 1642701741
+  - name: "VoIPmonitor"
+    favicon_hash: -124234705
+  - name: "Vodafone"
+    favicon_hash:
+      - -1441715561
+      - -147798235
+      - 1224994964
+  - name: "Vodafone (Technicolor)"
+    favicon_hash: 165976831
+  - name: "Vodien Internet Solutions"
+    favicon_hash: 304392005
+  - name: "Vue"
+    favicon_hash: -1237480336
+  - name: "Vue.js"
+    favicon_hash:
+      - -1252041730
+      - 1917028407
+  - name: "WAMPSERVER"
+    favicon_hash:
+      - 443944613
+      - 929825723
+  - name: "WHM"
+    favicon_hash: -649378830
+  - name: "WISE TIGER router"
+    favicon_hash: -1130575070
+  - name: "WISPR (Airlan)"
+    favicon_hash: -106646451
+  - name: "WS server test page"
+    favicon_hash: -291579889
+  - name: "WSO2"
+    favicon_hash: -1655234758
+  - name: "WSO2 Management Console"
+    favicon_hash: 1398055326
+  - name: "WX"
+    favicon_hash: 1841044852
+  - name: "Walmart"
+    favicon_hash: 12003995
+  - name: "WangShen"
+    favicon_hash: -1385513933
+  - name: "WatchGuard"
+    category: "firewall"
+    vendor: "watchguard"
+    favicon_hash: 15831193
+  - name: "WatchNet"
+    favicon_hash: -1765447687
+  - name: "WayOS"
+    favicon_hash: -1060318941
+  - name: "WeBWork"
+    favicon_hash: -1017346469
+  - name: "WeChat"
+    favicon_hash: -1817434995
+  - name: "Web Client Pro"
+    favicon_hash: -956471263
+  - name: "Web Directory"
+    favicon_hash: 1263391110
+  - name: "Web Help Desk"
+    favicon_hash: 1895809524
+  - name: "Web based Configurator"
+    favicon_hash: 1375487984
+  - name: "Web2Py"
+    favicon_hash: -1680052984
+  - name: "WebCTRL"
+    favicon_hash: 1756605828
+  - name: "Webif^2"
+    favicon_hash: 151225607
+  - name: "Webmail"
+    category: "webmail"
+    favicon_hash: 260894120
+  - name: "Webmin"
+    favicon_hash:
+      - -1038557304
+      - 479413330
+      - 1056758035
+      - 1280907310
+      - 1453890729
+  - name: "Webtitan Cloud"
+    favicon_hash: 1090061843
+  - name: "Wekan"
+    favicon_hash: -1418620977
+  - name: "Whatsapp"
+    favicon_hash: 1735289686
+  - name: "WiFi Login"
+    favicon_hash: -1350437236
+  - name: "WiJungle"
+    favicon_hash: 2113497004
+  - name: "Wightman"
+    favicon_hash: -1214233731
+  - name: "Wikipedia"
+    favicon_hash: -398568076
+  - name: "Wildfly"
+    favicon_hash: -1666561833
+  - name: "Wildix"
+    favicon_hash: -1295577382
+  - name: "WindRiver-WebServer"
+    favicon_hash: 74935566
+  - name: "Windows (Microsoft Corp)"
+    favicon_hash: -510925599
+  - name: "Windows Azure"
+    favicon_hash: -2125083197
+  - name: "Winet Voicetec Solutions"
+    favicon_hash: 1804194887
+  - name: "Winmail Server"
+    favicon_hash: 1356900853
+  - name: "Wisenet"
+    favicon_hash: 149496700
+  - name: "Wix"
+    favicon_hash: -1680106844
+  - name: "WordPress"
+    category: "cms"
+    vendor: "wordpress"
+    favicon_hash:
+      - -1003107038
+      - 693122507
+  - name: "WordPress Org"
+    category: "cms"
+    vendor: "wordpress"
+    favicon_hash:
+      - -2133341160
+      - 966563415
+  - name: "Wordpress"
+    category: "cms"
+    vendor: "wordpress"
+    favicon_hash: -1085284672
+  - name: "Wordpress Under Construction Icon"
+    category: "cms"
+    vendor: "wordpress"
+    favicon_hash: 191654058
+  - name: "WorkForce Telestaff Login"
+    favicon_hash: -1139576724
+  - name: "WorkWave"
+    favicon_hash: -1360098475
+  - name: "Workday"
+    favicon_hash:
+      - -1955339917
+      - -459291760
+  - name: "WorldClient for Mdaemon"
+    favicon_hash:
+      - -35107086
+      - 1985721423
+  - name: "X-point"
+    favicon_hash: -1940628871
+  - name: "XAMPP"
+    favicon_hash:
+      - -1437701105
+      - -1275226814
+  - name: "XOffice"
+    favicon_hash: 1076320928
+  - name: "XWeb"
+    favicon_hash: -1036244016
+  - name: "Xen Orchestra"
+    favicon_hash: -121875991
+  - name: "Xibo Digital Signage"
+    favicon_hash: 2061303838
+  - name: "Xtream UI"
+    favicon_hash: 760540646
+  - name: "YY"
+    favicon_hash: -1471633460
+  - name: "Yahoo"
+    favicon_hash: 1370528867
+  - name: "Yahoo!"
+    favicon_hash:
+      - -1730094997
+      - 1523284537
+  - name: "Yasni"
+    favicon_hash: -178685903
+  - name: "Yii PHP Framework"
+    favicon_hash: -1298108480
+  - name: "Youtube"
+    favicon_hash: 1179099333
+  - name: "ZF2 App"
+    favicon_hash: 118652228
+  - name: "ZNC Web Frontend"
+    favicon_hash: 1253536875
+  - name: "ZTE (Network)"
+    favicon_hash: 1427976651
+  - name: "ZTE Corporation (Gateway/Appliance)"
+    favicon_hash: 459900502
+  - name: "Zabbix"
+    category: "monitoring"
+    vendor: "zabbix"
+    favicon_hash: 892542951
+  - name: "Zammad"
+    favicon_hash: -1687285536
+  - name: "ZenML"
+    favicon_hash: -2028554187
+  - name: "Zentyal"
+    favicon_hash: 1540323611
+  - name: "Zerto"
+    favicon_hash: 1510327675
+  - name: "ZesleCP"
+    favicon_hash: -2065461083
+  - name: "Zhejiang Uniview Technologies Co."
+    favicon_hash: -1240222446
+  - name: "Zimbra"
+    favicon_hash: 475145467
+  - name: "Zope"
+    favicon_hash: -1886993228
+  - name: "Zultys"
+    favicon_hash: 889579989
+  - name: "Zuul"
+    favicon_hash: -1127895693
+  - name: "ZyXEL"
+    favicon_hash:
+      - 943925975
+      - 1901388980
+  - name: "ZyXEL (Network)"
+    favicon_hash: -882760066
+  - name: "Zyxel"
+    favicon_hash: 1561951501
+  - name: "Zyxel ZyWALL"
+    favicon_hash:
+      - -484708885
+      - -440644339
+  - name: "aaPanel"
+    favicon_hash: -386189083
+  - name: "ampps"
+    favicon_hash: 1693977300
+  - name: "antMan"
+    favicon_hash: -1986297913
+  - name: "audiocodes"
+    favicon_hash: -1878841207
+  - name: "authentik"
+    favicon_hash: -178113786
+  - name: "bee-queue/arena"
+    favicon_hash: 1623760745
+  - name: "bet365"
+    favicon_hash: -2116540786
+  - name: "bintec elmeg"
+    favicon_hash:
+      - -375623619
+      - 1770799630
+  - name: "bit.ly"
+    favicon_hash: -434501501
+  - name: "boost ai"
+    favicon_hash: 1194900831
+  - name: "bticino"
+    favicon_hash: -1250210868
+  - name: "byob"
+    favicon_hash: 487145192
+  - name: "cPanel Login"
+    favicon_hash:
+      - 1244636413
+      - 1544230796
+      - 1993518473
+  - name: "cacaoweb"
+    favicon_hash: -1738184811
+  - name: "docker-swarm-visualizer"
+    category: "devops"
+    vendor: "docker"
+    favicon_hash: -1584893473
+  - name: "eBuilder"
+    favicon_hash: -1043355641
+  - name: "ePages"
+    favicon_hash: -1876148433
+  - name: "eRad"
+    favicon_hash: -1104274084
+  - name: "emessage"
+    favicon_hash: -1477694668
+  - name: "eve - Emulated Virtual Environment"
+    favicon_hash: -131381065
+  - name: "gov.uk"
+    favicon_hash:
+      - -1949588835
+      - 1472757244
+  - name: "h5ai"
+    favicon_hash: 1228349756
+  - name: "huginn"
+    favicon_hash: -1951475503
+  - name: "i-MSCP - Multi Server Control Panel"
+    favicon_hash: -848408438
+  - name: "i-VU Router"
+    favicon_hash: -1592540846
+  - name: "i.LON"
+    favicon_hash: 112509862
+  - name: "iCanteen"
+    favicon_hash: 1046701084
+  - name: "iDirect Canada (Network Management)"
+    favicon_hash: -256828986
+  - name: "iKuai Networks"
+    favicon_hash: -271448102
+  - name: "iMIS"
+    favicon_hash: -892542227
+  - name: "iMM Control Center"
+    favicon_hash: -1491070374
+  - name: "iPECS"
+    favicon_hash: -195508437
+  - name: "iServer"
+    favicon_hash: -1656662001
+  - name: "idera"
+    favicon_hash: -450254253
+  - name: "idfuse"
+    favicon_hash: -104250814
+  - name: "ilsonline"
+    favicon_hash: -155518807
+  - name: "immich"
+    favicon_hash: -43504595
+  - name: "infobox.ru"
+    favicon_hash: -1998633262
+  - name: "infor"
+    favicon_hash: 253035985
+  - name: "innovaphone"
+    favicon_hash: 671221099
+  - name: "iomega NAS"
+    favicon_hash:
+      - -2056503929
+      - -1656695885
+      - -689902428
+      - -613216179
+      - -600508822
+      - -401934945
+      - 322531336
+      - 331870709
+      - 656868270
+      - 998138196
+      - 1241049726
+  - name: "ip3sec"
+    favicon_hash: 1486876794
+  - name: "iparapheur"
+    favicon_hash: -1383463717
+  - name: "ispCP Omega Virtual Hosting Control System"
+    favicon_hash: 1999746265
+  - name: "ispbox"
+    favicon_hash: -1319399032
+  - name: "jeecg-boot"
+    favicon_hash: 1380908726
+  - name: "leanote"
+    favicon_hash: 1500512504
+  - name: "lighttpd"
+    favicon_hash: 1423930703
+  - name: "litemall"
+    favicon_hash: 1367958180
+  - name: "lwIP (A Lightweight TCP/IP stack)"
+    favicon_hash: -1205024243
+  - name: "macOS Server (Apple)"
+    favicon_hash: 1629518721
+  - name: "maxView Storage Manager"
+    favicon_hash: 1510423261
+  - name: "mdex.de"
+    favicon_hash: -1964821744
+  - name: "mofinetwork"
+    favicon_hash: -1702393021
+  - name: "motionEye (camera)"
+    favicon_hash: -923693877
+  - name: "nanominer"
+    favicon_hash: -1828108081
+  - name: "netDocuments"
+    favicon_hash: -1661746099
+  - name: "netdata dashboard"
+    favicon_hash:
+      - -182423204
+      - 1585145626
+  - name: "ngX-Rocket"
+    favicon_hash: -318968846
+  - name: "nxFilter"
+    favicon_hash: -1350587650
+  - name: "oVirt Engine"
+    category: "hypervisor"
+    vendor: "redhat"
+    favicon_hash: 1878555718
+  - name: "openWRT Luci"
+    favicon_hash:
+      - -675839242
+      - 1941381095
+  - name: "openmediavault (NAS)"
+    category: "nas"
+    vendor: "omv"
+    favicon_hash: -693082538
+  - name: "openmediavault web"
+    category: "nas"
+    vendor: "omv"
+    favicon_hash: -996836732
+  - name: "ownCloud"
+    category: "file-sharing"
+    favicon_hash:
+      - -1616115760
+      - 1398098445
+  - name: "pfSense"
+    category: "firewall"
+    vendor: "pfsense"
+    favicon_hash:
+      - 1015545776
+      - 1405460984
+  - name: "pgAdmin"
+    category: "database-ui"
+    vendor: "pgadmin"
+    favicon_hash: 1502815117
+  - name: "phpLDAPadmin"
+    favicon_hash: -1170501093
+  - name: "phpMyAdmin"
+    category: "database-ui"
+    vendor: "phpmyadmin"
+    favicon_hash:
+      - -1010568750
+      - -476231906
+  - name: "poste.io"
+    favicon_hash: -835596734
+  - name: "pyLoad Interface web"
+    favicon_hash: 77699822
+  - name: "qBittorrent Web UI"
+    favicon_hash: -1889500183
+  - name: "qdPM"
+    favicon_hash: 762074255
+  - name: "rediff"
+    favicon_hash: 192500777
+  - name: "starbeacon CMS"
+    favicon_hash: -111232642
+  - name: "tdssuite"
+    favicon_hash: -1461493576
+  - name: "tilgin"
+    favicon_hash: -278788671
+  - name: "tn4 Gateway"
+    favicon_hash: 2098602123
+  - name: "truVision (NVR)"
+    category: "camera"
+    favicon_hash: -1093172228
+  - name: "truVision NVR (interlogix)"
+    category: "camera"
+    favicon_hash: 1782271534
+  - name: "umami"
+    favicon_hash: -130447705
+  - name: "vBulletin"
+    favicon_hash: -1313140993
+  - name: "wallabag"
+    favicon_hash: 1565357565
+  - name: "wdCP cloud host management system"
+    favicon_hash:
+      - 255892555
+      - 1786752597
+  - name: "webflow"
+    favicon_hash: -1649762785
+  - name: "wiki.js"
+    favicon_hash: -1478010471
+  - name: "xWiki"
+    favicon_hash: 1245897666
+  - name: "yTM"
+    favicon_hash: -1131689409

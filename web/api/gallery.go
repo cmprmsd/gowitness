@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/models"
 )
 
 type galleryResponse struct {
@@ -19,15 +19,18 @@ type galleryResponse struct {
 }
 
 type galleryContent struct {
-	ID           uint      `json:"id"`
-	ProbedAt     time.Time `json:"probed_at"`
-	URL          string    `json:"url"`
-	ResponseCode int       `json:"response_code"`
-	Title        string    `json:"title"`
-	Filename     string    `json:"file_name"`
-	Screenshot   string    `json:"screenshot"`
-	Failed       bool      `json:"failed"`
-	Technologies []string  `json:"technologies"`
+	ID              uint      `json:"id"`
+	ProbedAt        time.Time `json:"probed_at"`
+	URL             string    `json:"url"`
+	URLScheme       string    `json:"url_scheme"`
+	ResponseCode    int       `json:"response_code"`
+	Title           string    `json:"title"`
+	Filename        string    `json:"file_name"`
+	Screenshot      string    `json:"screenshot"`
+	Failed          bool      `json:"failed"`
+	DiscoveredCreds string    `json:"discovered_creds"`
+	Technologies    []string  `json:"technologies"`
+	Tags            []string  `json:"tags"`
 }
 
 // GalleryHandler gets a paginated gallery
@@ -43,6 +46,8 @@ type galleryContent struct {
 //	@Param			status			query		string	false	"A comma seperated list of HTTP status codes to filter by."
 //	@Param			perception		query		boolean	false	"Order the results by perception hash."
 //	@Param			failed			query		boolean	false	"Include failed screenshots in the results."
+//	@Param			schemes			query		string	false	"A comma separated list of url schemes (http, https, vnc, rdp) to filter by."
+//	@Param			tags			query		string	false	"A comma separated list of tags to filter by (matches any)."
 //	@Success		200				{object}	galleryResponse
 //	@Router			/results/gallery [get]
 func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
@@ -91,6 +96,30 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 		technologies = append(technologies, strings.Split(technologyFilterValue, ",")...)
 	}
 
+	// url scheme filtering (http, https, vnc, rdp)
+	var schemes []string
+	schemesValue := r.URL.Query().Get("schemes")
+	if schemesValue != "" {
+		for _, s := range strings.Split(schemesValue, ",") {
+			s = strings.ToLower(strings.TrimSpace(s))
+			if s != "" {
+				schemes = append(schemes, s)
+			}
+		}
+	}
+
+	// tag filtering (matches results that have ANY of the requested tags)
+	var tags []string
+	tagsValue := r.URL.Query().Get("tags")
+	if tagsValue != "" {
+		for _, s := range strings.Split(tagsValue, ",") {
+			s = strings.TrimSpace(s)
+			if s != "" {
+				tags = append(tags, s)
+			}
+		}
+	}
+
 	// failed result filtering
 	var showFailed bool
 	showFailed, err = strconv.ParseBool(r.URL.Query().Get("failed"))
@@ -101,7 +130,7 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 	// query the db
 	var queryResults []*models.Result
 	query := h.DB.Model(&models.Result{}).Limit(results.Limit).
-		Offset(offset).Preload("Technologies")
+		Offset(offset).Preload("Technologies").Preload("Tags")
 
 	if perceptionSort {
 		query.Order("perception_hash_group_id DESC")
@@ -117,6 +146,16 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 			Where("value IN (?)", technologies))
 	}
 
+	if len(schemes) > 0 {
+		query.Where("url_scheme IN ?", schemes)
+	}
+
+	if len(tags) > 0 {
+		query.Where("id in (?)", h.DB.Model(&models.Tag{}).
+			Select("result_id").Distinct("result_id").
+			Where("value IN (?)", tags))
+	}
+
 	if !showFailed {
 		query.Where("failed = ?", showFailed)
 	}
@@ -127,24 +166,31 @@ func (h *ApiHandler) GalleryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// extract Technologies for each result
+	// extract Technologies and Tags for each result
 	for _, result := range queryResults {
 		var technologies []string
 		for _, tech := range result.Technologies {
 			technologies = append(technologies, tech.Value)
 		}
+		var resultTags []string
+		for _, tag := range result.Tags {
+			resultTags = append(resultTags, tag.Value)
+		}
 
 		// Append the processed data to the response
 		results.Results = append(results.Results, &galleryContent{
-			ID:           result.ID,
-			ProbedAt:     result.ProbedAt,
-			URL:          result.URL,
-			ResponseCode: result.ResponseCode,
-			Title:        result.Title,
-			Filename:     result.Filename,
-			Screenshot:   result.Screenshot,
-			Failed:       result.Failed,
-			Technologies: technologies,
+			ID:              result.ID,
+			ProbedAt:        result.ProbedAt,
+			URL:             result.URL,
+			URLScheme:       result.URLScheme,
+			ResponseCode:    result.ResponseCode,
+			Title:           result.Title,
+			Filename:        result.Filename,
+			Screenshot:      result.Screenshot,
+			Failed:          result.Failed,
+			DiscoveredCreds: result.DiscoveredCreds,
+			Technologies:    technologies,
+			Tags:            resultTags,
 		})
 	}
 

@@ -8,16 +8,26 @@ import (
 	"os"
 	"sync"
 
+	"github.com/cmprmsd/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/internal/tagger"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/writers"
 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
-	"github.com/sensepost/gowitness/internal/islazy"
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/writers"
 )
 
-// Runner is a runner that probes web targets using a driver
+// Runner is a runner that probes web targets using one or more drivers,
+// dispatched per-target based on the URL scheme.
 type Runner struct {
-	Driver     Driver
+	// Drivers is a per-scheme map of drivers (e.g. "http","https" -> chromedp,
+	// "vnc" -> vnc driver, "rdp" -> rdp driver). Driver instances may be shared
+	// across schemes (chromedp handles both http and https).
+	Drivers    map[string]Driver
 	Wappalyzer *wappalyzer.Wappalyze
+	// Tagger classifies HTTP results into operator tags (printer,
+	// firewall, hypervisor, ...). Nil when disabled or when loading the
+	// ruleset failed (a warning is logged in that case so scanning can
+	// continue without tagging).
+	Tagger *tagger.Tagger
 
 	// options for the Runner to consider
 	options Options
@@ -37,7 +47,7 @@ type Runner struct {
 
 // New gets a new Runner ready for probing.
 // It's up to the caller to call Close() on the runner
-func NewRunner(logger *slog.Logger, driver Driver, opts Options, writers []writers.Writer) (*Runner, error) {
+func NewRunner(logger *slog.Logger, drivers map[string]Driver, opts Options, writers []writers.Writer) (*Runner, error) {
 	if !opts.Scan.ScreenshotSkipSave {
 		screenshotPath, err := islazy.CreateDir(opts.Scan.ScreenshotPath)
 		if err != nil {
@@ -71,11 +81,23 @@ func NewRunner(logger *slog.Logger, driver Driver, opts Options, writers []write
 		return nil, err
 	}
 
+	// Load the favicon-hash + YAML tag ruleset. A bad rules file is a
+	// warning, not a fatal error - scanning continues without tagging.
+	var tg *tagger.Tagger
+	if !opts.Scan.DisableTags {
+		tg, err = tagger.LoadFromFile(opts.Scan.TagsFile)
+		if err != nil {
+			logger.Warn("tagger disabled: failed to load rules", "err", err)
+			tg = nil
+		}
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 
 	return &Runner{
-		Driver:     driver,
+		Drivers:    drivers,
 		Wappalyzer: wap,
+		Tagger:     tg,
 		options:    opts,
 		writers:    writers,
 		Targets:    make(chan string),
@@ -83,6 +105,16 @@ func NewRunner(logger *slog.Logger, driver Driver, opts Options, writers []write
 		ctx:        ctx,
 		cancel:     cancel,
 	}, nil
+}
+
+// driverFor returns the configured driver for a target URL based on its scheme.
+// Returns nil when no driver is registered for the scheme.
+func (run *Runner) driverFor(target string) Driver {
+	parsed, err := url.Parse(target)
+	if err != nil {
+		return nil
+	}
+	return run.Drivers[parsed.Scheme]
 }
 
 // runWriters takes a result and passes it to writers
@@ -139,7 +171,15 @@ func (run *Runner) Run() {
 						continue
 					}
 
-					result, err := run.Driver.Witness(target, run)
+					driver := run.driverFor(target)
+					if driver == nil {
+						if run.options.Logging.LogScanErrors {
+							run.log.Error("no driver registered for target scheme", "target", target)
+						}
+						continue
+					}
+
+					result, err := driver.Witness(target, run)
 					if err != nil {
 						// is this a chrome not found error?
 						var chromeErr *ChromeNotFoundError
@@ -181,6 +221,13 @@ func (run *Runner) Run() {
 }
 
 func (run *Runner) Close() {
-	// close the driver
-	run.Driver.Close()
+	// close every unique driver (multiple scheme keys may share the same instance)
+	closed := make(map[Driver]struct{}, len(run.Drivers))
+	for _, drv := range run.Drivers {
+		if _, done := closed[drv]; done {
+			continue
+		}
+		drv.Close()
+		closed[drv] = struct{}{}
+	}
 }

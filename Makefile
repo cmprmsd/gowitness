@@ -6,11 +6,11 @@ GOPATH := $(shell go env GOPATH)
 BUILD_TIME := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 LD_FLAGS := -trimpath \
 	-ldflags="-s -w \
-	-X=github.com/sensepost/gowitness/internal/version.GitHash=$(V) \
-	-X=github.com/sensepost/gowitness/internal/version.GoBuildEnv=$(G) \
-	-X=github.com/sensepost/gowitness/internal/version.GoBuildTime=$(BUILD_TIME)"
+	-X=github.com/cmprmsd/gowitness/internal/version.GitHash=$(V) \
+	-X=github.com/cmprmsd/gowitness/internal/version.GoBuildEnv=$(G) \
+	-X=github.com/cmprmsd/gowitness/internal/version.GoBuildTime=$(BUILD_TIME)"
 BIN_DIR := build
-PLATFORMS := darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 linux/arm windows/amd64 windows/arm64
+PLATFORMS := linux/amd64 #darwin/amd64 darwin/arm64 #linux/arm64 linux/arm windows/amd64 windows/arm64
 CGO := CGO_ENABLED=0
 
 # Default target

@@ -6,6 +6,8 @@ definitions:
     type: object
   api.galleryContent:
     properties:
+      discovered_creds:
+        type: string
       failed:
         type: boolean
       file_name:
@@ -18,6 +20,10 @@ definitions:
         type: integer
       screenshot:
         type: string
+      tags:
+        items:
+          type: string
+        type: array
       technologies:
         items:
           type: string
@@ -25,6 +31,8 @@ definitions:
       title:
         type: string
       url:
+        type: string
+      url_scheme:
         type: string
     type: object
   api.galleryResponse:
@@ -44,6 +52,8 @@ definitions:
     properties:
       content_length:
         type: integer
+      discovered_creds:
+        type: string
       failed:
         description: Failed flag set if the result should be considered failed
         type: boolean
@@ -63,6 +73,8 @@ definitions:
         type: string
       url:
         type: string
+      url_scheme:
+        type: string
     type: object
   api.searchRequest:
     properties:
@@ -73,6 +85,8 @@ definitions:
     properties:
       content_length:
         type: integer
+      discovered_creds:
+        type: string
       failed:
         type: boolean
       failed_reason:
@@ -98,6 +112,8 @@ definitions:
       title:
         type: string
       url:
+        type: string
+      url_scheme:
         type: string
     type: object
   api.statisticsResponse:
@@ -154,6 +170,20 @@ definitions:
         $ref: '#/definitions/api.submitRequestOptions'
       url:
         type: string
+    type: object
+  api.tagListEntry:
+    properties:
+      type:
+        type: string
+      value:
+        type: string
+    type: object
+  api.tagListResponse:
+    properties:
+      tags:
+        items:
+          $ref: '#/definitions/api.tagListEntry'
+        type: array
     type: object
   api.technologyListResponse:
     properties:
@@ -260,6 +290,14 @@ definitions:
         items:
           $ref: '#/definitions/models.Cookie'
         type: array
+      discovered_creds:
+        description: |-
+          DiscoveredCreds records the credentials (or "anonymous") that
+          successfully authenticated when the driver walked an automatic
+          credential ladder. Empty when the operator supplied creds
+          explicitly via URL or CLI flags, or when the protocol has no auth
+          concept. Currently populated by the RTSP driver.
+        type: string
       failed:
         description: Failed flag set if the result should be considered failed
         type: boolean
@@ -298,6 +336,10 @@ definitions:
         type: string
       screenshot:
         type: string
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
       technologies:
         items:
           $ref: '#/definitions/models.Technology'
@@ -307,6 +349,8 @@ definitions:
       tls:
         $ref: '#/definitions/models.TLS'
       url:
+        type: string
+      url_scheme:
         type: string
     type: object
   models.TLS:
@@ -344,6 +388,17 @@ definitions:
         type: integer
       tls_id:
         type: integer
+      value:
+        type: string
+    type: object
+  models.Tag:
+    properties:
+      id:
+        type: integer
+      result_id:
+        type: integer
+      type:
+        type: string
       value:
         type: string
     type: object
@@ -448,6 +503,15 @@ paths:
         in: query
         name: failed
         type: boolean
+      - description: A comma separated list of url schemes (http, https, vnc, rdp)
+          to filter by.
+        in: query
+        name: schemes
+        type: string
+      - description: A comma separated list of tags to filter by (matches any).
+        in: query
+        name: tags
+        type: string
       produces:
       - application/json
       responses:
@@ -471,6 +535,22 @@ paths:
           schema:
             $ref: '#/definitions/api.listResponse'
       summary: Results list
+      tags:
+      - Results
+  /results/tag:
+    get:
+      consumes:
+      - application/json
+      description: Get all the unique tags detected by the favicon-hash + YAML tagger,
+        with their classification axis.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.tagListResponse'
+      summary: Get tag results
       tags:
       - Results
   /results/technology:

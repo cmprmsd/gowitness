@@ -142,6 +142,18 @@
                         "description": "Include failed screenshots in the results.",
                         "name": "failed",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "A comma separated list of url schemes (http, https, vnc, rdp) to filter by.",
+                        "name": "schemes",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "A comma separated list of tags to filter by (matches any).",
+                        "name": "tags",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -172,6 +184,29 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.listResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/results/tag": {
+            "get": {
+                "description": "Get all the unique tags detected by the favicon-hash + YAML tagger, with their classification axis.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Results"
+                ],
+                "summary": "Get tag results",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.tagListResponse"
                         }
                     }
                 }
@@ -364,6 +399,9 @@
         "api.galleryContent": {
             "type": "object",
             "properties": {
+                "discovered_creds": {
+                    "type": "string"
+                },
                 "failed": {
                     "type": "boolean"
                 },
@@ -382,6 +420,12 @@
                 "screenshot": {
                     "type": "string"
                 },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "technologies": {
                     "type": "array",
                     "items": {
@@ -392,6 +436,9 @@
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                },
+                "url_scheme": {
                     "type": "string"
                 }
             }
@@ -422,6 +469,9 @@
                 "content_length": {
                     "type": "integer"
                 },
+                "discovered_creds": {
+                    "type": "string"
+                },
                 "failed": {
                     "description": "Failed flag set if the result should be considered failed",
                     "type": "boolean"
@@ -449,6 +499,9 @@
                 },
                 "url": {
                     "type": "string"
+                },
+                "url_scheme": {
+                    "type": "string"
                 }
             }
         },
@@ -465,6 +518,9 @@
             "properties": {
                 "content_length": {
                     "type": "integer"
+                },
+                "discovered_creds": {
+                    "type": "string"
                 },
                 "failed": {
                     "type": "boolean"
@@ -503,6 +559,9 @@
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                },
+                "url_scheme": {
                     "type": "string"
                 }
             }
@@ -589,6 +648,28 @@
                 },
                 "url": {
                     "type": "string"
+                }
+            }
+        },
+        "api.tagListEntry": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.tagListResponse": {
+            "type": "object",
+            "properties": {
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.tagListEntry"
+                    }
                 }
             }
         },
@@ -751,6 +832,10 @@
                         "$ref": "#/definitions/models.Cookie"
                     }
                 },
+                "discovered_creds": {
+                    "description": "DiscoveredCreds records the credentials (or \"anonymous\") that\nsuccessfully authenticated when the driver walked an automatic\ncredential ladder. Empty when the operator supplied creds\nexplicitly via URL or CLI flags, or when the protocol has no auth\nconcept. Currently populated by the RTSP driver.",
+                    "type": "string"
+                },
                 "failed": {
                     "description": "Failed flag set if the result should be considered failed",
                     "type": "boolean"
@@ -807,6 +892,12 @@
                 "screenshot": {
                     "type": "string"
                 },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tag"
+                    }
+                },
                 "technologies": {
                     "type": "array",
                     "items": {
@@ -820,6 +911,9 @@
                     "$ref": "#/definitions/models.TLS"
                 },
                 "url": {
+                    "type": "string"
+                },
+                "url_scheme": {
                     "type": "string"
                 }
             }
@@ -876,6 +970,23 @@
                 },
                 "tls_id": {
                     "type": "integer"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Tag": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "result_id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 },
                 "value": {
                     "type": "string"

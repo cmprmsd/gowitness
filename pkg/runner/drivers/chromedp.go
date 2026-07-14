@@ -21,10 +21,10 @@ import (
 	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/cdproto/storage"
 	"github.com/chromedp/chromedp"
-	"github.com/sensepost/gowitness/internal/islazy"
-	"github.com/sensepost/gowitness/pkg/imagehash"
-	"github.com/sensepost/gowitness/pkg/models"
-	"github.com/sensepost/gowitness/pkg/runner"
+	"github.com/cmprmsd/gowitness/internal/islazy"
+	"github.com/cmprmsd/gowitness/pkg/imagehash"
+	"github.com/cmprmsd/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/runner"
 )
 
 // Chromedp is a driver that probes web targets using chromedp
@@ -202,8 +202,9 @@ func (run *Chromedp) Witness(target string, thisRunner *runner.Runner) (*models.
 	// url result for output writers.
 	var (
 		result = &models.Result{
-			URL:      target,
-			ProbedAt: time.Now(),
+			URL:       target,
+			URLScheme: parseScheme(target),
+			ProbedAt:  time.Now(),
 		}
 		resultMutex sync.Mutex
 		first       *network.EventRequestWillBeSent
@@ -501,6 +502,18 @@ func (run *Chromedp) Witness(target string, thisRunner *runner.Runner) (*models.
 				Value: tech,
 			})
 		}
+	}
+
+	// apply tagger rules. Favicon hash takes precedence over title/header
+	// matching; an empty/missing favicon falls back gracefully.
+	{
+		var faviconB64 string
+		if err := chromedp.Run(navigationCtx, chromedp.Evaluate(faviconFetchScript, &faviconB64,
+			func(p *runtime.EvaluateParams) *runtime.EvaluateParams { return p.WithAwaitPromise(true) },
+		)); err != nil {
+			logger.Debug("favicon fetch failed", "err", err)
+		}
+		applyTags(result, faviconB64, thisRunner)
 	}
 
 	if img == nil && screenshotErr == nil {

@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/sensepost/gowitness/web/docs"
+	"github.com/cmprmsd/gowitness/web/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
 
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/web/api"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/web/api"
 )
 
 // Server is a web server
@@ -81,6 +81,7 @@ func (s *Server) Run() {
 		r.Get("/results/detail/{id}", apih.DetailHandler)
 		r.Post("/results/delete", apih.DeleteResultHandler)
 		r.Get("/results/technology", apih.TechnologyListHandler)
+		r.Get("/results/tag", apih.TagListHandler)
 	})
 
 	// screenshot files

@@ -6,7 +6,7 @@ import { WideSkeleton } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertOctagonIcon, BanIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, ExternalLinkIcon,
-  FilterIcon, GroupIcon, ShieldCheckIcon, XIcon
+  FilterIcon, GroupIcon, KeyIcon, NetworkIcon, ShieldCheckIcon, TagIcon, XIcon
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -26,8 +26,17 @@ const GalleryPage = () => {
   const [gallery, setGallery] = useState<apitypes.galleryResult[]>();
   const [wappalyzer, setWappalyzer] = useState<apitypes.wappalyzer>();
   const [technology, setTechnology] = useState<apitypes.technologylist>();
+  const [tagList, setTagList] = useState<apitypes.taglist>();
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  // Open-state for each multi-select popover. Controlled so that the
+  // re-render triggered by setSearchParams in handleXxxChange below
+  // can't reset the popover's internal uncontrolled state to closed.
+  // Radix's outside-click and ESC handling still close them normally.
+  const [techOpen, setTechOpen] = useState(false);
+  const [protocolOpen, setProtocolOpen] = useState(false);
+  const [tagOpen, setTagOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
   // pagination
@@ -36,20 +45,22 @@ const GalleryPage = () => {
   //filters
   const technologyFilter = searchParams.get("technologies") || "";
   const statusFilter = searchParams.get("status") || "";
+  const schemeFilter = searchParams.get("schemes") || "";
+  const tagFilter = searchParams.get("tags") || "";
   // toggles
   const perceptionGroup = searchParams.get("perception") === "true";
   const showFailed = searchParams.get("failed") !== "false"; // Default to true
 
   useEffect(() => {
-    getWappalyzerData(setWappalyzer, setTechnology);
+    getWappalyzerData(setWappalyzer, setTechnology, setTagList);
   }, []);
 
   useEffect(() => {
     getData(
       setLoading, setGallery, setTotalPages,
-      page, limit, technologyFilter, statusFilter, perceptionGroup, showFailed
+      page, limit, technologyFilter, statusFilter, schemeFilter, tagFilter, perceptionGroup, showFailed
     );
-  }, [page, limit, perceptionGroup, statusFilter, technologyFilter, showFailed]);
+  }, [page, limit, perceptionGroup, statusFilter, technologyFilter, schemeFilter, tagFilter, showFailed]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -100,6 +111,73 @@ const GalleryPage = () => {
     });
     handlePageChange(1); // back to page 1
   };
+
+  const PROTOCOL_OPTIONS = ["http", "https", "vnc", "rdp", "rtsp"] as const;
+
+  const selectedSchemes = schemeFilter.split(",").filter(Boolean);
+  const selectedTags = tagFilter.split(",").filter(Boolean);
+
+  const handleSchemeChange = (scheme: string) => {
+    setSearchParams(prev => {
+      const current = prev.get("schemes")?.split(",").filter(Boolean) || [];
+      if (current.includes(scheme)) {
+        prev.set("schemes", current.filter(s => s !== scheme).join(","));
+      } else {
+        current.push(scheme);
+        prev.set("schemes", current.join(","));
+      }
+      return prev;
+    });
+    handlePageChange(1);
+  };
+
+  const handleTagChange = (tag: string) => {
+    setSearchParams(prev => {
+      const current = prev.get("tags")?.split(",").filter(Boolean) || [];
+      if (current.includes(tag)) {
+        prev.set("tags", current.filter(s => s !== tag).join(","));
+      } else {
+        current.push(tag);
+        prev.set("tags", current.join(","));
+      }
+      return prev;
+    });
+    handlePageChange(1);
+  };
+
+  // Map every known tag value to its type ("name" | "category" | "vendor"
+  // | "" for legacy rows). Used both by the dropdown for grouping and to
+  // colour-style on-card pills if we later want to.
+  const tagTypeMap = useMemo(() => {
+    const m = new Map<string, string>();
+    if (tagList) {
+      for (const t of tagList.tags) m.set(t.value, t.type);
+    }
+    return m;
+  }, [tagList]);
+
+  // Tags grouped for the dropdown. Order: Category -> Vendor -> Product
+  // (broad -> specific reading order). Anything without a known type
+  // (legacy DB rows) falls into an "Other" group.
+  const groupedTags = useMemo(() => {
+    if (!tagList) return [] as { key: string; label: string; values: string[] }[];
+    const selected = tagFilter.split(",").filter(Boolean);
+    const groups: Record<string, string[]> = { category: [], vendor: [], name: [], "": [] };
+    const seen = new Set<string>();
+    const allValues = tagList.tags.map(t => t.value);
+    for (const v of [...selected, ...allValues]) {
+      if (seen.has(v)) continue;
+      seen.add(v);
+      const type = tagTypeMap.get(v) ?? "";
+      (groups[type] ?? groups[""]).push(v);
+    }
+    return [
+      { key: "category", label: "Category", values: groups.category },
+      { key: "vendor",   label: "Vendor",   values: groups.vendor },
+      { key: "name",     label: "Product",  values: groups.name },
+      { key: "",         label: "Other",    values: groups[""] },
+    ].filter(g => g.values.length > 0);
+  }, [tagList, tagFilter, tagTypeMap]);
 
   const handleStatusFilter = (status: string) => {
     setSearchParams(prev => {
@@ -185,13 +263,61 @@ const GalleryPage = () => {
                 className="w-full h-48 object-cover transition-all duration-300 filter group-hover:scale-105"
               />
             )}
-            <div className="absolute top-2 right-2">
+            <div className="absolute top-2 right-2 flex gap-1">
+              {screenshot.url_scheme ? (
+                <Badge variant="secondary" className="uppercase">
+                  {screenshot.url_scheme}
+                </Badge>
+              ) : null}
               <Badge variant="default" className={`${getStatusColor(screenshot.response_code)}`}>
                 {screenshot.response_code}
               </Badge>
             </div>
+            {screenshot.discovered_creds ? (
+              <div className="absolute top-2 left-2">
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge
+                        variant="outline"
+                        className="bg-yellow-500/95 text-black border-yellow-700 font-mono text-[11px] shadow-lg"
+                      >
+                        <KeyIcon className="mr-1 h-3 w-3" />
+                        {screenshot.discovered_creds}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="text-xs max-w-xs">
+                      <p>Discovered credentials: <span className="font-mono">{screenshot.discovered_creds}</span></p>
+                      <p className="text-muted-foreground mt-1">
+                        Authenticated to this service using a default-credential probe.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            ) : null}
             <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <ExternalLinkIcon className="text-white drop-shadow-lg" />
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      className="h-8 w-8 shadow-lg"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.open(screenshot.url, "_blank", "noopener,noreferrer");
+                      }}
+                    >
+                      <ExternalLinkIcon className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="left" className="text-xs">
+                    Open URL in a new tab
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </CardContent>
 
@@ -212,6 +338,30 @@ const GalleryPage = () => {
               <div className="w-full truncate text-xs text-muted-foreground mt-1">
                 {screenshot.url}
               </div>
+              {screenshot.tags && screenshot.tags.length > 0 ? (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {screenshot.tags.slice(0, 6).map(tag => (
+                    <Badge
+                      key={tag}
+                      variant="outline"
+                      className="text-[10px] px-1.5 py-0 cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleTagChange(tag);
+                      }}
+                      title={`Filter by ${tag}`}
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                  {screenshot.tags.length > 6 ? (
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                      +{screenshot.tags.length - 6}
+                    </Badge>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
             <div className="w-full flex items-center justify-between mt-2">
               <TooltipProvider delayDuration={0}>
@@ -266,7 +416,7 @@ const GalleryPage = () => {
     <div className="space-y-6">
       <div className="flex flex-wrap gap-4 items-center justify-between rounded-lg">
         <div className="flex flex-wrap gap-2">
-          <Popover>
+          <Popover open={techOpen} onOpenChange={setTechOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-[200px] justify-start">
                 <FilterIcon className="mr-2 h-4 w-4" />
@@ -279,7 +429,10 @@ const GalleryPage = () => {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent
+              className="w-[200px] p-0"
+              onCloseAutoFocus={(e) => e.preventDefault()}
+            >
               <Command>
                 <CommandInput placeholder="Search technologies..." />
                 <CommandList>
@@ -288,6 +441,7 @@ const GalleryPage = () => {
                     {sortedTechnologies.map((tech) => (
                       <CommandItem
                         key={tech}
+                        onMouseDown={(e) => e.preventDefault()}
                         onSelect={() => handleTechnologyChange(tech)}
                       >
                         <CheckIcon
@@ -300,6 +454,94 @@ const GalleryPage = () => {
                       </CommandItem>
                     ))}
                   </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          <Popover open={protocolOpen} onOpenChange={setProtocolOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[200px] justify-start">
+                <NetworkIcon className="mr-2 h-4 w-4" />
+                {selectedSchemes.length > 0 ? (
+                  <>{selectedSchemes.length} protocol{selectedSchemes.length === 1 ? "" : "s"}</>
+                ) : (
+                  "Filter by Protocol"
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[200px] p-0"
+              onCloseAutoFocus={(e) => e.preventDefault()}
+            >
+              <Command>
+                <CommandList>
+                  <CommandEmpty>No protocols.</CommandEmpty>
+                  <CommandGroup>
+                    {PROTOCOL_OPTIONS.map((scheme) => (
+                      <CommandItem
+                        key={scheme}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onSelect={() => handleSchemeChange(scheme)}
+                      >
+                        <CheckIcon
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            selectedSchemes.includes(scheme) ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {scheme.toUpperCase()}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          <Popover open={tagOpen} onOpenChange={setTagOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[200px] justify-start">
+                <TagIcon className="mr-2 h-4 w-4" />
+                {selectedTags.length > 0 ? (
+                  <>{selectedTags.length} tag{selectedTags.length === 1 ? "" : "s"}</>
+                ) : (
+                  "Filter by Tag"
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[280px] p-0"
+              onCloseAutoFocus={(e) => e.preventDefault()}
+            >
+              <Command>
+                <CommandInput placeholder="Search tags..." />
+                <CommandList>
+                  <CommandEmpty>No tags yet. Run a scan to populate.</CommandEmpty>
+                  {groupedTags.map(group => (
+                    <CommandGroup key={group.key} heading={group.label}>
+                      {group.values.map((tag) => (
+                        <CommandItem
+                          key={tag}
+                          // Prevent the click from shifting focus out of the
+                          // Popover, which would otherwise close it after
+                          // each selection. Lets the operator tick several
+                          // tags in a row without re-opening the menu.
+                          onMouseDown={(e) => e.preventDefault()}
+                          onSelect={() => handleTagChange(tag)}
+                        >
+                          <CheckIcon
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedTags.includes(tag) ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          <span>{tag}</span>
+                          <span className="ml-auto text-xs text-muted-foreground">
+                            {group.key || "—"}
+                          </span>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  ))}
                 </CommandList>
               </Command>
             </PopoverContent>

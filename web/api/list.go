@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/sensepost/gowitness/pkg/log"
-	"github.com/sensepost/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/log"
+	"github.com/cmprmsd/gowitness/pkg/models"
 )
 
 type listResponse struct {
 	ID uint `json:"id" gorm:"primarykey"`
 
 	URL            string `json:"url"`
+	URLScheme      string `json:"url_scheme"`
 	FinalURL       string `json:"final_url"`
 	ResponseCode   int    `json:"response_code"`
 	ResponseReason string `json:"response_reason"`
@@ -20,8 +21,9 @@ type listResponse struct {
 	Title          string `json:"title"`
 
 	// Failed flag set if the result should be considered failed
-	Failed       bool   `json:"failed"`
-	FailedReason string `json:"failed_reason"`
+	Failed          bool   `json:"failed"`
+	FailedReason    string `json:"failed_reason"`
+	DiscoveredCreds string `json:"discovered_creds"`
 }
 
 // ListHandler returns a simple list of results

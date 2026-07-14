@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sensepost/gowitness/pkg/models"
+	"github.com/cmprmsd/gowitness/pkg/models"
 )
 
 // StdoutWriter is a Stdout writer

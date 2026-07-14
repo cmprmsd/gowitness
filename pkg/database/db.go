@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/cmprmsd/gowitness/pkg/models"
 	"github.com/glebarez/sqlite"
-	"github.com/sensepost/gowitness/pkg/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -79,6 +79,7 @@ func Connection(uri string, shouldExist, debug bool) (*gorm.DB, error) {
 		&models.TLS{},
 		&models.TLSSanList{},
 		&models.Technology{},
+		&models.Tag{},
 		&models.Header{},
 		&models.NetworkLog{},
 		&models.ConsoleLog{},
